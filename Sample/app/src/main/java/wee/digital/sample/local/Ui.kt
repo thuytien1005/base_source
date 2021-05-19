@@ -1,11 +1,18 @@
-package wee.digital.ml.util
+package wee.digital.sample.local
+
+import android.view.View
 
 /**
  * -------------------------------------------------------------------------------------------------
  * @Project: Sample
- * @Created: Huy 2021/05/19
+ * @Created: Huy 2021/04/30
  * @Organize: Wee Digital
  * @Description: ...
  * All Right Reserved
  * -------------------------------------------------------------------------------------------------
  */
+object Ui {
+
+    var currentFocus: View? = null
+
+}

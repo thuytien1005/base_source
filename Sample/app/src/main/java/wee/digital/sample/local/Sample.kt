@@ -1,4 +1,4 @@
-package wee.digital.sample.shared
+package wee.digital.sample.local
 
 object Sample {
 

@@ -32,24 +32,28 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.kotlin.stdlib
     implementation deps.android.appcompat
     implementation deps.android.material
     implementation deps.android.recyclerview
     implementation deps.android.constraintlayout
+    implementation deps.android.constraintlayout
+    implementation deps.android.security
+
+    implementation deps.lifecycle.viewmodel
+    implementation deps.lifecycle.livedata
+    kapt deps.lifecycle.compiler
+
+    implementation deps.paging.runtime
+    implementation deps.paging.rx
 
     implementation deps.dimens.sdp
     implementation deps.dimens.ssp
 
-    implementation deps.lifecycle.extensions
-    kapt deps.lifecycle.compiler
-
     implementation deps.google.gson
 
-    implementation deps.paging.runtime
-    implementation deps.paging.rx
-    
     implementation deps.glide.glide
     kapt deps.glide.compiler
 

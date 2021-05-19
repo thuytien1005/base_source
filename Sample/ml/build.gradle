@@ -31,14 +31,21 @@ android {
     }
 }
 
+repositories {
+    // Depending on AndroidX Snapshot Builds to get the latest CameraX libs.
+    maven { url 'https://androidx.dev/snapshots/builds/6787662/artifacts/repository/' }
+}
+
 dependencies {
+
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
     implementation deps.kotlin.stdlib
     implementation deps.android.appcompat
     implementation deps.android.corektx
     implementation deps.android.constraintlayout
 
-    implementation deps.lifecycle.extensions
+    implementation deps.lifecycle.viewmodel
+    implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
 
     implementation deps.camera.camera2
@@ -46,5 +53,6 @@ dependencies {
     implementation deps.camera.view
 
     implementation deps.ml.face_detection
+    implementation deps.permissions
 
 }

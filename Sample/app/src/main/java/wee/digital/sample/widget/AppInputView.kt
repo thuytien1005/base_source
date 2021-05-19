@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.widget_text_input.view.*
 import wee.digital.library.extension.*
 import wee.digital.library.widget.AppCustomView
 import wee.digital.sample.R
-import wee.digital.sample.shared.Ui
+import wee.digital.sample.local.Ui
 
 
 class AppInputView : AppCustomView,
