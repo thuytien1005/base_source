@@ -1,0 +1,126 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+
+    compileSdkVersion builds.compile_sdk
+
+    defaultConfig {
+        applicationId "wee.digital.sample"
+        minSdkVersion builds.min_sdk
+        targetSdkVersion builds.target_sdk
+        versionCode builds.version_code
+        versionName builds.version_name
+        flavorDimensions "default"
+        consumerProguardFiles "consumer-rules.pro"
+        //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    signingConfigs {
+        release {
+
+        }
+    }
+
+    buildTypes {
+        all {
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.release
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+
+    productFlavors {
+        all {
+        }
+        dev {
+            resValue "string", "app_name", "Sample Dev"
+            applicationIdSuffix ".dev"
+        }
+        qc {
+            resValue "string", "app_name", "Sample QC"
+            applicationIdSuffix ".qc"
+        }
+        prod {
+            resValue "string", "app_name", "Sample"
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ["libs"]
+        }
+    }
+
+    aaptOptions {
+        noCompress "tflite"
+    }
+}
+
+dependencies {
+
+    implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
+
+    implementation project(":library")
+    implementation project(":ml")
+    
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutines_core
+    implementation deps.kotlin.coroutines_android
+
+    implementation deps.android.appcompat
+    implementation deps.android.corektx
+    implementation deps.android.constraintlayout
+    implementation deps.android.recyclerview
+    implementation deps.android.cardview
+    implementation deps.android.exifinterface
+    implementation deps.android.vectordrawable_animated
+    implementation deps.android.legacy
+    implementation deps.android.legacy_v4
+    implementation deps.android.material
+    implementation deps.android.browser
+
+    // FRAGMENT NAVIGATION
+    implementation deps.navigation.fragment
+    implementation deps.navigation.ui
+
+    // MULTI DIMENSIONS
+    implementation deps.dimens.sdp
+    implementation deps.dimens.ssp
+
+    // JSON CONVERTER
+    implementation deps.google.gson
+
+    // ASYNC IMAGE LOAD
+    implementation deps.glide.glide
+    kapt deps.glide.compiler
+
+    // CUSTOM VIEWS
+    implementation deps.roundedimageview
+
+}
+
+apply plugin: "com.google.gms.google-services"

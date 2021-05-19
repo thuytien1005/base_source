@@ -1,0 +1,4 @@
+include ':ml'
+include ':library'
+include ':app'
+rootProject.name = "Sample"
