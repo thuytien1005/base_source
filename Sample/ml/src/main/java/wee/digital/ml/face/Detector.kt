@@ -3,7 +3,7 @@ package wee.digital.ml.face
 import com.google.mlkit.vision.face.FaceDetectorOptions
 
 
-object DetectorOption {
+object Detector {
 
     // High-accuracy landmark detection and face classification
     val highAccuracyOpts = FaceDetectorOptions.Builder()

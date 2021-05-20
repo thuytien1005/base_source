@@ -48,22 +48,6 @@ fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
     return ViewModelProvider(this, factory).get(cls.java)
 }
 
-val hasCameraPermission: Boolean get() = ContextCompat.checkSelfPermission(ML.app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-
-fun onCameraPermissionGranted(block: () -> Unit) {
-    val permissionListener = object : PermissionListener {
-        override fun onPermissionGranted() {
-            block()
-        }
-
-        override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-        }
-    }
-    TedPermission.with(ML.app)
-            .setPermissionListener(permissionListener)
-            .setPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .check()
-}
 
 fun toast(message: String?) {
     if (Looper.myLooper() == Looper.getMainLooper()) {

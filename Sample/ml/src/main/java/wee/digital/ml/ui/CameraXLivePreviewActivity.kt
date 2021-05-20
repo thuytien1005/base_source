@@ -4,27 +4,21 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.mlkit.common.MlKitException
 import kotlinx.android.synthetic.main.face_live_preview.*
 import wee.digital.ml.R
 import wee.digital.ml.base.VisionImageProcessor
-import wee.digital.ml.camera.CameraOption
-import wee.digital.ml.face.DetectorOption
+import wee.digital.ml.camera.CameraVM
+import wee.digital.ml.face.Detector
 import wee.digital.ml.face.FaceDetectorProcessor
-import wee.digital.ml.hasCameraPermission
 
 class CameraXLivePreviewActivity :
-        AppCompatActivity(),
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        AppCompatActivity() {
 
+    private val camVM  : CameraVM by lazy { CameraVM.get(this) }
 
-    private val cameraProvider: ProcessCameraProvider? get() = CameraOption.cameraProvider
-    private var previewUseCase: Preview? = null
     private var analysisUseCase: ImageAnalysis? = null
     private var imageProcessor: VisionImageProcessor? = null
     private var needUpdateGraphicOverlayImageSourceInfo = false
@@ -32,13 +26,14 @@ class CameraXLivePreviewActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.face_live_preview)
-        CameraOption.cameraProviderLiveData.observe(this, Observer {
+        camVM.requestPermission(this)
+        camVM.providerLiveData.observe(this, Observer {
             bindAllCameraUseCases()
         })
+
     }
 
-
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         bindAllCameraUseCases()
     }
@@ -50,41 +45,31 @@ class CameraXLivePreviewActivity :
         }
     }
 
-    public override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         imageProcessor?.run {
             this.stop()
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        bindAllCameraUseCases()
+    }
+
     private fun bindAllCameraUseCases() {
-        if (cameraProvider != null && hasCameraPermission) {
-            cameraProvider?.unbindAll()
-            bindPreviewUseCase()
+        if (camVM.hasPermission) {
+            camVM.bindPreviewUseCase(this, previewView)
             bindAnalysisUseCase()
         }
     }
 
-    private fun bindPreviewUseCase() {
-        if (previewUseCase != null) {
-            cameraProvider!!.unbind(previewUseCase)
-        }
-
-        val builder = Preview.Builder()
-        previewUseCase = builder.build()
-        previewUseCase!!.setSurfaceProvider(previewView.surfaceProvider)
-        cameraProvider!!.bindToLifecycle(this, CameraOption.cameraSelector, previewUseCase)
-    }
-
     private fun bindAnalysisUseCase() {
-
         if (analysisUseCase != null) {
-            cameraProvider?.unbind(analysisUseCase)
+            camVM.provider?.unbind(analysisUseCase)
         }
-        if (imageProcessor != null) {
-            imageProcessor?.stop()
-        }
-        imageProcessor = FaceDetectorProcessor(this, DetectorOption.highAccuracyOpts)
+        imageProcessor?.stop()
+        imageProcessor = FaceDetectorProcessor(this, Detector.highAccuracyOpts)
 
         val builder = ImageAnalysis.Builder()
         analysisUseCase = builder.build()
@@ -97,9 +82,9 @@ class CameraXLivePreviewActivity :
                     if (needUpdateGraphicOverlayImageSourceInfo) {
                         val rotationDegrees = imageProxy.imageInfo.rotationDegrees
                         if (rotationDegrees == 0 || rotationDegrees == 180) {
-                            graphicOverlay!!.setImageSourceInfo(imageProxy.width, imageProxy.height, CameraOption.isImageFlipped)
+                            graphicOverlay!!.setImageSourceInfo(imageProxy.width, imageProxy.height, camVM.isImageFlipped)
                         } else {
-                            graphicOverlay!!.setImageSourceInfo(imageProxy.height, imageProxy.width, CameraOption.isImageFlipped)
+                            graphicOverlay!!.setImageSourceInfo(imageProxy.height, imageProxy.width, camVM.isImageFlipped)
                         }
                         needUpdateGraphicOverlayImageSourceInfo = false
                     }
@@ -110,13 +95,8 @@ class CameraXLivePreviewActivity :
                     }
                 }
         )
-        cameraProvider?.bindToLifecycle(this, CameraOption.cameraSelector, analysisUseCase)
+        camVM.provider?.bindToLifecycle(this, camVM.selector, analysisUseCase)
     }
 
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        bindAllCameraUseCases()
-    }
 
 }
