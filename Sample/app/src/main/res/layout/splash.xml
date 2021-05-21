@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <wee.digital.sample.widget.AppInputView
+    <wee.digital.widget.AppInputView
         android:id="@+id/ocrInputFullName"
         style="@style/InputView"
         android:layout_margin="@dimen/_16sdp"

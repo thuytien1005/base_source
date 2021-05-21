@@ -120,6 +120,7 @@ camera.version = "1.0.0-alpha06"
 camera.camera2 = "androidx.camera:camera-camera2:$camera.version"
 camera.lifecycle = "androidx.camera:camera-lifecycle:$camera.version"
 camera.view = "androidx.camera:camera-view:$camera.version"
+camera.extension = "androidx.camera:camera-extensions:$camera.version"
 deps.camera = camera
 
 /**
@@ -198,6 +199,7 @@ deps.square = square
  * [https://github.com/socketio/socket.io-client-java]
  */
 deps.socket_io_client = "io.socket:socket.io-client:1.0.0" // { exclude group: "org.json", module: "json" }
+
 
 /**
  * Asynchronous image load

@@ -21,7 +21,7 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <application>
-        <activity android:name=".ui.CameraXLivePreviewActivity"></activity>
+        <activity android:name=".ui.FaceAutoCaptureActivity"></activity>
     </application>
 
 </manifest>

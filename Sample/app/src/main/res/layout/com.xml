@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MatchParent"
     android:orientation="vertical">
+    <wee.digital.widget.TextCustomView
+        android:id="@+id/textViewPlaceHolder"
+        style="@style/TextView.PlaceHolder"
+        android:text="SAMPLE" />
 
     <androidx.core.widget.NestedScrollView
         style="@style/ScrollView"
@@ -15,12 +19,8 @@
             android:orientation="vertical"
             android:padding="@dimen/_8sdp">
 
-            <wee.digital.sample.widget.TextCustomView
-                android:id="@+id/textViewPlaceHolder"
-                style="@style/TextView.PlaceHolder"
-                android:text="SAMPLE" />
 
-            <wee.digital.sample.widget.TextHorizontalView
+            <wee.digital.widget.TextHorizontalView
                 style="@style/MatchWidth"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:src="@drawable/ic_placeholder"
@@ -28,7 +28,7 @@
                 android:textColorHint="@color/colorPrimary"
                 android:title="TextHorizontalView" />
 
-            <wee.digital.sample.widget.TextVerticalView
+            <wee.digital.widget.TextVerticalView
                 style="@style/MatchWidth"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:src="@drawable/ic_placeholder"
@@ -36,7 +36,7 @@
                 android:textColorHint="@color/colorPrimary"
                 android:title="TextHorizontalView" />
 
-            <wee.digital.sample.widget.AppInputView
+            <wee.digital.widget.AppInputView
                 style="@style/MatchWidth"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:hint="TextHorizontalView"

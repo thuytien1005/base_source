@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
-
 android {
     compileSdkVersion builds.compile_sdk
     defaultConfig {
@@ -30,9 +29,7 @@ android {
         jvmTarget = '1.8'
     }
 }
-
 dependencies {
-
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.kotlin.stdlib
     implementation deps.android.appcompat
@@ -41,21 +38,15 @@ dependencies {
     implementation deps.android.constraintlayout
     implementation deps.android.constraintlayout
     implementation deps.android.security
-
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
-
     implementation deps.paging.runtime
     implementation deps.paging.rx
-
     implementation deps.dimens.sdp
     implementation deps.dimens.ssp
-
     implementation deps.google.gson
-
     implementation deps.glide.glide
     kapt deps.glide.compiler
-
 }
 
