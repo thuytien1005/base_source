@@ -13,6 +13,6 @@ import android.view.View
  */
 object Ui {
 
-    var currentFocus: View? = null
+
 
 }

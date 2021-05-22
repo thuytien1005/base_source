@@ -72,6 +72,7 @@ dependencies {
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
     implementation project(":library")
     implementation project(":ml")
+    implementation project(":widget")
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines_core
     implementation deps.kotlin.coroutines_android

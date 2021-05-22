@@ -1,8 +1,9 @@
-package wee.digital.library.extension
+package wee.digital.widget.extension
 
 import android.text.Editable
 import android.text.InputType
 import android.widget.EditText
+import wee.digital.library.extension.SimpleTextWatcher
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.net.URI

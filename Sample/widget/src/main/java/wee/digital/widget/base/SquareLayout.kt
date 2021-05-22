@@ -1,18 +1,9 @@
-package wee.digital.widget
+package wee.digital.widget.base
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2018/10/04
- * @Description: A RelativeLayout that will always be square -- same width and height,
- * where the height is based off the width.
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
 class SquareLayout : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)

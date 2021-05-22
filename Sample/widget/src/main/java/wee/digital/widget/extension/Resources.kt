@@ -1,4 +1,4 @@
-package wee.digital.library.extension
+package wee.digital.widget.extension
 
 import android.app.Application
 import android.graphics.PorterDuff
@@ -9,17 +9,10 @@ import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import wee.digital.library.Library
+import wee.digital.widget.Widget
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy 2020/04/01
- * @Organize: Wee Digital
- * @Description: ...
- * All Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-private val app: Application get() = Library.app
+
+private val app: Application get() = Widget.app
 
 fun anim(@AnimRes res: Int): Animation {
     return AnimationUtils.loadAnimation(app, res)

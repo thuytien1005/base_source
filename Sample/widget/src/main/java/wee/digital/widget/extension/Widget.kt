@@ -1,4 +1,4 @@
-package wee.digital.widget.base
+package wee.digital.widget.extension
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -23,19 +23,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
-import wee.digital.widget.extension.hideKeyboard
-import wee.digital.widget.extension.string
 import java.util.*
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Sample
- * @Created: Huy 2021/05/21
- * @Organize: Wee Digital
- * @Description: ...
- * All Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
+
 fun EditText?.showKeyboard() {
     this?.post {
         requestFocus()
@@ -256,7 +246,7 @@ fun EditText.addEditorActionListener(actionId: Int, block: (String?) -> Unit) {
                 this@addEditorActionListener.post {
                     isSelected = false
                     block(text.toString())
-                    (context as? Activity)?.hideKeyboard()
+                    hideKeyboard()
                     clearFocus()
                 }
                 return true

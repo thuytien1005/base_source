@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import kotlinx.android.synthetic.main.text_vertical.view.*
+import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.extension.isGone
 
 class TextVerticalView : AppCustomView {

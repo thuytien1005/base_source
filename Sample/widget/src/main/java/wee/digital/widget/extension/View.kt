@@ -23,19 +23,11 @@ import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentActivity
-import wee.digital.widget.Library
+import wee.digital.widget.Widget
 import kotlin.math.roundToInt
 
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2018/11/04
- * @Description: ...
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-private val app: Application get() = Library.app
+private val app: Application get() = Widget.app
 
 fun Float.dpToPx(): Float {
     val resources = app.resources

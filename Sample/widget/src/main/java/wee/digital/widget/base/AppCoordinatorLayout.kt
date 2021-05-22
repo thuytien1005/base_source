@@ -1,4 +1,4 @@
-package wee.digital.widget
+package wee.digital.widget.base
 
 import android.content.Context
 import android.util.AttributeSet

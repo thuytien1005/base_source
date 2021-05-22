@@ -1,4 +1,4 @@
-package wee.digital.widget
+package wee.digital.widget.base
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,6 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.constraintlayout.motion.widget.MotionLayout
 import wee.digital.widget.extension.SimpleMotionTransitionListener
-import wee.digital.widget.util.Logger
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -20,7 +19,6 @@ open class AppMotionLayout : MotionLayout {
                     it.isInteractionEnabled = true
                     it.previousId = it.currentId
                     it.currentId = currentId
-                    log.d("onTransitionCompleted isInteractionEnabled - $isInteractionEnabled")
                 }
             }
         })
@@ -30,8 +28,6 @@ open class AppMotionLayout : MotionLayout {
         super.onDetachedFromWindow()
         removeCallbacks(enableInteraction)
     }
-
-    val log by lazy { Logger(this::class) }
 
     var previousId: Int = -1
 
@@ -123,7 +119,6 @@ open class AppMotionLayout : MotionLayout {
 
     fun safeTransitionTo(@IdRes transitionId: Int) {
         if (progress == 0f && progress == 1f) return
-        log.d("safeTransitionTo isInteractionEnabled - $isInteractionEnabled")
         this.post {
             isInteractionEnabled = false
             super.transitionToState(transitionId)

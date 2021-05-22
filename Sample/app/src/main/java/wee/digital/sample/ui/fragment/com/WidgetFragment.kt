@@ -14,6 +14,7 @@ import wee.digital.sample.ui.base.BaseFragment
 class WidgetFragment : BaseFragment() {
 
     override fun layoutResource(): Int {
+        return 0
     }
 
 

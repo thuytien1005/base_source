@@ -4,9 +4,10 @@ import android.view.View
 import kotlinx.android.synthetic.main.selectable_item.view.*
 import wee.digital.library.adapter.BaseRecyclerAdapter
 import wee.digital.library.extension.bold
-import wee.digital.library.extension.isGone
-import wee.digital.library.extension.regular
+import wee.digital.widget.extension.isGone
+import wee.digital.widget.extension.regular
 import wee.digital.sample.R
+import wee.digital.widget.extension.bold
 
 open class SelectableAdapter : BaseRecyclerAdapter<Selectable>() {
 

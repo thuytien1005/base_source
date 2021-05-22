@@ -36,7 +36,7 @@
                 android:textColorHint="@color/colorPrimary"
                 android:title="TextHorizontalView" />
 
-            <wee.digital.widget.AppInputView
+            <wee.digital.widget.base.AppInputView
                 style="@style/MatchWidth"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:hint="TextHorizontalView"

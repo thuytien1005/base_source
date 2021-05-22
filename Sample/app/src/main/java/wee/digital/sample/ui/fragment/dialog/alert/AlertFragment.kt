@@ -5,6 +5,10 @@ import kotlinx.android.synthetic.main.alert.*
 import wee.digital.library.extension.*
 import wee.digital.sample.R
 import wee.digital.sample.ui.main.MainDialog
+import wee.digital.widget.extension.backgroundTintRes
+import wee.digital.widget.extension.gone
+import wee.digital.widget.extension.isGone
+import wee.digital.widget.extension.setHyperText
 
 class AlertFragment : MainDialog() {
 

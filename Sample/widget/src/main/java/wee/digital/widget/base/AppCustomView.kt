@@ -1,4 +1,4 @@
-package wee.digital.widget
+package wee.digital.widget.base
 
 import android.app.Application
 import android.content.Context
@@ -15,9 +15,9 @@ import androidx.annotation.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import wee.digital.widget.Library
+import wee.digital.library.extension.ViewClickListener
 import wee.digital.widget.R
-import wee.digital.widget.extension.ViewClickListener
+import wee.digital.widget.Widget
 
 abstract class AppCustomView : ConstraintLayout {
 
@@ -58,7 +58,7 @@ abstract class AppCustomView : ConstraintLayout {
         }
     }
 
-    val app: Application get() = Library.app
+    val app: Application get() = Widget.app
 
     /**
      * Text
@@ -92,7 +92,7 @@ abstract class AppCustomView : ConstraintLayout {
      */
     val TypedArray.tint: Int
         get() {
-            return getColor(R.styleable.CustomView_android_tint, color(R.color.colorLightBlue))
+            return getColor(R.styleable.CustomView_android_tint, Color.BLACK)
         }
 
     val TypedArray.drawableTint: Int

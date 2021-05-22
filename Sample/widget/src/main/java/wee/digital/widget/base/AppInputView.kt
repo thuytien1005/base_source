@@ -1,4 +1,4 @@
-package wee.digital.widget
+package wee.digital.widget.base
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -16,10 +16,13 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
-import kotlinx.android.synthetic.main.widget_text_input.view.*
+import kotlinx.android.synthetic.main.text_input.view.*
+import wee.digital.widget.extension.addDateWatcher
+import wee.digital.library.extension.addViewClickListener
+import wee.digital.library.extension.tintRes
 import wee.digital.widget.extension.*
-import wee.digital.widget.AppCustomView
-import wee.digital.sample.local.Ui
+import wee.digital.widget.R
+import wee.digital.widget.Widget
 
 
 class AppInputView : AppCustomView,
@@ -30,7 +33,7 @@ class AppInputView : AppCustomView,
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)
 
     override fun layoutResource(): Int {
-        return R.layout.widget_text_input
+        return R.layout.text_input
     }
 
     override fun onInitialize(context: Context, types: TypedArray) {
@@ -315,7 +318,7 @@ class AppInputView : AppCustomView,
         when {
             //
             hasFocus -> {
-                Ui.currentFocus = this
+                Widget.currentFocus = this
                 if (editText.isFocusable) {
                     editText.select()
                     showKeyboard()
