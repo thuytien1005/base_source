@@ -3,4 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="wee.digital.widget">
 
+    <application>
+        <activity android:name=".ui.WidgetsActivity" />
+    </application>
 </manifest>

@@ -5,10 +5,66 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.StringReader
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
-private val convertFactory: Gson = Gson()
+/**
+ * Parse [JsonObject]/[JsonArray]/[String] to Kotlin Object/List<Object>
+ */
+private val convertFactory: Gson by lazy {
+    Gson()
+}
+
+fun <T> JsonObject?.parse(cls: Class<T>): T? {
+    return this?.toString()?.parse(cls)
+}
+
+fun <T> JsonArray?.parse(cls: Class<Array<T>>): List<T>? {
+    return this?.toString()?.parse(cls)
+}
+
+fun <T : Any> JsonObject?.parse(cls: KClass<T>): T? {
+    return this?.toString()?.parse(cls)
+}
+
+fun <T : Any> JsonArray?.parse(cls: KClass<Array<T>>): List<T>? {
+    return this?.toString()?.parse(cls)
+}
+
+fun <T> String?.parse(cls: Class<T>): T? {
+    this ?: return null
+    if (isNullOrEmpty()) {
+        return null
+    }
+    return try {
+        return convertFactory.fromJson(this, cls)
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+fun <T> String?.parse(cls: Class<Array<T>>): List<T>? {
+    this ?: return null
+    if (isNullOrEmpty()) {
+        return null
+    }
+    return try {
+        return convertFactory.fromJson(StringReader(this), cls).toList()
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+fun <T : Any> String?.parse(cls: KClass<T>): T? {
+    return this?.parse(cls.java)
+}
+
+fun <T : Any> String?.parse(cls: KClass<Array<T>>): List<T>? {
+    return this?.parse(cls.java)
+}
 
 fun <T> T.toJsonObject(): JsonObject? {
     return try {
@@ -42,44 +98,22 @@ fun <T> Collection<T?>?.toJsonArray(): JsonArray? {
     return jsonArray
 }
 
-fun <T> JsonObject?.parse(cls: Class<T>): T? {
-    this ?: return null
-    return this.toString().parse(cls)
+
+/**
+ * [String] to [JsonObject]/[JsonArray]
+ */
+fun String?.toObject(): JsonObject? {
+    return parse(JsonObject::class.java)
 }
 
-fun <T> JsonArray?.parse(cls: Class<Array<T>>): List<T>? {
-    this ?: return null
-    return this.toString().parse(cls)
+fun String?.toArray(): JsonArray? {
+    return parse(JsonArray::class.java)
 }
 
-fun <T> String?.parse(cls: Class<T>): T? {
-    this ?: return null
-    if (isNullOrEmpty()) {
-        return null
-    }
-    return try {
-        return convertFactory.fromJson(this, cls)
-    } catch (ignore: Exception) {
-        null
-    }
-}
 
-fun <T> String?.parse(cls: Class<Array<T>>): List<T>? {
-    this ?: return null
-    if (isNullOrEmpty()) {
-        return null
-    }
-    return try {
-        return convertFactory.fromJson(StringReader(this), cls).toList()
-    } catch (ignore: Exception) {
-        null
-    }
-}
-
-fun readObject(fileName: String): JsonObject? {
-    return readAsset(fileName).parse(JsonObject::class.java)
-}
-
+/**
+ * [JsonElement] to [JsonObject]/[JsonArray]
+ */
 fun JsonElement?.toObject(): JsonObject? {
     this ?: return null
     if (this.isJsonNull) return null
@@ -87,24 +121,70 @@ fun JsonElement?.toObject(): JsonObject? {
     return this.asJsonObject
 }
 
+fun JsonElement?.toArray(): JsonArray? {
+    this ?: return null
+    if (isJsonNull) return null
+    if (!isJsonArray) return null
+    val arr = asJsonArray
+    if (arr.size() == 0) return null
+    return arr
+}
+
+
+/**
+ * [JsonArray]
+ */
+fun JsonArray?.getObject(index: Int): JsonObject? {
+    this ?: return null
+    if (index !in 0 until this.size()) return null
+    if (this[index].isJsonNull) return null
+    if (!this[index].isJsonObject) return null
+    return this[index].asJsonObject
+}
+
+fun JsonArray?.getArray(index: Int): JsonArray? {
+    this ?: return null
+    if (index !in 0 until this.size()) return null
+    if (this[index].isJsonNull) return null
+    if (!this[index].isJsonArray) return null
+    return this[index].asJsonArray
+}
+
+fun JsonArray?.getElement(index: Int): JsonElement? {
+    this ?: return null
+    if (index !in 0 until this.size()) return null
+    if (this[index].isJsonNull) return null
+    return this[index]
+}
+
+fun JsonArray?.addObject(obj: JsonObject?) {
+    this ?: return
+    obj ?: return
+    if (obj.isJsonNull) return
+    this.add(obj)
+}
+
+fun JsonArray?.addArray(array: JsonArray?) {
+    this ?: return
+    array ?: return
+    if (array.size() == 0) return
+    this.addAll(array)
+}
+
 fun JsonArray?.isEmpty(): Boolean {
     this ?: return true
     return this.size() == 0
 }
 
+fun JsonArray?.notEmpty(): Boolean {
+    this ?: return false
+    return this.size() != 0
+}
+
+
 /**
- * [JsonObject]
+ * [JsonObject] properties setter
  */
-fun JsonObject.putString(key: String, value: String?): JsonObject {
-    addProperty(key, value ?: "")
-    return this
-}
-
-fun JsonObject.putLong(key: String, value: Long?): JsonObject {
-    addProperty(key, value ?: 0L)
-    return this
-}
-
 fun JsonObject.put(key: String, value: String?): JsonObject {
     if (null != value) addProperty(key, value)
     return this
@@ -130,6 +210,10 @@ fun <T> JsonObject.put(key: String, value: List<T?>?): JsonObject {
     return this
 }
 
+
+/**
+ * [JsonObject] properties getter
+ */
 fun JsonObject?.obj(string: String): JsonObject? {
     this ?: return null
     if (!has(string)) return null
@@ -146,26 +230,6 @@ fun JsonObject?.array(key: String): JsonArray? {
     if (arr.size() == 0) return null
     return arr
 }
-
-fun JsonObject?.list(key: String): List<JsonObject>? {
-    val s = array(key).toString()
-    return try {
-        return convertFactory.fromJson(StringReader(s), Array<JsonObject>::class.java).toList()
-    } catch (ignore: Exception) {
-        null
-    }
-}
-
-
-fun JsonObject?.listString(key: String): List<String>? {
-    val s = array(key).toString()
-    return try {
-        return convertFactory.fromJson(StringReader(s), Array<String>::class.java).toList()
-    } catch (ignore: Exception) {
-        null
-    }
-}
-
 
 fun JsonObject?.str(key: String, default: String? = null): String? {
     this ?: return default
@@ -227,14 +291,55 @@ fun JsonObject?.float(key: String, default: Float = 0f): Float {
     }
 }
 
-fun String?.toArray(): JsonArray? {
-    return parse(JsonArray::class.java)
+fun JsonObject?.double(key: String, default: Double = 0.0): Double {
+    try {
+        this ?: return default
+        if (!has(key)) return default
+        if (get(key).isJsonNull) return default
+        return get(key)?.asDouble ?: get(key)?.asString?.toDoubleOrNull() ?: 0.0
+    } catch (e: Exception) {
+        return 0.0
+    }
 }
 
-fun (JsonObject.() -> Unit).build(): JsonObject {
-    val body = JsonObject()
-    this(body)
-    return body
+fun JsonObject?.list(key: String): List<JsonObject>? {
+    val s = array(key).toString()
+    return try {
+        return convertFactory.fromJson(StringReader(s), Array<JsonObject>::class.java).toList()
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+fun JsonObject?.listString(key: String): List<String>? {
+    val s = array(key).toString()
+    return try {
+        return convertFactory.fromJson(StringReader(s), Array<String>::class.java).toList()
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+
+/**
+ * Beauty json
+ */
+fun String?.stringyJson(): String {
+    this ?: return "null"
+    return try {
+        JSONObject(this).toString(2)
+    } catch (e: JSONException) {
+        "null"
+    }
+}
+
+fun JsonObject?.stringyJson(): String {
+    this ?: return "null"
+    return try {
+        JSONObject(this.toString()).toString(2)
+    } catch (e: JSONException) {
+        "null"
+    }
 }
 
 

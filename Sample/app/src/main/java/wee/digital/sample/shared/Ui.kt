@@ -1,6 +1,4 @@
-package wee.digital.sample.local
-
-import android.view.View
+package wee.digital.sample.shared
 
 /**
  * -------------------------------------------------------------------------------------------------

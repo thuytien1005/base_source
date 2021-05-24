@@ -5,16 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.speech.RecognizerIntent
-
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2018/02/24
- * @Description: ...
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-const val IMAGE_REQUEST_CODE = 1004
+import androidx.fragment.app.Fragment
+import kotlin.reflect.KClass
 
 const val VOICE_REQUEST_CODE = 1005
 
@@ -33,18 +25,13 @@ val emailIntent: Intent
         return intent
     }
 
-fun <T : Activity> Activity.start(cls: Class<T>) {
-    startActivity(Intent(this, cls))
+
+fun <T : Activity> Fragment.start(cls: KClass<T>) {
+    requireActivity().start(cls)
 }
 
-fun <T : Activity> Activity.startFinish(cls: Class<T>) {
-    startActivity(Intent(this, cls))
-    finish()
-}
-
-fun <T : Activity> Activity.startClear(cls: Class<T>) {
-    startActivity(Intent(this, cls))
-    finish()
+fun <T : Activity> Activity.start(cls: KClass<T>) {
+    startActivity(Intent(this, cls.java))
 }
 
 fun Activity.navigateEmail() {
@@ -62,7 +49,7 @@ fun Activity.navigateSettings(code: Int = 0) {
     startActivityForResult(intent, code)
 }
 
-fun Activity.navigateAppStore() {
+fun Activity.navigateCHPlay() {
 
     try {
         val s = "market://details?id=${applicationContext.packageName}"

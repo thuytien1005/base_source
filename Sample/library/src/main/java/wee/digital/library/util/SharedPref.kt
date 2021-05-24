@@ -6,9 +6,8 @@ import android.os.Build
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import wee.digital.library.Library
-import wee.digital.library.BuildConfig
 
-class Shared(private val fileName : String) {
+class SharedPref(private val fileName : String) {
 
     private val context get() = Library.app
 

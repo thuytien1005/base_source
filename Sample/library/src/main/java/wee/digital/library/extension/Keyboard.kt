@@ -12,32 +12,12 @@ import androidx.fragment.app.Fragment
 /**
  * -------------------------------------------------------------------------------------------------
  * @Project: Kotlin
- * @Created: Huy 2021/04/16
+ * @Created: Huy 2021/04/28
  * @Organize: Wee Digital
  * @Description: ...
  * All Right Reserved
  * -------------------------------------------------------------------------------------------------
  */
-fun Activity.hideKeyboard() {
-    this.findViewById<View>(android.R.id.content)?.windowToken.also { windowToken ->
-        val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
-    }
-}
-
-fun Activity.showKeyboard() {
-    (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            .toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-}
-
-fun Fragment.hideKeyboard() {
-    activity?.hideKeyboard()
-}
-
-fun Fragment.showKeyboard() {
-    activity?.showKeyboard()
-}
-
 fun View?.hideKeyboard() {
     this?.post {
         clearFocus()
@@ -52,6 +32,26 @@ fun View?.showKeyboard() {
         val imm: InputMethodManager? = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
+}
+
+fun Activity.hideKeyboard() {
+    this.findViewById<View>(android.R.id.content)?.windowToken.also { windowToken ->
+        val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+}
+
+fun Activity.showKeyboard() {
+    (this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+}
+
+fun Fragment.hideKeyboard() {
+    view?.hideKeyboard()
+}
+
+fun Fragment.showKeyboard() {
+    view?.showKeyboard()
 }
 
 fun AppCompatActivity.listenKeyboard() {
