@@ -1,9 +1,7 @@
 package wee.digital.ml
 
-import android.Manifest
 import android.app.Activity
 import android.app.Application
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -20,8 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import java.io.ByteArrayOutputStream
 import kotlin.reflect.KClass
 
@@ -47,7 +43,6 @@ fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
     val factory = ViewModelProvider.AndroidViewModelFactory.getInstance(ML.app)
     return ViewModelProvider(this, factory).get(cls.java)
 }
-
 
 fun toast(message: String?) {
     if (Looper.myLooper() == Looper.getMainLooper()) {

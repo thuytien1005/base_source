@@ -8,10 +8,6 @@ import wee.digital.ml.ML
 import wee.digital.sample.BuildConfig
 import wee.digital.widget.Widget
 
-lateinit var app: App private set
-
-val pref by lazy { SharedPref(BuildConfig.APPLICATION_ID) }
-
 class App : Application(), LifecycleObserver {
 
     override fun onCreate() {
@@ -23,3 +19,9 @@ class App : Application(), LifecycleObserver {
     }
 
 }
+
+lateinit var app: App private set
+
+val appId: String get() = BuildConfig.APPLICATION_ID
+
+val pref: SharedPref by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { SharedPref(appId) }

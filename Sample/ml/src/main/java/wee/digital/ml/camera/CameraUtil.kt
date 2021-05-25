@@ -1,12 +1,11 @@
 package wee.digital.ml.camera
 
 import android.Manifest
-import android.app.Activity
 import android.content.pm.PackageManager
+import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraInfoUnavailableException
 import androidx.camera.core.CameraSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import wee.digital.ml.ML
@@ -25,16 +24,9 @@ object CameraUtil {
     val hasPermission: Boolean
         get() = ContextCompat.checkSelfPermission(ML.app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
-    fun onPermissionGranted(activity: Activity, block: () -> Unit) {
-        if (hasPermission) {
-            block()
-        } else {
-            requestPermission(activity)
-        }
-    }
 
-    fun requestPermission(activity: Activity) {
-        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), 1)
+    fun onPermissionGranted(activity: ComponentActivity,onGranted: () -> Unit) {
+        onGranted()
     }
 
 
@@ -53,15 +45,7 @@ object CameraUtil {
         return false
     }
 
-    val cameraProviderLiveData = object : MutableLiveData<ProcessCameraProvider>() {
-        init {
-            val cameraProvider = ProcessCameraProvider.getInstance(ML.app)
-            cameraProvider.addListener({
-                try {
-                    value = cameraProvider.get()
-                } catch (e: Exception) {
-                }
-            }, ContextCompat.getMainExecutor(ML.app))
-        }
-    }
+    val cameraProviderLiveData = MutableLiveData<ProcessCameraProvider>()
+
+
 }

@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-sdk tools:overrideLibrary="androidx.security,androidx.camera.camera2,
+        androidx.camera.core, androidx.camera.view, androidx.camera.lifecycle" />
+
+    <uses-feature android:name="android.hardware.camera"/>
+
     <application
         android:name=".app.App"
         android:allowBackup="false"
