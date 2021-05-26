@@ -93,6 +93,7 @@ dependencies {
     implementation deps.dimens.ssp
     implementation deps.google.gson
     implementation deps.glide.glide
+    implementation deps.camera.camera2
     kapt deps.glide.compiler
     implementation deps.roundedimageview
 }

@@ -2,6 +2,7 @@ package wee.digital.ml.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -22,7 +23,9 @@ class FaceAutoCaptureActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.face_auto_capture)
         CameraUtil.onPermissionGranted(this) {
-            val cameraProvider = ProcessCameraProvider.getInstance(this)
+                    CameraSelector.Builder().requireLensFacing( CameraSelector.LENS_FACING_FRONT).build()
+
+           val cameraProvider = ProcessCameraProvider.getInstance(this)
             cameraProvider.addListener({
                 detector?.unBindAllUseCases()
                 detector = FaceDetector(object : FaceDetectorInterface {
