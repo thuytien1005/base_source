@@ -1,6 +1,8 @@
 package wee.digital.sample.app
 
 import android.app.Application
+import androidx.camera.camera2.Camera2Config
+import androidx.camera.core.CameraXConfig
 import androidx.lifecycle.LifecycleObserver
 import wee.digital.library.Library
 import wee.digital.library.util.SharedPref
@@ -17,9 +19,11 @@ class App : Application(), LifecycleObserver , CameraXConfig.Provider {
         Widget.app = this
         ML.app = this
     }
+
     override fun getCameraXConfig(): CameraXConfig {
         return Camera2Config.defaultConfig()
     }
+    
 }
 
 lateinit var app: App private set
