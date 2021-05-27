@@ -1,0 +1,43 @@
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/set2"
+        motion:constraintSetStart="@+id/set1"
+        motion:duration="360">
+        <OnSwipe
+            motion:dragDirection="dragLeft"
+            motion:maxAcceleration="300"
+            motion:touchAnchorId="@id/textViewFaceRecognitionInfo" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/set1">
+        <Constraint
+            android:id="@+id/textViewFaceRecognitionInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constrainedWidth="true"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1.0" />
+    </ConstraintSet>
+
+
+    <ConstraintSet
+        android:id="@+id/set2"
+        motion:deriveConstraintsFrom="@id/set1">
+        <Constraint
+            android:id="@+id/textViewFaceRecognitionInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constrainedWidth="true"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintWidth_default="percent"
+            motion:layout_constraintWidth_percent="1.0" />
+    </ConstraintSet>
+
+</MotionScene>

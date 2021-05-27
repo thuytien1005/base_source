@@ -25,7 +25,8 @@ class FaceAutoCaptureActivity : AppCompatActivity(){
         onCameraPermissionGranted(this) {
             val cameraProvider = ProcessCameraProvider.getInstance(this)
             cameraProvider.addListener({
-                detector?.unbindUseCases()
+                detector?.unBindPreview()
+                detector?.unBindImageAnalysis()
                 detector = FaceCapture(object : FaceCapture.ViewInterface {
 
                     override val lifecycleOwner: LifecycleOwner
@@ -40,6 +41,7 @@ class FaceAutoCaptureActivity : AppCompatActivity(){
                     override val graphicOverlay: GraphicOverlay
                         get() = this@FaceAutoCaptureActivity.graphicOverlay
                 })
+
 
 
             }, ContextCompat.getMainExecutor(this))
