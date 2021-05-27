@@ -23,7 +23,7 @@ class App : Application(), LifecycleObserver , CameraXConfig.Provider {
     override fun getCameraXConfig(): CameraXConfig {
         return Camera2Config.defaultConfig()
     }
-    
+
 }
 
 lateinit var app: App private set

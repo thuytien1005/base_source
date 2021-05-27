@@ -32,6 +32,7 @@ import kotlin.math.max
  * graphic overlay view.
  */
 class FaceGraphic constructor(overlay: GraphicOverlay?, private val face: Face) : GraphicOverlay.Graphic(overlay) {
+
   private val facePositionPaint: Paint
   private val numColors = COLORS.size
   private val idPaints = Array(numColors) { Paint() }

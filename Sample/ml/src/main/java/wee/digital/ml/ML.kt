@@ -1,7 +1,9 @@
 package wee.digital.ml
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -38,6 +40,15 @@ object ML {
         }
 
 }
+
+val activityManager by lazy { ML.app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager }
+
+val availableMemoryInMB: Long
+    get() {
+        val mi = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(mi)
+        return mi.availMem / 0x100000L
+    }
 
 fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
     val factory = ViewModelProvider.AndroidViewModelFactory.getInstance(ML.app)
