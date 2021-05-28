@@ -5,11 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AlertDialog
-import androidx.camera.core.CameraInfoUnavailableException
-import androidx.camera.core.CameraSelector
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -31,12 +28,11 @@ val hasCameraPermission: Boolean
 
 private var cameraPermissionObserver: LifecycleObserver? = null
 
-fun onCameraPermissionGranted(activity: ComponentActivity, onGranted: () -> Unit) {
+fun onCameraPermissionGranted(activity: AppCompatActivity, onGranted: () -> Unit) {
     if (hasCameraPermission) {
         onGranted()
         return
     }
-
     val observerPermission = {
         cameraPermissionObserver?.also {
             activity.lifecycle.removeObserver(it)
