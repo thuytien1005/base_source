@@ -12,15 +12,6 @@ import wee.digital.ml.base.BitmapUtils
 import wee.digital.ml.base.GraphicOverlay
 import wee.digital.ml.base.ScopedExecutor
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Sample
- * @Created: Huy 2021/05/19
- * @Organize: Wee Digital
- * @Description: ...
- * All Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
 class FaceDetector {
 
     data class Info(
@@ -72,7 +63,7 @@ class FaceDetector {
 
             detector.process(inputImage)
                     .addOnSuccessListener(executor) { results: List<Face> ->
-                        int?.onProcessInfo(FaceLogger.processInfo(frameStartTime, detectorStartTime))
+                        FaceLogger.processInfo(frameStartTime, detectorStartTime)
                         graphicOverlay?.clear()
                         if (bitmap != null) {
                             //graphicOverlay.add(CameraImageGraphic(graphicOverlay, bitmap))

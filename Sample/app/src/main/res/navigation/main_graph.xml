@@ -3,29 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/comFragment">
-
-    <fragment
-        android:id="@+id/comFragment"
-        android:name="wee.digital.sample.ui.fragment.com.ComFragment"
-        android:label="ComFragment"
-        tools:layout="@layout/com" />
-    <action
-        android:id="@+id/action_global_comFragment"
-        app:destination="@id/comFragment" />
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="wee.digital.sample.ui.fragment.splash.SplashFragment"
+        android:name="wee.digital.sample.ui.main.fragment.splash.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/splash" />
+    
     <action
         android:id="@+id/action_global_splashFragment"
         app:destination="@id/splashFragment" />
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="wee.digital.sample.ui.fragment.home.HomeFragment"
+        android:name="wee.digital.sample.ui.main.fragment.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/home" />
     <action
@@ -34,7 +26,7 @@
 
     <dialog
         android:id="@+id/alertFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.alert.AlertFragment"
+        android:name="wee.digital.sample.ui.main.fragment.alert.AlertFragment"
         android:label="AlertFragment"
         tools:layout="@layout/alert" />
     <action
@@ -42,7 +34,7 @@
         app:destination="@id/alertFragment" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="wee.digital.sample.ui.fragment.login.LoginFragment"
+        android:name="wee.digital.sample.ui.main.fragment.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/login" />
     <action
@@ -51,7 +43,7 @@
 
     <dialog
         android:id="@+id/selectableFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment"
+        android:name="wee.digital.sample.ui.main.fragment.selectable.SelectableFragment"
         android:label="SelectableFragment"
         tools:layout="@layout/selectable" />
     <action

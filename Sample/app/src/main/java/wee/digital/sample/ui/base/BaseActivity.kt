@@ -3,58 +3,32 @@ package wee.digital.sample.ui.base
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
-import wee.digital.library.util.Logger
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity : AppCompatActivity(), BaseView {
+abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
+        BaseView {
+
+    protected val bind: B by viewBinding(inflating())
+
+    abstract fun inflating(): (LayoutInflater) -> B
 
     /**
-     * [AppCompatActivity] override
+     * [AppCompatActivity] implements
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutResource())
+        setContentView(bind.root)
         onViewCreated()
         onLiveDataObserve()
     }
 
-    /**
-     * [BaseActivity] abstract implements
-     */
-    abstract fun layoutResource(): Int
-
-    abstract fun onViewCreated()
-
-    abstract fun onLiveDataObserve()
-
-    /**
-     * [BaseView] implement
-     */
-    override fun navController(): NavController? {
-        return null
-    }
-
-    final override val log by lazy { Logger(this::class) }
-
-    final override val fragmentActivity: FragmentActivity get() = this
-
-    final override val lifecycleOwner: LifecycleOwner get() = this
-
-    /**
-     * [BaseActivity] properties
-     */
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        //return hideKeyboardOnTouchDown(event)
-        return super.dispatchTouchEvent(event)
-    }
-
-    private fun hideKeyboardOnTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
             if (v is EditText) {
@@ -68,6 +42,24 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    /**
+     * [BaseView] implements
+     */
+    final override val baseActivity: BaseActivity<*>? get() = this
+
+    final override val lifecycleOwner: LifecycleOwner get() = this
+
+    /**
+     * [BaseActivity] properties
+     */
+    protected open fun fragmentContainerId(): Int {
+        throw NullPointerException("fragmentContainerId no has implement")
+    }
+
+    protected fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> T): Lazy<T> {
+        return lazy { block.invoke(layoutInflater) }
     }
 
 }

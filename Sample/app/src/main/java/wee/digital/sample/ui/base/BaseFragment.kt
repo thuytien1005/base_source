@@ -1,23 +1,41 @@
 package wee.digital.sample.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import wee.digital.library.util.Logger
+import androidx.viewbinding.ViewBinding
+import wee.digital.library.extension.statusBarColor
+import wee.digital.widget.extension.backgroundColor
 
-abstract class BaseFragment : Fragment(), BaseView {
+abstract class BaseFragment<B : ViewBinding> : Fragment(), FragmentView {
+
+    protected val bind: B by viewBinding(inflating())
+
+    abstract fun inflating(): (LayoutInflater) -> B
 
     /**
-     * [Fragment] override
+     * [Fragment] implements
      */
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        onBackPressed()
+                    }
+                })
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutResource(), container, false)
+        val view = bind.root
+        view.setOnTouchListener { _, _ -> true }
+        statusBarColor(view.backgroundColor)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,31 +44,18 @@ abstract class BaseFragment : Fragment(), BaseView {
         onLiveDataObserve()
     }
 
-    override fun onPause() {
-        super.onPause()
-        view?.clearAnimation()
-    }
+    /**
+     * [FragmentView] implements
+     */
+    override val fragment: Fragment get() = this
 
     /**
-     * [BaseFragment] required implements
+     * [BaseFragment] properties
      */
-    abstract fun layoutResource(): Int
-
-    abstract fun onViewCreated()
-
-    abstract fun onLiveDataObserve()
-
-    /**
-     * [BaseView] implement
-     */
-    final override val log by lazy { Logger(this::class) }
-
-    final override val fragmentActivity: FragmentActivity get() = requireActivity()
-
-    final override val lifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
-
-    override fun navController(): NavController? {
-        return findNavController()
+    protected open fun onBackPressed() {
+        if (!findNavController().popBackStack()) {
+            requireActivity().finish()
+        }
     }
 
 }

@@ -14,6 +14,8 @@
     <color name="colorInputDefault">#00000000</color>
     <color name="colorInputUnfocused">#ADADAD</color>
     <color name="colorInputFocused">@color/colorPrimary</color>
-    <color name="colorInputError">@color/colorAccent</color>
+
+
+    <color name="colorError">#EA3232</color>
 
 </resources>

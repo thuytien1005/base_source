@@ -17,7 +17,7 @@
     <uses-feature android:name="android.hardware.camera"/>
 
     <application
-        android:name=".app.App"
+        android:name=".App"
         android:allowBackup="false"
         android:configChanges="layoutDirection|locale"
         android:icon="@drawable/ic_placeholder"

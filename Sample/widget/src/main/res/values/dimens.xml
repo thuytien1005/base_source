@@ -18,4 +18,5 @@
     <dimen name="radius3">@dimen/_11sdp</dimen>
     <dimen name="radius4">@dimen/_14sdp</dimen>
 
+    <dimen name="inputHeight">@dimen/_40sdp</dimen>
 </resources>

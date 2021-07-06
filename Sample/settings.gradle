@@ -1,5 +1,5 @@
+rootProject.name = "Sample"
 include ':widget'
-include ':ml'
+//include ':ml'
 include ':library'
 include ':app'
-rootProject.name = "Sample"

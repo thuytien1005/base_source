@@ -1,9 +1,9 @@
 package wee.digital.sample.ui.base
 
-import android.app.Activity
-import android.content.Intent
+import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentActivity
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,54 +12,42 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import wee.digital.sample.R
 import wee.digital.library.extension.ViewClickListener
-import wee.digital.library.extension.hideKeyboard
-import wee.digital.library.extension.post
-import wee.digital.library.util.Logger
-import kotlin.reflect.KClass
+import wee.digital.sample.R
 
 interface BaseView {
 
-    val className: String get() = this::class.simpleName.toString()
+    val baseActivity: BaseActivity<*>? get() = null
 
     val lifecycleOwner: LifecycleOwner
 
-    val fragmentActivity: FragmentActivity
+    fun navController(): NavController?
 
-    val log: Logger
+    fun onViewCreated()
+
+    fun onLiveDataObserve()
 
     fun addClickListener(vararg views: View?) {
-        val listener = object : ViewClickListener(300L) {
+        val listener = object : ViewClickListener() {
             override fun onClicks(v: View?) {
-                fragmentActivity.hideKeyboard()
                 onViewClick(v)
             }
         }
-        views.forEach {
-            it?.setOnClickListener(listener)
-        }
+        views.forEach { it?.setOnClickListener(listener) }
     }
 
-    fun onViewClick(v: View?) {}
+    fun onViewClick(v: View?) = Unit
 
-    fun navController(): NavController?
-
-    fun <T : Activity> navigate(cls: KClass<T>) {
-        fragmentActivity.startActivity(Intent(fragmentActivity, cls.java))
-    }
-
-    fun <T : Activity> launch(cls: KClass<T>) {
-        navigate(cls)
-        fragmentActivity.finish()
-    }
-
-    fun navigate(directions: NavDirections, extras: Navigator.Extras? = null, block: (NavOptions.Builder.() -> Unit) = {}) {
+    fun navigate(@IdRes actionId: Int, args: Bundle? = null, extras: Navigator.Extras? = null, block: (NavOptions.Builder.() -> Unit) = {}) {
         val options = NavOptions.Builder().also {
             it.setVerticalAnim()
             it.block()
         }.build()
-        navController()?.navigate(directions.actionId, null, options, extras)
+        navController()?.navigate(actionId, args, options, extras)
+    }
+
+    fun navigate(directions: NavDirections, args: Bundle? = null, extras: Navigator.Extras? = null, block: (NavOptions.Builder.() -> Unit) = {}) {
+        navigate(directions.actionId, args, extras, block)
     }
 
     fun navigateUp() {
@@ -111,12 +99,19 @@ interface BaseView {
         return this
     }
 
-    fun <T> LiveData<T>.observes(vararg blocks: (T) -> Unit) {
-        observe(lifecycleOwner, Observer { data ->
-            blocks?.forEach { unit ->
-                unit(data)
-            }
-        })
+    val defaultArgKey: String get() = "DEFAULT_ARG_KEY"
+
+    fun <T> navResultLiveData(key: String = defaultArgKey): MutableLiveData<T>? {
+        return navController()?.currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
+    }
+
+    fun <T> setNavResult(key: String?, result: T) {
+        navController()?.previousBackStackEntry?.savedStateHandle?.set(key
+                ?: defaultArgKey, result)
+    }
+
+    fun <T> setNavResult(result: T) {
+        navController()?.previousBackStackEntry?.savedStateHandle?.set(defaultArgKey, result)
     }
 
     fun <T> LiveData<T>.observe(block: (T) -> Unit) {
@@ -127,9 +122,16 @@ interface BaseView {
         removeObservers(lifecycleOwner)
     }
 
-    fun <T> MutableLiveData<T>.postDelayed(delay: Long, _value: T) {
-        post(delay) {
-            value = _value
-        }
+    fun add(fragment: Fragment, stack: Boolean = true) {
+        baseActivity?.add(fragment, stack)
     }
+
+    fun replace(fragment: Fragment, stack: Boolean = true) {
+        baseActivity?.replace(fragment, stack)
+    }
+
+    fun <T : Fragment> remove(cls: Class<T>) {
+        baseActivity?.remove(cls)
+    }
+
 }

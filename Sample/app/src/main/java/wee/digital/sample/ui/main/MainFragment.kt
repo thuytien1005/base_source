@@ -1,27 +1,17 @@
 package wee.digital.sample.ui.main
 
-import android.os.Bundle
-import android.view.View
-import androidx.transition.TransitionInflater
-import wee.digital.library.extension.statusBarColor
+import androidx.viewbinding.ViewBinding
+import wee.digital.library.extension.activityVM
 import wee.digital.sample.ui.base.BaseFragment
-import wee.digital.sample.ui.base.activityVM
-import wee.digital.widget.extension.backgroundColor
+import wee.digital.sample.ui.main.vm.DialogVM
+import wee.digital.sample.ui.main.vm.MainVM
 
-abstract class MainFragment : BaseFragment() {
+abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainView {
 
-    val mainVM: MainVM by lazy { activityVM(MainVM::class) }
+    override val mainActivity get() = requireActivity() as? MainActivity
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-    }
+    override val mainVM by activityVM(MainVM::class)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        statusBarColor(view.backgroundColor)
-        onViewCreated()
-        onLiveDataObserve()
-    }
-
+    override val dialogVM by activityVM(DialogVM::class)
 
 }

@@ -14,16 +14,6 @@ import androidx.annotation.StyleableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import wee.digital.widget.R
 
-/**
- * -------------------------------------------------------------------------------------------------
- *
- * @Project: Kotlin
- * @Created: Huy 2020/10/12
- * @Organize: Wee Digital
- * @Description: ...
- * All Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
 open class AppConstraintLayout : ConstraintLayout {
 
     var path: Path? = null
@@ -90,8 +80,8 @@ open class AppConstraintLayout : ConstraintLayout {
     private fun render(attrs: AttributeSet?) {
         attrs?.let {
             /** set corner radii */
-            context.obtainStyledAttributes(it, wee.digital.library.R.styleable.AppConstraintLayout).apply {
-                val radius = pixels(wee.digital.library.R.styleable.AppConstraintLayout_radius)
+            context.obtainStyledAttributes(it, R.styleable.AppConstraintLayout).apply {
+                val radius = pixels(R.styleable.AppConstraintLayout_radius)
 
                 if (radius != 0f) {
                     cornerLeftTop = radius
@@ -99,17 +89,17 @@ open class AppConstraintLayout : ConstraintLayout {
                     cornerLeftBottom = radius
                     cornerRightBottom = radius
                 } else {
-                    cornerLeftTop = pixels(wee.digital.library.R.styleable.AppConstraintLayout_topLeftRadius)
-                    cornerRightTop = pixels(wee.digital.library.R.styleable.AppConstraintLayout_topRightRadius)
-                    cornerLeftBottom = pixels(wee.digital.library.R.styleable.AppConstraintLayout_bottomLeftRadius)
-                    cornerRightBottom = pixels(wee.digital.library.R.styleable.AppConstraintLayout_bottomRightRadius)
+                    cornerLeftTop = pixels(R.styleable.AppConstraintLayout_topLeftRadius)
+                    cornerRightTop = pixels(R.styleable.AppConstraintLayout_topRightRadius)
+                    cornerLeftBottom = pixels(R.styleable.AppConstraintLayout_bottomLeftRadius)
+                    cornerRightBottom = pixels(R.styleable.AppConstraintLayout_bottomRightRadius)
                 }
 
-                backgroundColor = getColor(wee.digital.library.R.styleable.AppConstraintLayout_backgroundColor, Color.WHITE)
-                strokeLineWidth = pixels(wee.digital.library.R.styleable.AppConstraintLayout_strokeLineWidth)
-                strokeLineColor = getColor(wee.digital.library.R.styleable.AppConstraintLayout_strokeLineColor, Color.BLACK)
-                dashLineWidth = pixels(wee.digital.library.R.styleable.AppConstraintLayout_dashLineWidth)
-                dashLineGap = pixels(wee.digital.library.R.styleable.AppConstraintLayout_dashLineGap)
+                backgroundColor = getColor(R.styleable.AppConstraintLayout_backgroundColor, Color.WHITE)
+                strokeLineWidth = pixels(R.styleable.AppConstraintLayout_strokeLineWidth)
+                strokeLineColor = getColor(R.styleable.AppConstraintLayout_strokeLineColor, Color.BLACK)
+                dashLineWidth = pixels(R.styleable.AppConstraintLayout_dashLineWidth)
+                dashLineGap = pixels(R.styleable.AppConstraintLayout_dashLineGap)
 
             }.run {
                 recycle()

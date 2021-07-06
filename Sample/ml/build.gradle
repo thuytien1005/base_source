@@ -28,6 +28,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 dependencies {
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")

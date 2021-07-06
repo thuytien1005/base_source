@@ -6,7 +6,7 @@
     style="@style/MatchWidth">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/textFieldImageViewIcon"
+        android:id="@+id/imageViewIcon"
         android:layout_width="@dimen/_28sdp"
         android:layout_height="0dp"
         android:src="@drawable/ic_placeholder"
@@ -15,18 +15,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textFieldTextViewTitle"
+        android:id="@+id/textViewTitle"
         style="@style/TextView"
         android:layout_width="0dp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_2sdp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textFieldImageViewIcon"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Title goes here" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textFieldTextViewProperty"
+        android:id="@+id/textViewProperty"
         style="@style/TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,8 +36,8 @@
         android:maxLines="2"
         android:minHeight="@dimen/_24sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textFieldTextViewTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldTextViewTitle"
+        app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
         tools:text="Property text goes here\nmax lines is 2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
