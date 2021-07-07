@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import wee.digital.library.Library
+import wee.digital.library.app
 
 
 @GlideModule
@@ -111,7 +111,7 @@ fun ImageView.tint(@ColorInt color: Int) {
 }
 
 fun ImageView.tintRes(@ColorRes color: Int) {
-    this.post { this.setColorFilter(ContextCompat.getColor(Library.app, color)) }
+    this.post { this.setColorFilter(ContextCompat.getColor(app, color)) }
 }
 
 fun ImageView.clearTint() {

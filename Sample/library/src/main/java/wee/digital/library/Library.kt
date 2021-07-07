@@ -4,18 +4,13 @@ import android.app.Application
 
 object Library {
 
-    /**
-     * Module must be set on create application
-     */
-    private var mApp: Application? = null
-
-    var app: Application
-        set(value) {
-            mApp = value
-        }
-        get() {
-            if (null == mApp) throw NullPointerException("module not be set")
-            return mApp!!
-        }
-
+    fun init(application: Application) {
+        mApp = application
+    }
 }
+
+private var mApp: Application? = null
+
+val app: Application
+    get() = mApp ?: throw NullPointerException("Library module must be init with " +
+            "Library.init(application: Application) in android.app.Application.onCreate()")

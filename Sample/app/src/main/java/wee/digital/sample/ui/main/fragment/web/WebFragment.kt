@@ -2,7 +2,6 @@ package wee.digital.sample.ui.main.fragment.web
 
 import android.view.LayoutInflater
 import android.view.View
-import kotlinx.android.synthetic.main.web.*
 import wee.digital.sample.databinding.WebBinding
 import wee.digital.sample.ui.main.MainDialogFragment
 
@@ -13,7 +12,7 @@ class WebFragment : MainDialogFragment<WebBinding>() {
     }
 
     override fun onViewCreated() {
-        addClickListener(dialogViewDismiss, dialogView)
+        addClickListener(bind.viewDismiss, bind.dialogView)
     }
 
     override fun onLiveDataObserve() {
@@ -26,8 +25,8 @@ class WebFragment : MainDialogFragment<WebBinding>() {
 
     private fun onBindArg(it: WebArg?) {
         it ?: return
-        dialogTextViewTitle.text = it.title
-        dialogWebView.loadUrl(it.url)
+        bind.dialogTextViewTitle.text = it.title
+        bind.webView.loadUrl(it.url)
     }
 
 }

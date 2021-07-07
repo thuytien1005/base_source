@@ -68,7 +68,7 @@ fun EditText?.addOnClickListener(listener: View.OnClickListener) {
     setOnClickListener { listener.onClick(this) }
 }
 
-fun ImageView.tintColor(@ColorInt color: Int) {
+fun ImageView.tint(@ColorInt color: Int) {
     post {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
@@ -77,6 +77,10 @@ fun ImageView.tintColor(@ColorInt color: Int) {
             setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         }
     }
+}
+
+fun ImageView.tintRes(@ColorRes res: Int) {
+    tint(ContextCompat.getColor(context, res))
 }
 
 fun ImageView.postImage(@DrawableRes drawableRes: Int) {

@@ -2,25 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/MatchParent"
-    android:background="@color/colorWhite">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/TextView.PlaceHolder"
-        android:text="SPLASH"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <wee.digital.widget.custom.InputView
-        android:id="@+id/ocrInputFullName"
-        style="@style/InputView"
-        android:layout_margin="@dimen/_16sdp"
-        android:hint="Name"
-        android:src="@drawable/ic_placeholder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

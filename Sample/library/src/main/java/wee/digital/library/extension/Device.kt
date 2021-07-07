@@ -1,15 +1,12 @@
 package wee.digital.library.extension
 
-import android.app.Application
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
-import wee.digital.library.Library
+import wee.digital.library.app
 import java.net.NetworkInterface
 import java.util.*
-
-private val app: Application get() = Library.app
 
 val macAddress: String
     get() {

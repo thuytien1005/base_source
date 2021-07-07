@@ -1,40 +1,11 @@
 package wee.digital.widget.extension
 
-import android.text.Editable
-import android.text.InputType
-import android.widget.EditText
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.net.URI
-import java.net.URISyntaxException
+import android.os.Build
+import android.text.Html
+import org.json.JSONObject
 import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.text.Normalizer
 import java.text.NumberFormat
 import java.util.*
-
-fun String?.normalize(): String? {
-    this ?: return null
-    if (this.isEmpty()) return null
-    val s = this.trim { it <= ' ' }
-    return Normalizer.normalize(s, Normalizer.Form.NFD)
-            .toLowerCase()
-            .replace("\\p{M}".toRegex(), "")
-            .replace("đ".toRegex(), "d")
-}
-
-/**
- * www.oracle.com/download#374 -> oracle.com
- */
-fun String.getDomainName(): String {
-    return try {
-        val uri = URI(this)
-        val domain = uri.host ?: return ""
-        if (domain.startsWith("www.")) domain.substring(4) else domain
-    } catch (e: URISyntaxException) {
-        ""
-    }
-}
 
 /**
  * 123456789012345 -> 1234 4567 8901 2345
@@ -51,6 +22,108 @@ fun String?.toHiddenCreditNum(): String {
     return "•••• •••• •••• ${substring(lastIndex - 4, lastIndex)}"
 }
 
+private val decimalFormat = NumberFormat.getInstance(Locale.US) as DecimalFormat
+
+fun Long?.moneyFormat(currency: String? = "VND"): String? {
+    return this?.toString()?.moneyFormat(currency)
+}
+
+fun String?.moneyFormat(currency: String? = "VND"): String {
+    this ?: return ""
+    return try {
+        if (currency != null && currency != "VND") {
+
+            if (last().toString() == ".") return this
+
+            val lgt = length
+            if (lgt > 1 && substring(lgt - 2, lgt) == ".0") return this
+            if (lgt > 2 && substring(lgt - 3, lgt) == ".00") return this
+
+            val docId = indexOf(".")
+            if (docId != -1 && substring(docId, length).length > 3) return substring(0, docId + 3)
+
+        }
+        var originalString = when (currency) {
+            null, "VND" -> this.replace(".", "")
+            else -> this
+        }
+        if (originalString.contains(",")) {
+            originalString = originalString.replace(",".toRegex(), "")
+        }
+        when (currency) {
+            null, "VND" -> {
+                val value = originalString.toLong()
+                decimalFormat.applyPattern("#,###,###,###")
+                decimalFormat.format(value)
+            }
+            else -> {
+                val value = originalString.toDouble()
+                decimalFormat.applyPattern("#,###,###,###.##")
+                decimalFormat.format(value)
+            }
+        }
+
+    } catch (nfe: Exception) {
+        ""
+    }
+}
+
+fun String?.unHyper(): String? {
+    this ?: return null
+    return when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(this, 1).toString()
+        else -> @Suppress("DEPRECATION")
+        Html.fromHtml(this).toString()
+    }
+}
+
+fun String?.jsonFormat(): String? {
+    this ?: return null
+    return try {
+        val obj = JSONObject(this)
+        obj.keys().forEach {
+            if (obj.getString(it).length > 256) {
+                obj.put(it, obj.getString(it).substring(0, 256) + "...")
+            }
+        }
+        obj.toString(2)
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+fun Long.cashToText(): String {
+
+    val number = this.toString()
+
+    var text = ""
+    var startIndex = number.length - 3
+    var endIndex = number.length
+    var unit = " đồng"
+
+    while (startIndex >= -2) {
+
+        val sCash = number.substring(if (startIndex > -1) startIndex else 0, endIndex)
+
+        text = " ${cashText(sCash)}$unit$text"
+        startIndex -= 3
+        endIndex -= 3
+        unit = when (unit) {
+            " nghìn" -> " triệu"
+            " triệu" -> " tỷ"
+            " đồng" -> " nghìn"
+            else -> " nghìn"
+        }
+    }
+
+    text = text.replace("  ", " ")
+            .trim()
+            .replace("tỷ triệu nghìn đồng", "tỷ đồng")
+            .replace("triệu nghìn đồng", "triệu đồng")
+
+    return text.substring(0, 1).toUpperCase() + text.substring(1, text.length)
+}
+
 /**
  * us -> 🇺🇸
  */
@@ -63,186 +136,61 @@ fun String?.flagIcon(): String {
     return String(Character.toChars(char1st)) + String(Character.toChars(char2st))
 }
 
-
-/**
- * Format string pattern ex:    423.016024, 9442.456363,    72
- * To                           423,        9,442           72
- */
-private val INT_CASH_FORMAT = (NumberFormat.getInstance(Locale.US) as DecimalFormat).also {
-    it.applyPattern("#,###,###,###")
+fun String?.hideText(replacement: String, visibleCount: Int): String? {
+    this ?: return null
+    if (length < visibleCount) return this
+    val showText = substring(length - visibleCount)
+    val hiddenText = substring(0, length - visibleCount).replace("[^.]".toRegex(), replacement)
+    return "$hiddenText$showText"
 }
 
-fun String?.intCash(): String {
-    this ?: return ""
-    return try {
-        var originalString = replace(",", "").replace(".", "")
-        if (originalString.contains(",")) originalString = originalString.replace(",".toRegex(), "")
-        INT_CASH_FORMAT.format(originalString.toLong())
-    } catch (nfe: Exception) {
-        ""
+private fun cashText(numText: String): String {
+
+    val n = numText.toLong()
+    val n100 = n / 100
+    val n10 = n / 10 % 10
+    val n1 = n % 10
+
+    if (n100 == 0L && n10 == 0L && n1 == 0L) return ""
+
+    val s100 = if (numText.length < 3) "" else when (n100) {
+        0L -> "không trăm"
+        1L -> "một trăm"
+        2L -> "hai trăm"
+        3L -> "ba trăm"
+        4L -> "bốn trăm"
+        5L -> "năm trăm"
+        6L -> "sáu trăm"
+        7L -> "bảy trăm"
+        8L -> "tám trăm"
+        else -> "chín trăm"
     }
-}
 
-/**
- * Text watcher to apply pattern: #,###,###,###
- */
-fun EditText.addCashWatcher() {
-    inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
-    addTextChangedListener(object : SimpleTextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            setSilentText(text.toString().intCash())
-        }
-    })
-}
-
-/**
- * Format string pattern ex:    423.016024, 9442.456363,    72
- * To                           423.01,     9,442.45,       72.0
- */
-private val FLOAT_CAST_FORMAT = (NumberFormat.getInstance(Locale.US) as DecimalFormat).also {
-    it.applyPattern("#,###,###,###.##")
-}
-
-fun String?.cashFormat(): String {
-    this ?: return ""
-    return try {
-
-        if (last().toString() == ".") return this
-
-        val sLength = length
-        if (sLength > 1 && substring(sLength - 2, sLength) == ".0") return this
-        if (sLength > 2 && substring(sLength - 3, sLength) == ".00") return this
-
-        val docIndex = indexOf(".")
-        if (docIndex != -1 && substring(docIndex, length).length > 3) return substring(0, docIndex + 3)
-
-        var originalString = this
-        if (originalString.contains(",")) originalString = originalString.replace(",".toRegex(), "")
-
-        val value = originalString.toDouble()
-        FLOAT_CAST_FORMAT.format(value)
-
-    } catch (nfe: Exception) {
-        ""
+    val s10 = if (numText.length < 2) "" else when (n10) {
+        0L -> if (n1 == 0L) "" else " lẻ"
+        1L -> " mười"
+        2L -> " hai mươi"
+        3L -> " ba mươi"
+        4L -> " bốn mươi"
+        5L -> " năm mươi"
+        6L -> " sáu mươi"
+        7L -> " bảy mươi"
+        8L -> " tám mươi"
+        else -> " chín mươi"
     }
-}
 
-/**
- * Text watcher to apply pattern: USD #,###,###,###.##
- */
-fun EditText.addCashWatcher(maxLength: Int, prefix: String = "") {
-    inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
-    addTextChangedListener(object : SimpleTextWatcher {
+    val s1 = when (n1) {
+        0L -> ""
+        1L -> if (n10 < 2) " một" else " mốt"
+        2L -> " hai"
+        3L -> " ba"
+        4L -> " bốn"
+        5L -> if (n10 == 0L) " năm" else " lăm"
+        6L -> " sáu"
+        7L -> " bảy"
+        8L -> " tám"
+        else -> " chín"
+    }
+    return "$s100$s10$s1"
 
-        var previousCleanString = ""
-
-        override fun afterTextChanged(s: Editable?) {
-
-            val str = s.toString()
-            if (str.length < prefix.length) {
-                setText(prefix)
-                setSelection(prefix.length)
-                return
-            }
-            if (str == prefix) return
-            val cleanString = str.replace(prefix, "").replace("[,]".toRegex(), "")
-            if (cleanString == previousCleanString || cleanString.isEmpty()) return
-            previousCleanString = cleanString
-            val formattedString: String
-            formattedString = if (cleanString.contains(".")) cleanString.formatDecimal() else cleanString.formatInteger()
-            removeTextChangedListener(this)
-            setText(formattedString)
-            handleSelection()
-            addTextChangedListener(this)
-        }
-
-        private fun String?.formatInteger(): String {
-            this ?: return ""
-            val parsed = BigDecimal(this)
-            val formatter = DecimalFormat("$prefix#,###", DecimalFormatSymbols(Locale.US))
-            return formatter.format(parsed)
-        }
-
-        private fun String?.formatDecimal(): String {
-            this ?: return ""
-            if (this == ".") return "$prefix."
-            val parsed = BigDecimal(this)
-            val formatter = DecimalFormat(prefix + "#,###." + getDecimalPattern(), DecimalFormatSymbols(Locale.US))
-            formatter.roundingMode = RoundingMode.DOWN
-            return formatter.format(parsed)
-        }
-
-        private fun String.getDecimalPattern(): String {
-            val decimalCount = this.length - this.indexOf(".") - 1
-            val decimalPattern = StringBuilder()
-            var i = 0
-            while (i < decimalCount && i < 2) {
-                decimalPattern.append("0")
-                i++
-            }
-            return decimalPattern.toString()
-        }
-
-        private fun EditText.handleSelection() {
-            setSelection(if (text.length <= maxLength) text.length else maxLength)
-        }
-
-    })
-}
-
-fun EditText.addSimpleCashWatcher(afterTextChanged: (BigDecimal) -> Unit) {
-    addTextChangedListener(object : SimpleTextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            removeTextChangedListener(this)
-            val maskText = text?.toString()?.cashFormat()
-            setText(maskText)
-            setSelection(maskText?.length ?: 0)
-            val amount = try {
-                if (maskText.isNullOrEmpty()) BigDecimal.ZERO
-                val text = maskText.toString().replace(",", "")
-                text.toBigDecimal()
-            } catch (e: Exception) {
-                BigDecimal.ZERO
-            }
-            afterTextChanged(amount)
-            addTextChangedListener(this)
-        }
-    })
-
-}
-
-fun EditText.addDateWatcher() {
-    addTextChangedListener(object : SimpleTextWatcher {
-
-        private val sb: StringBuilder = StringBuilder("")
-
-        private var ignore = false
-
-        override fun afterTextChanged(s: Editable?) {
-            if (ignore) {
-                ignore = false
-                return
-            }
-
-            sb.clear()
-            sb.append(if (s!!.length > 10) {
-                s.subSequence(0, 10)
-            } else {
-                s
-            })
-
-            if (sb.lastIndex == 2) {
-                if (sb[2] != '/') {
-                    sb.insert(2, "/")
-                }
-            } else if (sb.lastIndex == 5) {
-                if (sb[5] != '/') {
-                    sb.insert(5, "/")
-                }
-            }
-            ignore = true
-            this@addDateWatcher.setText(sb.toString())
-            this@addDateWatcher.setSelection(sb.length)
-        }
-    })
 }

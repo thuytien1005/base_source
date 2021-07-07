@@ -16,7 +16,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
-import wee.digital.library.extension.*
 import wee.digital.widget.R
 import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.databinding.InputBinding
@@ -127,9 +126,10 @@ class InputView : AppCustomView<InputBinding>,
     }
 
     /**
-     * [AppInputView] properties
+     * [InputView] properties
      */
-    private val editText: EditText get() = bind.inputEditText
+    private val editText: EditText
+        get() = bind.inputEditText
 
     var text: String?
         get() {
@@ -259,8 +259,6 @@ class InputView : AppCustomView<InputBinding>,
     fun clear() {
         editText.text = null
         error = null
-        setBorderColor(R.color.colorInputDefault)
-        setInputBackground(R.drawable.drw_input_bg)
         bind.inputTextViewHint.textColor(R.color.colorInputUnfocused)
         bind.inputTextViewHint.background = null
     }
@@ -330,41 +328,32 @@ class InputView : AppCustomView<InputBinding>,
      */
     fun updateUiOnFocusChanged(hasFocus: Boolean = editText.hasFocus()) {
         when {
-            //
             hasFocus -> {
                 if (editText.isFocusable) {
                     editText.select()
                     showKeyboard()
                 }
-                setInputBackground(0)
                 setHintBackground(R.color.colorWhite)
                 setMotionState(R.id.focused)
                 if (error.isNullOrEmpty()) {
                     setBorderColor(R.color.colorInputFocused)
                     setIconColor(R.color.colorInputFocused)
-                    setInputBackground(0)
                 }
             }
-            //
             !hasFocus && text.isNullOrEmpty() -> {
-                setInputBackground(R.color.colorInputDefault)
-                setHintBackground(R.color.colorInputDefault)
+                setHintBackground(0)
                 setMotionState(R.id.unfocused)
                 if (error.isNullOrEmpty()) {
-                    setBorderColor(R.color.colorInputDefault)
-                    setIconColor(R.color.colorInputFocused)
-                    setInputBackground(R.drawable.drw_input_bg)
+                    setBorderColor(R.color.colorInputUnfocused)
+                    setIconColor(R.color.colorInputUnfocused)
                 }
             }
-            //
             !hasFocus && !text.isNullOrEmpty() -> {
-                setInputBackground(0)
                 setHintBackground(R.color.colorWhite)
                 setMotionState(R.id.focused)
                 if (error.isNullOrEmpty()) {
                     setBorderColor(R.color.colorInputUnfocused)
                     setIconColor(R.color.colorInputUnfocused)
-                    setInputBackground(0)
                 }
             }
         }
@@ -372,10 +361,6 @@ class InputView : AppCustomView<InputBinding>,
 
     private fun setMotionState(id: Int) {
         bind.inputViewLayout.transitionToState(id)
-    }
-
-    private fun setInputBackground(@DrawableRes res: Int) {
-        bind.inputViewBackground.setBackgroundResource(res)
     }
 
     private fun setBorderColor(@ColorRes res: Int) {

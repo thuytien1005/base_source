@@ -35,6 +35,10 @@ val PARALLAX_ANIMATIONS = intArrayOf(
         R.anim.parallax_pop_enter,
         R.anim.parallax_pop_exit)
 
+private fun String.tag(): String {
+    return if (length > 23) substring(0, 22) else this
+}
+
 /**
  * [Fragment].[FragmentManager]
  */

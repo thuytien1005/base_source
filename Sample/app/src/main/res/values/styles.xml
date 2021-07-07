@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="App.CheckBox">
         <item name="android:layout_width">wrap_content</item>
@@ -21,12 +21,6 @@
 
     <!--DIALOG-->
     <style name="Dialog" />
-
-    <style name="Button.Primary">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@drawable/drw_btn_primary</item>
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
 
     <!--DIALOG-->
     <style name="Dialog.BottomLayout">
@@ -62,6 +56,18 @@
         <item name="android:textColorHint">#6E6E6E</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:minWidth">@dimen/_24sdp</item>
+    </style>
+
+
+    <style name="Login" />
+
+    <style name="Login.ProviderButton">
+        <item name="android:layout_width">@dimen/_32sdp</item>
+        <item name="android:layout_height">@dimen/_32sdp</item>
+        <item name="android:background">@drawable/drw_oval</item>
+        <item name="android:padding">@dimen/_8sdp</item>
+        <item name="android:tint">@color/colorWhite</item>
+        <item name="android:scaleType">centerInside</item>
     </style>
 
 </resources>

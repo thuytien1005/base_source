@@ -12,8 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
-import wee.digital.library.extension.ViewClickListener
 import wee.digital.sample.R
+import wee.digital.widget.extension.ViewClickListener
 
 interface BaseView {
 

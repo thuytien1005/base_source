@@ -1,7 +1,6 @@
 package wee.digital.library.extension
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,17 +10,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
-import wee.digital.library.Library
-
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2019/08/07
- * @Description: ...
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-private val app: Application get() = Library.app
+import wee.digital.library.app
 
 val connectionInfo: String?
     @SuppressLint("MissingPermission")
@@ -96,7 +85,7 @@ private fun registerNetworkCallback() {
 @Suppress("DEPRECATION")
 val networkReceiver = object : BroadcastReceiver() {
     fun register() {
-        Library.app.registerReceiver(this, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        app.registerReceiver(this, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     override fun onReceive(context: Context, intent: Intent) {

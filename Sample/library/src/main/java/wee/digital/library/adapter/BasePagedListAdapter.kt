@@ -1,6 +1,5 @@
 package wee.digital.library.adapter
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -8,10 +7,9 @@ import androidx.paging.AsyncPagedListDiffer
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.*
-import wee.digital.library.extension.addViewClickListener
+import androidx.viewbinding.ViewBinding
 
 abstract class BasePagedListAdapter<T> : PagedListAdapter<T, RecyclerView.ViewHolder> {
-
 
     private val differ: AsyncPagedListDiffer<T>
 
@@ -19,66 +17,46 @@ abstract class BasePagedListAdapter<T> : PagedListAdapter<T, RecyclerView.ViewHo
         differ = asyncPagedListDiffer(itemCallback)
     }
 
-
-    /**
-     * [PagedListAdapter] override
-     */
     override fun getItemCount(): Int {
-        if (blankLayoutResource() != 0 || footerLayoutResource() != 0)
-            return size + 1
-        return size
+        return size + 1
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (dataIsEmpty && blankLayoutResource() != 0) return blankLayoutResource()
-
-        if (dataNotEmpty && footerLayoutResource() != 0 && position == size) return footerLayoutResource()
-
-        val model = get(position) ?: return 0
-
-        return layoutResource(model, position)
+        return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val v = if (viewType == 0) {
-            View(parent.context).apply { visibility = View.GONE }
-        } else {
-            LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int /* also it position */): RecyclerView.ViewHolder {
+        when {
+            dataIsEmpty -> blankInflating().invokeItem(parent)?.also {
+                return BaseViewHolder(it)
+            }
+            dataNotEmpty && viewType == size -> footerInflating().invokeItem(parent)?.also {
+                if (viewType > lastBindIndex) onFooterIndexChanged(viewType)
+                return BaseViewHolder(it)
+            }
+            else -> get(viewType)?.also { item ->
+                itemInflating(item, viewType).invokeItem(parent)?.also {
+                    return BaseViewHolder(it)
+                }
+            }
         }
-        return ViewHolder(v)
+        return GoneViewHolder(parent)
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        val type = getItemViewType(position)
-
-        if (type == 0) return
-
-        if (type == blankLayoutResource()) {
-            viewHolder.itemView.onBindBlank(type)
-            return
-        }
-
-        if (type == footerLayoutResource()) {
-            if (footerIndexed == position) return
-            footerIndexed = position
-            viewHolder.itemView.onBindFooter(type, position)
-            return
-        }
-
         val model = get(position) ?: return
-
-        viewHolder.itemView.onBindModel(model, position, type)
-
-        viewHolder.itemView.addViewClickListener(itemClickDelayInterval()) {
-            onItemClick(model, position)
-        }
-
-        viewHolder.itemView.setOnLongClickListener {
-            onItemLongClick(model, position)
-            true
-        }
-        if (position < lastBindIndex) {
-            lastBindIndex = position
+        when (viewHolder) {
+            is BaseViewHolder<*> -> viewHolder.bind.apply {
+                onBindItem(model, position)
+                root.addViewClickListener {
+                    onItemClick(model, position)
+                }
+                root.setOnLongClickListener {
+                    onItemLongClick(model, position)
+                    true
+                }
+                lastBindIndex = position
+            }
         }
     }
 
@@ -87,13 +65,10 @@ abstract class BasePagedListAdapter<T> : PagedListAdapter<T, RecyclerView.ViewHo
     }
 
     override fun submitList(pagedList: PagedList<T>?) {
-        differ.submitList(pagedList)
+        if (pagedList.isNullOrEmpty()) return
+        else differ.submitList(pagedList)
     }
 
-    fun submitElseEmptyList(pagedList: PagedList<T>?) {
-        if (pagedList.isNullOrEmpty()) return
-        submitList(pagedList)
-    }
 
     /**
      * [BasePagedListAdapter] abstractions
@@ -103,63 +78,12 @@ abstract class BasePagedListAdapter<T> : PagedListAdapter<T, RecyclerView.ViewHo
 
     protected abstract fun View.onBindModel(model: T, position: Int, @LayoutRes layout: Int)
 
-    private var blankLayoutResource = blankLayoutResource()
-
-    @LayoutRes
-    open fun blankLayoutResource(): Int {
-        return 0
-    }
-
-    open fun View.onBindBlank(layout: Int) {
-    }
-
-    @Volatile
-    private var footerIndexed: Int = -1
-
-    private var footerLayoutResource = footerLayoutResource()
-
-    @LayoutRes
-    open fun footerLayoutResource(): Int {
-        return 0
-    }
-
-    open fun showFooter(@LayoutRes res: Int) {
-        footerLayoutResource = res
-        notifyItemChanged(size)
-    }
-
-    open fun hideFooter() {
-        footerLayoutResource = 0
-        notifyItemChanged(size)
-    }
-
-    private var footerVisible: (Int) -> Unit = { }
-
-    open fun View.onBindFooter(layout: Int, position: Int) {
-        footerVisible(position)
-    }
-
-    open var onItemClick: (T, Int) -> Unit = { model, position ->
-        itemClickList.forEach {
-            it(model, position)
-        }
-    }
-
-    private val itemClickList = mutableListOf<(T, Int) -> Unit>()
-
-    open fun addOnItemClick(block: (T, Int) -> Unit) {
-        itemClickList.add(block)
-    }
-
-    open fun itemClickDelayInterval(): Long {
-        return 500
-    }
+    var onItemClick: (T, Int) -> Unit = { _, _ -> }
 
     var onItemLongClick: (T, Int) -> Unit = { _, _ -> }
 
-    /**
-     * Data
-     */
+    var onFooterIndexChanged: (Int) -> Unit = {}
+
     val size: Int get() = currentList?.size ?: 0
 
     var lastBindIndex: Int = -1
@@ -170,9 +94,16 @@ abstract class BasePagedListAdapter<T> : PagedListAdapter<T, RecyclerView.ViewHo
 
     val dataNotEmpty: Boolean get() = size != 0
 
+    protected open fun blankInflating(): ItemInflating? = null
+
+    protected open fun footerInflating(): ItemInflating? = null
+
+    protected abstract fun itemInflating(item: T, position: Int): ItemInflating
+
+    protected abstract fun ViewBinding.onBindItem(item: T, position: Int)
+
     open fun get(position: Int): T? {
-        if (position in 0..lastIndex) return differ.getItem(position)
-        return null
+        return differ.currentList?.getOrNull(position)
     }
 
     private fun asyncPagedListDiffer(itemCallback: DiffUtil.ItemCallback<T>): AsyncPagedListDiffer<T> {

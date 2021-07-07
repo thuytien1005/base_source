@@ -1,7 +1,6 @@
 package wee.digital.widget.extension
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -23,11 +22,9 @@ import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.FragmentActivity
-import wee.digital.widget.Widget
+import wee.digital.widget.app
 import kotlin.math.roundToInt
 
-
-private val app: Application get() = Widget.app
 
 fun Float.dpToPx(): Float {
     val resources = app.resources

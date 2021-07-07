@@ -2,7 +2,6 @@ package wee.digital.sample.ui.main.fragment.selectable
 
 import android.view.LayoutInflater
 import android.view.View
-import kotlinx.android.synthetic.main.selectable.*
 import wee.digital.sample.databinding.SelectableBinding
 import wee.digital.sample.ui.main.MainDialogFragment
 
@@ -13,7 +12,7 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
     }
 
     override fun onViewCreated() {
-        addClickListener(dialogView, dialogViewDismiss)
+        addClickListener(bind.dialogView, bind.viewDismiss)
     }
 
     override fun onLiveDataObserve() {
@@ -27,17 +26,17 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
 
     override fun onViewClick(v: View?) {
         when (v) {
-            dialogView, dialogViewDismiss -> dismissAllowingStateLoss()
+            bind.dialogView, bind.viewDismiss -> dismissAllowingStateLoss()
         }
     }
 
     private fun onBindArg(arg: SelectableArg?) {
         arg ?: return
-        dialogTextViewTitle.text = arg.title
+        bind.dialogTextViewTitle.text = arg.title
         SelectableAdapter().also {
             it.set(arg.listItem)
             it.selectedItem = arg.selectedItem
-            it.bind(selectableRecyclerView)
+            it.bind(bind.selectableRecyclerView)
             it.onItemClick = { model, _ ->
                 arg.selectedItem = model
                 dismissAllowingStateLoss()

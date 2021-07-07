@@ -6,20 +6,126 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
 import androidx.annotation.DimenRes
 import androidx.annotation.IntDef
 import androidx.recyclerview.widget.*
+import androidx.viewbinding.ViewBinding
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2018/11/02
- * @Description: ...
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
+class BaseViewHolder<B : ViewBinding>(val bind: B) : RecyclerView.ViewHolder(bind.root)
+
+typealias ItemInflating = (LayoutInflater, ViewGroup, Boolean) -> ViewBinding
+
+fun ItemInflating?.invokeItem(parent: ViewGroup): ViewBinding? {
+    return this?.invoke(LayoutInflater.from(parent.context), parent, false)
+}
+
+class GoneViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(View(parent.context).also { it.visibility = View.GONE })
+
+interface ScrollListener {
+
+    fun onScrolling()
+
+    fun onStopScroll()
+}
+
+interface MostScrollListener {
+
+    fun onMostTopScrolled()
+
+    fun onMostBottomScrolled()
+}
+
+interface DragListener {
+
+    fun onLeftDrag()
+
+    fun onRightDrag()
+
+    fun onUpDrag()
+
+    fun onDownDrag()
+}
+
+fun RecyclerView.addScrollListener(listener: ScrollListener?) {
+
+    if (listener == null) {
+        clearOnScrollListeners()
+    } else {
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE -> {
+                        println("Not scrolling")
+                        listener.onStopScroll()
+                    }
+                    RecyclerView.SCROLL_STATE_DRAGGING -> {
+                        println("Scrolling now")
+                        listener.onScrolling()
+                    }
+                }
+            }
+        })
+    }
+
+}
+
+fun RecyclerView.addMostScrollListener(listener: MostScrollListener?) {
+
+    if (listener == null)
+        clearOnScrollListeners()
+    else
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (layoutManager is LinearLayoutManager) {
+                    val pastVisibleItems: Int = (layoutManager as LinearLayoutManager)
+                            .findFirstCompletelyVisibleItemPosition()
+                    if (pastVisibleItems == 0)
+                        listener.onMostTopScrolled()
+                }
+            }
+        })
+}
+
+fun RecyclerView.addDragListener(listener: DragListener?) {
+
+    if (listener == null)
+        clearOnScrollListeners()
+    else
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                when {
+                    dx < 0 -> {
+                        println("Scrolled Left")
+                        listener.onLeftDrag()
+                    }
+                    dx > 0 -> {
+                        println("Scrolled Right")
+                        listener.onRightDrag()
+                    }
+                    else -> {
+                        println("No Horizontal Scrolled")
+                    }
+                }
+                when {
+                    dy < 0 -> {
+                        println("Scrolled Upwards")
+                        listener.onUpDrag()
+                    }
+                    dy > 0 -> {
+                        println("Scrolled Downwards")
+                        listener.onDownDrag()
+                    }
+                    else -> {
+                        println("No Vertical Scrolled")
+                    }
+                }
+            }
+        })
+}
 
 open class DiffItemCallback<T> : DiffUtil.ItemCallback<T>() {
 
@@ -251,4 +357,58 @@ fun RecyclerView.initLayoutManager(spanCount: Int, block: (GridLayoutManager.() 
     lm.block()
     layoutManager = lm
     return lm
+}
+
+private var lastClickTime: Long = 0
+
+private var lastClickViewId: Int = 0
+
+abstract class ViewClickListener(private val delayedInterval: Long = 400) : View.OnClickListener {
+
+    abstract fun onClicks(v: View?)
+
+    private val View?.isAcceptClick: Boolean get() = this?.id != lastClickViewId && delayedInterval == 0L
+
+    private val isDelayed: Boolean get() = System.currentTimeMillis() - lastClickTime > delayedInterval
+
+    private var hasDelayed: Boolean = false
+
+    final override fun onClick(v: View?) {
+        if (isDelayed || v.isAcceptClick) {
+            lastClickViewId = v?.id ?: -1
+            lastClickTime = 0
+            hasDelayed = false
+            onClicks(v)
+        }
+        if (!hasDelayed) {
+            hasDelayed = true
+            lastClickTime = System.currentTimeMillis()
+        }
+    }
+
+}
+
+fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit)? = null) {
+    this ?: return
+    if (listener == null) {
+        setOnClickListener(null)
+        if (this is EditText) {
+            isFocusable = true
+            isCursorVisible = true
+        }
+        return
+    }
+    setOnClickListener(object : ViewClickListener(delayedInterval) {
+        override fun onClicks(v: View?) {
+            listener(v)
+        }
+    })
+    if (this is EditText) {
+        isFocusable = false
+        isCursorVisible = false
+    }
+}
+
+fun View?.addViewClickListener(listener: ((View?) -> Unit)? = null) {
+    addViewClickListener(0, listener)
 }

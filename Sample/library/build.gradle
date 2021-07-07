@@ -33,22 +33,32 @@ android {
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+
     implementation deps.kotlin.stdlib
+
+    // android
     implementation deps.android.appcompat
     implementation deps.android.material
     implementation deps.android.recyclerview
     implementation deps.android.constraintlayout
     implementation deps.android.constraintlayout
     implementation deps.android.security
+
+    // android lifecycle aware
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
+
+    // paging recycler view adapter
     implementation deps.paging.runtime
     implementation deps.paging.rx
-    implementation deps.dimens.sdp
-    implementation deps.dimens.ssp
+
+    // json, P.O.J.O convert/parse
     implementation deps.google.gson
+
+    // asynchronous image load
     implementation deps.glide.glide
     kapt deps.glide.compiler
+
 }
 

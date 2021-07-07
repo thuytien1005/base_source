@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
 }
@@ -73,12 +72,22 @@ android {
 
 dependencies {
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
+
+    // utils lib
     implementation project(":library")
+
+    // widgets lib
     implementation project(":widget")
+
     implementation deps.kotlin.stdlib
+
+    // concurrency pattern
     implementation deps.kotlin.coroutines_core
     implementation deps.kotlin.coroutines_android
+
+    // android
     implementation deps.android.appcompat
+    implementation deps.android.multidex
     implementation deps.android.corektx
     implementation deps.android.constraintlayout
     implementation deps.android.recyclerview
@@ -89,15 +98,29 @@ dependencies {
     implementation deps.android.legacy_v4
     implementation deps.android.material
     implementation deps.android.browser
+
+    // fragment navigation
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
+
+    // dimension resources
     implementation deps.dimens.sdp
     implementation deps.dimens.ssp
+
+    // json, P.O.J.O convert/parse
     implementation deps.google.gson
+
+    // asynchronous image load
     implementation deps.glide.glide
-    implementation deps.camera.camera2
     kapt deps.glide.compiler
+
+    // firebase sdk
+    implementation platform(deps.firebase.bom)
+    implementation deps.firebase.auth
+
+    // round image view
     implementation deps.roundedimageview
+
 }
 
 apply plugin: "com.google.gms.google-services"

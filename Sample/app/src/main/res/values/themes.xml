@@ -10,7 +10,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar"
+            tools:targetApi="m">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -18,6 +19,10 @@
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:navigationBarColor">#00000000</item>
+    </style>
+
+    <style name="App.Theme.Splash" parent="App.Theme">
+        <item name="android:windowBackground">@drawable/drw_plash_bg</item>
     </style>
 
     <style name="App.Dialog" parent="Theme.AppCompat.Light.Dialog">

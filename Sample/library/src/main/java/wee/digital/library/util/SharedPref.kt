@@ -5,11 +5,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import wee.digital.library.Library
+import wee.digital.library.app
 
 class SharedPref(private val fileName : String) {
-
-    private val context get() = Library.app
 
     private val pref: SharedPreferences by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -17,11 +15,11 @@ class SharedPref(private val fileName : String) {
             EncryptedSharedPreferences.create(
                     fileName,
                     masterKey,
-                    context,
+                    app,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
         } else {
-            context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+            app.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         }
     }
 

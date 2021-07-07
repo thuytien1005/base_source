@@ -12,8 +12,8 @@ class App : Application(), LifecycleObserver {
     override fun onCreate() {
         super.onCreate()
         app = this
-        Library.app = this
-        Widget.app = this
+        Library.init(this)
+        Widget.init(this)
     }
 
 }

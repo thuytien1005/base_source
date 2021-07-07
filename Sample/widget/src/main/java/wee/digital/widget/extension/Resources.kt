@@ -1,6 +1,5 @@
 package wee.digital.widget.extension
 
-import android.app.Application
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.view.animation.Animation
@@ -8,11 +7,8 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import wee.digital.library.Library
-import wee.digital.widget.Widget
+import wee.digital.widget.app
 
-
-private val app: Application get() = Widget.app
 
 fun anim(@AnimRes res: Int): Animation {
     return AnimationUtils.loadAnimation(app, res)

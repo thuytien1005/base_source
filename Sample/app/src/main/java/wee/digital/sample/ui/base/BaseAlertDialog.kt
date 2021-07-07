@@ -4,13 +4,13 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
-import wee.digital.library.extension.ViewClickListener
+import androidx.viewbinding.ViewBinding
 import wee.digital.sample.R
 import wee.digital.sample.currentActivity
+import wee.digital.widget.extension.ViewClickListener
 
-abstract class BaseAlertDialog {
+abstract class BaseAlertDialog<B : ViewBinding> {
 
     companion object {
         val dialogList: MutableList<DialogInterface> = mutableListOf()
@@ -18,11 +18,9 @@ abstract class BaseAlertDialog {
 
     protected var dialog: Dialog? = null
 
-    lateinit var view: View
-        private set
+    protected lateinit var bind: B
 
-    @LayoutRes
-    protected abstract fun layoutResource(): Int
+    abstract fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> B
 
     protected open fun onViewCreate() = Unit
 
@@ -43,7 +41,8 @@ abstract class BaseAlertDialog {
 
     constructor() {
         val activity = currentActivity ?: return
-        view = LayoutInflater.from(activity).inflate(layoutResource(), null).also {
+        bind = inflating().invoke(LayoutInflater.from(activity), null, false)
+        bind.root.also {
             it.isFocusable = false
             it.isFocusableInTouchMode = true
         }
@@ -58,7 +57,7 @@ abstract class BaseAlertDialog {
         }
         dialog = sDialog.also {
             it.setCanceledOnTouchOutside(true)
-            it.setContentView(view)
+            it.setContentView(bind.root)
         }
         dialog?.window?.also {
             onWindowConfig(it)
@@ -136,6 +135,8 @@ abstract class BaseAlertDialog {
                 @Suppress("DEPRECATION")
                 wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN.inv()
                 wlp.gravity = Gravity.BOTTOM
+                wlp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                wlp.width = WindowManager.LayoutParams.MATCH_PARENT
                 dialog?.window?.attributes = wlp
             }
         }

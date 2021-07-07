@@ -7,15 +7,6 @@
     style="@style/MatchWidth"
     app:layoutDescription="@xml/motion_input">
 
-    <View
-        android:id="@+id/inputViewBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/drw_input_bg"
-        app:layout_constraintBottom_toBottomOf="@id/inputEditText"
-        app:layout_constraintEnd_toEndOf="@id/inputEditText"
-        app:layout_constraintStart_toStartOf="@id/inputEditText"
-        app:layout_constraintTop_toTopOf="@id/inputEditText" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/inputEditText"

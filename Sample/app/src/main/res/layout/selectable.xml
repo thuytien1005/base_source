@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/dialogViewDismiss"
+            android:id="@+id/viewDismiss"
             style="@style/Dialog.TitleIcon"
             android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toEndOf="parent"

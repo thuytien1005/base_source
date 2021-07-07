@@ -21,31 +21,31 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/alertImageViewIcon"
+            android:id="@+id/imageViewIcon"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:src="@drawable/ic_placeholder"
             android:tint="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@id/alertTextViewTitle"
+            app:layout_constraintBottom_toTopOf="@id/textViewTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/alertTextViewTitle"
+            android:id="@+id/textViewTitle"
             style="@style/TextView"
             android:layout_marginTop="@dimen/_32sdp"
             android:layout_marginBottom="@dimen/_24sdp"
             android:gravity="center_horizontal"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/alertTextViewMessage"
+            app:layout_constraintBottom_toTopOf="@id/textViewMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alertImageViewIcon"
+            app:layout_constraintTop_toBottomOf="@id/imageViewIcon"
             tools:text="@string/app_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/alertTextViewMessage"
+            android:id="@+id/textViewMessage"
             style="@style/TextView"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_8sdp"
@@ -53,25 +53,25 @@
             android:maxLines="6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alertTextViewTitle"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
             tools:text="@tools:sample/lorem" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/alertViewAccept"
+            android:id="@+id/viewAccept"
             style="@style/Button.Primary"
             android:layout_marginTop="@dimen/_32sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alertTextViewMessage"
+            app:layout_constraintTop_toBottomOf="@id/textViewMessage"
             tools:text="@tools:sample/lorem" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/alertViewCancel"
+            android:id="@+id/viewCancel"
             style="@style/Button"
             android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alertViewAccept"
+            app:layout_constraintTop_toBottomOf="@id/viewAccept"
             tools:text="@tools:sample/lorem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

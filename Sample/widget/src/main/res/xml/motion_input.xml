@@ -16,7 +16,7 @@
         <Constraint
             android:id="@id/inputEditText"
             android:layout_width="0dp"
-            android:layout_height="@dimen/inputHeight"
+            android:layout_height="@dimen/rowHeight"
             android:layout_marginStart="1px"
             android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginEnd="1px"
@@ -65,7 +65,7 @@
         <Constraint
             android:id="@id/inputEditText"
             android:layout_width="0dp"
-            android:layout_height="@dimen/inputHeight"
+            android:layout_height="@dimen/rowHeight"
             android:layout_marginStart="1px"
             android:layout_marginTop="@dimen/_14sdp"
             android:layout_marginEnd="1px"

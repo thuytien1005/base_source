@@ -1,7 +1,6 @@
 package wee.digital.library.extension
 
 import android.app.ActivityManager
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,12 +14,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import wee.digital.library.Library
+import wee.digital.library.app
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-
-private val app: Application get() = Library.app
 
 private val memoryInfo = ActivityManager.MemoryInfo()
 
