@@ -17,22 +17,16 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import wee.digital.widget.R
-import wee.digital.widget.base.AppCustomView
+import wee.digital.widget.base.AppBindCustomView
 import wee.digital.widget.databinding.InputBinding
 import wee.digital.widget.extension.*
 
-class InputView : AppCustomView<InputBinding>,
+class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<InputBinding>(context, attrs, InputBinding::inflate),
         SimpleMotionTransitionListener,
         OnFocusChangeListener,
         SimpleTextWatcher {
 
-    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)
-
-    override fun inflating(): (LayoutInflater, ViewGroup, Boolean) -> InputBinding {
-        return InputBinding::inflate
-    }
-
-    override fun onInitialize(context: Context, types: TypedArray) {
+    override fun onViewInit(context: Context, types: TypedArray) {
         hint = types.hint
         bind.inputEditText.setText(types.text)
         bind.inputEditText.addTextChangedListener(this)
@@ -40,6 +34,15 @@ class InputView : AppCustomView<InputBinding>,
         onEditTextInitialize(bind.inputEditText, types)
         bind.inputViewLayout.addTransitionListener(this)
     }
+
+    /*override fun onInitialize(context: Context, types: TypedArray) {
+      hint = types.hint
+        bind.inputEditText.setText(types.text)
+        bind.inputEditText.addTextChangedListener(this)
+        onIconInitialize(bind.inputImageViewIcon, types)
+        onEditTextInitialize(bind.inputEditText, types)
+        bind.inputViewLayout.addTransitionListener(this)
+    }*/
 
     private fun onIconInitialize(it: AppCompatImageView, types: TypedArray) {
         val color = types.getColor(R.styleable.AppCustomView_android_tint, -1)

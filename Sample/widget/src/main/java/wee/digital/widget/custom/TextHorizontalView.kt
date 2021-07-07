@@ -12,7 +12,7 @@ import wee.digital.widget.extension.isGone
 
 class TextHorizontalView : AppCustomView<TextHorizontalBinding> {
 
-    override fun inflating(): (LayoutInflater, ViewGroup, Boolean) -> TextHorizontalBinding {
+    override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> TextHorizontalBinding {
         return TextHorizontalBinding::inflate
     }
 
