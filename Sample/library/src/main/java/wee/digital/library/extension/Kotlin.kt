@@ -3,9 +3,7 @@ package wee.digital.library.extension
 import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 typealias Void = () -> Unit
@@ -44,22 +42,23 @@ fun <T> Flow<Data<T>>.each(block: (Data<T>) -> Unit) {
 
 val isOnUiThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
 
-fun LifecycleOwner.post(interval: Long = 0, block: Void) {
-    flow {
+fun LifecycleOwner.launch(interval: Long = 0, block: Void) {
+    lifecycleScope.launch {
         if (interval > 0) delay(interval)
-        emit(true)
-    }.flowOn(Dispatchers.Main).onEach {
-        block()
-    }.launchIn(this.lifecycleScope)
+        withContext(Dispatchers.Main) {
+            block()
+        }
+    }
 }
 
 fun onUi(interval: Long = 0, block: Void) {
-    flow {
+    GlobalScope.launch {
         if (interval > 0) delay(interval)
-        emit(true)
-    }.flowOn(Dispatchers.Main).onEach {
-        block()
-    }.launchIn(GlobalScope)
+        withContext(Dispatchers.Main) {
+            block()
+        }
+    }
+
 }
 
 fun onIo(interval: Long = 0, block: Void) {

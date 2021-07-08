@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#F4F4F4">
 
     <wee.digital.widget.base.AppConstraintLayout
@@ -54,6 +55,7 @@
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/contentMarginX2"
             android:title="Email"
+            android:inputType="textEmailAddress"
             android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -65,6 +67,7 @@
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/contentMarginD2"
             android:title="Password"
+            android:inputType="textPassword"
             android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -122,7 +125,7 @@
             app:layout_constraintTop_toTopOf="@+id/viewTwitter" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/loginActionRegister"
+            android:id="@+id/viewRegister"
             style="@style/Button"
             android:layout_marginBottom="@dimen/contentMargin"
             android:text="Register"

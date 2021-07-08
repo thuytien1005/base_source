@@ -6,18 +6,20 @@ import androidx.navigation.findNavController
 import wee.digital.library.extension.isGranted
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
+import wee.digital.sample.app
 import wee.digital.sample.databinding.MainBinding
 import wee.digital.sample.ui.base.BaseActivity
 import wee.digital.sample.ui.main.vm.DialogVM
+import wee.digital.sample.ui.main.vm.FirebaseVM
 import wee.digital.sample.ui.main.vm.MainVM
 
 class MainActivity : BaseActivity<MainBinding>(), MainView {
 
-    override val mainActivity: MainActivity? get() = this
+    private val mainVM by viewModel(MainVM::class)
 
-    override val mainVM by viewModel(MainVM::class)
+    private val dialogVM by viewModel(DialogVM::class)
 
-    override val dialogVM by viewModel(DialogVM::class)
+    private val firebaseVM by viewModel(FirebaseVM::class)
 
     override fun navController(): NavController? {
         return findNavController(R.id.fragment)
@@ -28,6 +30,7 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
     }
 
     override fun onViewCreated() {
+        firebaseVM.onFirebaseAppInit(app)
     }
 
     override fun onLiveDataObserve() {
