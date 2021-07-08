@@ -33,7 +33,7 @@ class MainVM : BaseVM() {
     }
 
     private val registerDataEvent = EventLiveData<RegisterData>()
-    var registerData: RegisterData
+    var userInfo: RegisterData
         get() = registerDataEvent.value ?: RegisterData()
         set(value) {
             registerDataEvent.value = value

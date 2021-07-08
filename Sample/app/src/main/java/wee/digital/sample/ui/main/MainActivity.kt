@@ -43,9 +43,9 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
                 true -> {
                     progressDialog?.dismiss()
                     progressDialog = ProgressDialog()
-                    progressDialog?.show()
+                    progressDialog?.show(supportFragmentManager, "progress")
                 }
-                else->{
+                else -> {
                     progressDialog?.dismiss()
                 }
             }

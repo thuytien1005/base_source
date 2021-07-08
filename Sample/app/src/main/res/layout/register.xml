@@ -43,22 +43,33 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <wee.digital.widget.custom.InputView
-            android:id="@+id/inputViewEmail"
+            android:id="@+id/inputViewName"
             style="@style/InputView"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/contentMargin"
-            android:title="Email"
-            android:src="@drawable/ic_placeholder"
+            android:src="@drawable/ic_user"
+            android:title="Name"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@+id/registerActionLogin" />
 
         <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewEmail"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:src="@drawable/ic_mail"
+            android:title="Email"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewName" />
+
+        <wee.digital.widget.custom.InputView
             android:id="@+id/inputViewPassword"
             style="@style/InputView"
             android:layout_width="0dp"
+            android:inputType="textPassword"
+            android:src="@drawable/ic_lock"
             android:title="Password"
-            android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@+id/inputViewEmail" />

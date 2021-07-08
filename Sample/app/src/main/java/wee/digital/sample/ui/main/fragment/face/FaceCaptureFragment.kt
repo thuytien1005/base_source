@@ -46,7 +46,7 @@ class FaceCaptureFragment : MainFragment<FaceCaptureBinding>() {
             byte ?: return@launch
             bind.faceCapture.hide()
             bind.faceCaptureProgress.show()
-            val user = mainVM.registerData.apply {
+            val user = mainVM.userInfo.apply {
                 face = Base64.encodeToString(byte, Base64.NO_WRAP)
             }
             vm.addUser(user)

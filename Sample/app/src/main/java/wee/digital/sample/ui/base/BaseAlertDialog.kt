@@ -122,7 +122,7 @@ abstract class BaseAlertDialog<B : ViewBinding> {
         dialog?.window?.attributes = wlp
     }
 
-    fun Window.setGravityBottom() {
+    fun Window.setGravityTop() {
         when {
             android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R -> {
                 this.decorView.windowInsetsController?.hide(
@@ -134,7 +134,7 @@ abstract class BaseAlertDialog<B : ViewBinding> {
                 val wlp = this.attributes ?: return
                 @Suppress("DEPRECATION")
                 wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN.inv()
-                wlp.gravity = Gravity.BOTTOM
+                wlp.gravity = Gravity.TOP
                 wlp.height = WindowManager.LayoutParams.WRAP_CONTENT
                 wlp.width = WindowManager.LayoutParams.MATCH_PARENT
                 dialog?.window?.attributes = wlp
