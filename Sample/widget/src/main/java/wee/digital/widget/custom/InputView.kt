@@ -73,8 +73,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<I
         } else {
             it.inputType = customInputType or
                     EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS or
-                    EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD or
-                    EditorInfo.TYPE_TEXT_VARIATION_FILTER or
                     EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
         }
 

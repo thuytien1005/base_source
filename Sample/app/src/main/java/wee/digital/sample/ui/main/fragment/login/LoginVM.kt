@@ -13,7 +13,7 @@ class LoginVM : BaseVM() {
 
     val passwordErrorLiveData = SingleLiveData<String?>()
 
-    private val hasError get() = null == emailErrorLiveData.value || null == passwordErrorLiveData.value
+    private val hasError get() = null != emailErrorLiveData.value || null != passwordErrorLiveData.value
 
     fun onLogin(email: String?, password: String?) {
         emailErrorLiveData.value = if (email.isEmail) null else "Email incorrect format"

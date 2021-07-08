@@ -2,9 +2,6 @@ package wee.digital.sample.ui.main.fragment.login
 
 import android.view.LayoutInflater
 import android.view.View
-import com.google.firebase.auth.FirebaseUser
-import wee.digital.library.extension.launch
-import wee.digital.library.extension.toast
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.LoginBinding
@@ -19,22 +16,27 @@ class LoginFragment : MainFragment<LoginBinding>() {
     }
 
     override fun onViewCreated() {
-        addClickListener(bind.viewLogin,bind.viewRegister)
+        addClickListener(bind.viewLogin, bind.viewRegister)
+        //bind.inputViewEmail.text = "huyquocvu.sg@gmail.com"
+        //bind.inputViewPassword.text = "concacv1p"
     }
 
     override fun onLiveDataObserve() {
-        firebaseVM.hasAuthLiveData.observe(this::onAuthSuccess)
-        loginVM.emailErrorLiveData.observe(this::setEmailError)
-        loginVM.passwordErrorLiveData.observe(this::setPasswordError)
+        firebaseVM.hasAuthLiveData.observe {
+            onAuthSuccess()
+        }
+        loginVM.emailErrorLiveData.observe {
+            setEmailError(it)
+        }
+        loginVM.passwordErrorLiveData.observe {
+            setPasswordError(it)
+        }
     }
 
     override fun onViewClick(v: View?) {
         when (v) {
             bind.viewLogin -> {
-                launch (4000){
-                    toast("login")
-                }
-                //loginVM.onLogin(bind.inputViewEmail.trimText, bind.inputViewPassword.text)
+                loginVM.onLogin(bind.inputViewEmail.trimText, bind.inputViewPassword.text)
             }
             bind.viewRegister -> {
                 navigate(R.id.action_global_registerFragment)
@@ -42,15 +44,15 @@ class LoginFragment : MainFragment<LoginBinding>() {
         }
     }
 
-    fun setEmailError(it: String?) {
+    private fun setEmailError(it: String?) {
         bind.inputViewEmail.error = it
     }
 
-    fun setPasswordError(it: String?) {
+    private fun setPasswordError(it: String?) {
         bind.inputViewPassword.error = it
     }
 
-    fun onAuthSuccess(it: FirebaseUser) {
+    private fun onAuthSuccess() {
         navigate(R.id.action_global_homeFragment) {
             setLaunchSingleTop()
         }
