@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.lifecycle.LifecycleObserver
 import androidx.multidex.MultiDexApplication
 import wee.digital.library.Library
+import wee.digital.library.extension.SimpleActivityLifecycleCallbacks
 import wee.digital.widget.Widget
 import java.lang.ref.WeakReference
 
@@ -14,6 +15,11 @@ class App : MultiDexApplication(), LifecycleObserver {
         app = this
         Library.init(this)
         Widget.init(this)
+        app.registerActivityLifecycleCallbacks(object : SimpleActivityLifecycleCallbacks {
+            override fun onActivityResumed(activity: Activity) {
+                activityReference = WeakReference(activity)
+            }
+        })
     }
 
 }

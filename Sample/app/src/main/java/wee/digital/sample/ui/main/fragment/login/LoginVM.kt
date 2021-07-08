@@ -28,7 +28,7 @@ class LoginVM : BaseVM() {
         progressLiveData.value = true
         auth.signInWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener {
-                    Thread.sleep(1000)
+                    Thread.sleep(1200)
                     progressLiveData.value = false
                     when {
                         it.isSuccessful -> onLoginSuccess()
