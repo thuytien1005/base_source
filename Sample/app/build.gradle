@@ -79,6 +79,9 @@ dependencies {
     // widgets lib
     implementation project(":widget")
 
+    //cameraX
+    implementation project(':cameraX')
+
     implementation deps.kotlin.stdlib
 
     // concurrency pattern

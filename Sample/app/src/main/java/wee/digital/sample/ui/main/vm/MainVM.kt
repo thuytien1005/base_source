@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import wee.digital.library.util.EventLiveData
+import wee.digital.sample.repository.model.RegisterData
 
-abstract class MainVM : ViewModel() {
+open class MainVM : ViewModel() {
 
     /**
      * View model on initialized
@@ -30,5 +32,12 @@ abstract class MainVM : ViewModel() {
         }.launchIn(viewModelScope)
 
     }
+
+    private val registerDataEvent = EventLiveData<RegisterData>()
+    var registerData: RegisterData
+        get() = registerDataEvent.value ?: RegisterData()
+        set(value) {
+            registerDataEvent.value = value
+        }
 
 }

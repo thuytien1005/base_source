@@ -2,4 +2,11 @@
 <resources>
 
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="register_invalid_email">email không hợp lệ</string>
+    <string name="register_invalid_pass">mật khẩu phải từ 6 ký tự trở lên</string>
+
+    <string name="face_capture_area">Vui lòng đưa khuôn mặt vào vùng nhận diện</string>
 </resources>

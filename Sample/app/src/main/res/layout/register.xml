@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4">
+
+    <wee.digital.widget.base.AppConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/contentMargin"
+        android:background="@color/colorWhite"
+        android:elevation="@dimen/_1sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".8"
+        app:radius="@dimen/radius4">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/contentMargin" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/contentMargin" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/registerActionLogin"
+            style="@style/Button"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:text="Register"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewEmail"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:hint="Email"
+            android:text="khang@wee.vn"
+            android:src="@drawable/ic_placeholder"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/registerActionLogin" />
+
+        <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewPassword"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:hint="Password"
+            android:text="khang@wee.vn"
+            android:src="@drawable/ic_placeholder"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewEmail" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewRegister"
+            style="@style/Button.Primary"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:layout_marginBottom="@dimen/contentMargin"
+            android:text="Register"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/inputViewEmail"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewPassword" />
+
+    </wee.digital.widget.base.AppConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

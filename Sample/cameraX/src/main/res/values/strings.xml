@@ -1,0 +1,5 @@
+<resources>
+    <string name="error_lens_back">device not camera back</string>
+    <string name="error_lens_front">device not camera front</string>
+
+</resources>

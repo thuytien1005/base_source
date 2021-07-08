@@ -123,6 +123,7 @@
             app:layout_constraintTop_toTopOf="@+id/viewTwitter" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/loginActionRegister"
             style="@style/Button"
             android:layout_marginBottom="@dimen/contentMargin"
             android:text="Register"

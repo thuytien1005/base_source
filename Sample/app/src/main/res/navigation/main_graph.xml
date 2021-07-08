@@ -40,4 +40,22 @@
         android:id="@+id/action_global_selectableFragment"
         app:destination="@id/selectableFragment" />
 
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="wee.digital.sample.ui.main.fragment.register.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/register" />
+    <action
+        android:id="@+id/action_global_registerFragment"
+        app:destination="@id/registerFragment" />
+
+    <fragment
+        android:id="@+id/faceCaptureFragment"
+        android:name="wee.digital.sample.ui.main.fragment.face.FaceCaptureFragment"
+        android:label="face_capture"
+        tools:layout="@layout/face_capture" />
+    <action
+        android:id="@+id/action_global_faceCaptureFragment"
+        app:destination="@id/faceCaptureFragment" />
+
 </navigation>

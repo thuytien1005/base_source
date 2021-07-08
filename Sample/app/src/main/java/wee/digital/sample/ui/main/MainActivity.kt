@@ -3,6 +3,7 @@ package wee.digital.sample.ui.main
 import android.view.LayoutInflater
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import wee.digital.library.extension.isGranted
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.MainBinding
@@ -31,6 +32,11 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
 
     override fun onLiveDataObserve() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isGranted(android.Manifest.permission.CAMERA)
     }
 
 }
