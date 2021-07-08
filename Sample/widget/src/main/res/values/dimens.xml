@@ -6,6 +6,9 @@
     <dimen name="contentMargin">@dimen/_16sdp</dimen>
     <dimen name="contentMarginX2">@dimen/_32sdp</dimen>
     <dimen name="contentMarginX3">@dimen/_48sdp</dimen>
+    <dimen name="contentMarginX4">@dimen/_64sdp</dimen>
+    <dimen name="contentMarginX5">@dimen/_80sdp</dimen>
+    <dimen name="contentMarginX6">@dimen/_96sdp</dimen>
 
     <dimen name="textSize">@dimen/_8ssp</dimen>
     <dimen name="textSize2">@dimen/_9ssp</dimen>
@@ -19,6 +22,6 @@
     <dimen name="radius4">@dimen/_14sdp</dimen>
 
     <dimen name="rowHeight">@dimen/_34sdp</dimen>
-    <dimen name="rowRadius">@dimen/_6sdp</dimen>
+    <dimen name="rowRadius">@dimen/_4sdp</dimen>
 
 </resources>

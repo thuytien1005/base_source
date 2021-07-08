@@ -8,7 +8,9 @@ import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.app
 import wee.digital.sample.databinding.MainBinding
+import wee.digital.sample.shared.progressLiveData
 import wee.digital.sample.ui.base.BaseActivity
+import wee.digital.sample.ui.main.fragment.progress.ProgressDialog
 import wee.digital.sample.ui.main.vm.DialogVM
 import wee.digital.sample.ui.main.vm.FirebaseVM
 import wee.digital.sample.ui.main.vm.MainVM
@@ -20,6 +22,8 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
     private val dialogVM by viewModel(DialogVM::class)
 
     private val firebaseVM by viewModel(FirebaseVM::class)
+
+    private var progressDialog: ProgressDialog? = null
 
     override fun navController(): NavController? {
         return findNavController(R.id.fragment)
@@ -34,7 +38,15 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
     }
 
     override fun onLiveDataObserve() {
-
+        progressLiveData.observe {
+            when (it) {
+                true -> {
+                    progressDialog?.dismiss()
+                    progressDialog = ProgressDialog()
+                    progressDialog?.show()
+                }
+            }
+        }
     }
 
     override fun onResume() {

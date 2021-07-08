@@ -17,8 +17,8 @@ class LoginFragment : MainFragment<LoginBinding>() {
 
     override fun onViewCreated() {
         addClickListener(bind.viewLogin, bind.viewRegister)
-        //bind.inputViewEmail.text = "huyquocvu.sg@gmail.com"
-        //bind.inputViewPassword.text = "concacv1p"
+        bind.inputViewEmail.text = "huyquocvu.sg@gmail.com"
+        bind.inputViewPassword.text = "concacv1p"
     }
 
     override fun onLiveDataObserve() {

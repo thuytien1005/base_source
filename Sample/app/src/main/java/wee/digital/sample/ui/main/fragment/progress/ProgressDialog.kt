@@ -15,4 +15,5 @@ class ProgressDialog : BaseAlertDialog<ProgressBinding>() {
     override fun onWindowConfig(window: Window) {
         window.setGravityBottom()
     }
+    
 }
