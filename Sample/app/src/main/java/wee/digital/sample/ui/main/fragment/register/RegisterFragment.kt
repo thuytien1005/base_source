@@ -34,11 +34,11 @@ class RegisterFragment : MainFragment<RegisterBinding>() {
     private fun validData() {
         val email = bind.inputViewEmail.text.toString()
         val pass = bind.inputViewPassword.text.toString()
-        if (!vm.checkValidEmail(email)) {
+        if (email.isEmpty()) {
             bind.inputViewEmail.error = string(R.string.register_invalid_email)
             return
         }
-        if (pass.length < 6) {
+        if (pass.isEmpty()) {
             bind.inputViewPassword.error = string(R.string.register_invalid_pass)
             return
         }

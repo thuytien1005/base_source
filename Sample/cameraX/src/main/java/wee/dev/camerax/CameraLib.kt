@@ -2,13 +2,15 @@ package wee.dev.camerax
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Size
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -40,28 +42,51 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
 
     private val life = context as LifecycleOwner
 
-    var listener: CameraListener? = null
-
-    init {
-        bd.cameraCapture.setOnClickListener {
-            cameraExecutor ?: return@setOnClickListener
-            imageCapture?.takePicture(cameraExecutor!!, object :
-                ImageCapture.OnImageCapturedCallback() {
-
-            })
-        }
-    }
+    private val main = Handler(Looper.getMainLooper())
 
     fun resumeCamera() {
-        cameraExecutor = Executors.newSingleThreadExecutor()
+        cameraExecutor = Executors.newSingleThreadScheduledExecutor()
         bd.cameraPreview.post {
             displayId = bd.cameraPreview.display.displayId
             setupCamera()
         }
     }
 
+    @SuppressLint("RestrictedApi")
     fun pauseCamera() {
-        cameraExecutor?.shutdown()
+        cameraExecutor?.shutdownNow()
+    }
+
+    fun resetCamera() {
+        bd.cameraPreview.show()
+        bd.cameraResult.gone()
+    }
+
+    fun getImageCapture(block: (ByteArray?) -> Unit) {
+        cameraExecutor ?: return
+        imageCapture?.takePicture(
+            cameraExecutor!!,
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    cameraExecutor?.submit {
+                        try {
+                            val buffer = image.planes[0].buffer
+                            val bytes = ByteArray(buffer.capacity()).also { buffer.get(it) }
+                            val bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                            val bmRotate = BitmapUtils.rotate(bm, 270)
+                            val byteRotation = BitmapUtils.bitmapToByteArray(bmRotate)
+                            block(byteRotation)
+                            main.post {
+                                bd.cameraPreview.gone()
+                                bd.cameraResult.show()
+                                bd.cameraResult.setImageBitmap(bmRotate)
+                            }
+                        } catch (e: java.lang.Exception) {
+                            block(null)
+                        }
+                    }
+                }
+            })
     }
 
     private fun setupCamera() {
@@ -69,11 +94,11 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
         cameraProviderFuture.addListener({
             cameraProvider = cameraProviderFuture.get()
             if (!cameraProvider.hasBackCamera() && lensFacing == Config.LENS_BACK) {
-                toast(string(R.string.error_lens_back))
+                print(string(R.string.error_lens_back))
                 return@addListener
             }
             if (!cameraProvider.hasFrontCamera() && lensFacing == Config.LENS_FRONT) {
-                toast(string(R.string.error_lens_front))
+                print(string(R.string.error_lens_front))
                 return@addListener
             }
             bindCamera()
@@ -108,9 +133,7 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
             .setTargetRotation(rotation)
             .setDefaultResolution(Size(Config.WITH_CAMERA, Config.HEIGHT_CAMERA))
             .build()
-            .also {
-                it.setAnalyzer(cameraExecutor!!, LuminosityAnalyzer { frame, with, height -> })
-            }
+
         cameraProvider.unbindAll()
         try {
             camera = cameraProvider.bindToLifecycle(
@@ -126,16 +149,19 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
         }
     }
 
-    private fun toast(mess: String) {
-        Toast.makeText(context, mess, Toast.LENGTH_SHORT).show()
-    }
-
     private fun string(@StringRes id: Int): String {
         return context.getString(id)
     }
 
-    interface CameraListener {
-        fun onCapture(bm: Bitmap)
+    private fun View.show() {
+        main.post { this.visibility = View.VISIBLE }
     }
 
+    private fun View.hide() {
+        main.post { this.visibility = View.INVISIBLE }
+    }
+
+    private fun View.gone() {
+        main.post { this.visibility = View.GONE }
+    }
 }
