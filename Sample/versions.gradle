@@ -261,3 +261,8 @@ deps.permissions = "gun0912.ted:tedpermission:2.2.3"
  * [https://github.com/zetbaitsu/Compressor]
  */
 deps.compressor = "id.zelory:compressor:2.1.0"
+
+/**
+ * Cloud Firestore
+ * */
+deps.firebase_firestore = "com.google.firebase:firebase-firestore-ktx"

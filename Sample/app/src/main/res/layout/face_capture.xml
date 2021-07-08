@@ -9,26 +9,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <wee.digital.widget.base.AppConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
-        android:elevation="@dimen/_1sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/faceCaptureStatus"
-            style="@style/TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/contentMargin"
-            android:layout_marginBottom="@dimen/contentMargin"
-            android:text="@string/face_capture_area"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </wee.digital.widget.base.AppConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

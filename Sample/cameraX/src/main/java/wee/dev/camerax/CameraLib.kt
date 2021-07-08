@@ -2,6 +2,7 @@ package wee.dev.camerax
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Size
@@ -35,31 +36,32 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
 
     private var imageCapture: ImageCapture? = null
 
-    private var detection: Detection? = null
-
     private var cameraExecutor: ExecutorService? = null
 
     private val life = context as LifecycleOwner
 
-    fun createCamera(listener: Detection.DetectionCallBack) {
-        detection = Detection()
-        detection?.listener = listener
+    var listener: CameraListener? = null
+
+    init {
+        bd.cameraCapture.setOnClickListener {
+            cameraExecutor ?: return@setOnClickListener
+            imageCapture?.takePicture(cameraExecutor!!, object :
+                ImageCapture.OnImageCapturedCallback() {
+
+            })
+        }
     }
 
     fun resumeCamera() {
         cameraExecutor = Executors.newSingleThreadExecutor()
-        bd.myCameraXPreview.post {
-            displayId = bd.myCameraXPreview.display.displayId
+        bd.cameraPreview.post {
+            displayId = bd.cameraPreview.display.displayId
             setupCamera()
         }
     }
 
     fun pauseCamera() {
         cameraExecutor?.shutdown()
-    }
-
-    fun destroyCamera() {
-        detection?.destroyThread()
     }
 
     private fun setupCamera() {
@@ -81,10 +83,10 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
     @SuppressLint("RestrictedApi")
     private fun bindCamera() {
         val metrics = DisplayMetrics().also {
-            bd.myCameraXPreview.display.getRealMetrics(it)
+            bd.cameraPreview.display.getRealMetrics(it)
         }
         val screenRatio = metrics.aSpecRatio()
-        val rotation = bd.myCameraXPreview.display.rotation
+        val rotation = bd.cameraPreview.display.rotation
         val cameraProvider =
             cameraProvider ?: throw IllegalStateException("camera initialization failed")
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
@@ -107,9 +109,7 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
             .setDefaultResolution(Size(Config.WITH_CAMERA, Config.HEIGHT_CAMERA))
             .build()
             .also {
-                it.setAnalyzer(cameraExecutor!!, LuminosityAnalyzer { frame, with, height ->
-                    detection?.bitmapChecking(frame, with, height)
-                })
+                it.setAnalyzer(cameraExecutor!!, LuminosityAnalyzer { frame, with, height -> })
             }
         cameraProvider.unbindAll()
         try {
@@ -120,7 +120,7 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
                 imageCapture,
                 imageAnalyzer
             )
-            preview?.setSurfaceProvider(bd.myCameraXPreview.surfaceProvider)
+            preview?.setSurfaceProvider(bd.cameraPreview.surfaceProvider)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -132,6 +132,10 @@ class CameraLib(context: Context, attrs: AttributeSet?) : FrameLayout(context, a
 
     private fun string(@StringRes id: Int): String {
         return context.getString(id)
+    }
+
+    interface CameraListener {
+        fun onCapture(bm: Bitmap)
     }
 
 }
