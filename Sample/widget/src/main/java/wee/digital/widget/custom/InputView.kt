@@ -17,32 +17,27 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import wee.digital.widget.R
-import wee.digital.widget.base.AppBindCustomView
+import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.databinding.InputBinding
 import wee.digital.widget.extension.*
 
-class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<InputBinding>(context, attrs, InputBinding::inflate),
+class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<InputBinding>(context, attrs),
         SimpleMotionTransitionListener,
         OnFocusChangeListener,
         SimpleTextWatcher {
 
-    override fun onViewInit(context: Context, types: TypedArray) {
-        hint = types.hint
-        bind.inputEditText.setText(types.text)
-        bind.inputEditText.addTextChangedListener(this)
-        onIconInitialize(bind.inputImageViewIcon, types)
-        onEditTextInitialize(bind.inputEditText, types)
-        bind.inputViewLayout.addTransitionListener(this)
+    override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> InputBinding {
+        return InputBinding::inflate
     }
 
-    /*override fun onInitialize(context: Context, types: TypedArray) {
-      hint = types.hint
-        bind.inputEditText.setText(types.text)
-        bind.inputEditText.addTextChangedListener(this)
-        onIconInitialize(bind.inputImageViewIcon, types)
-        onEditTextInitialize(bind.inputEditText, types)
+    override fun onInitialize(context: Context, types: TypedArray) {
+        title = types.title
+        bind.editText.setText(types.text)
+        bind.editText.addTextChangedListener(this)
+        onIconInitialize(bind.imageViewIcon, types)
+        onEditTextInitialize(bind.editText, types)
         bind.inputViewLayout.addTransitionListener(this)
-    }*/
+    }
 
     private fun onIconInitialize(it: AppCompatImageView, types: TypedArray) {
         val color = types.getColor(R.styleable.AppCustomView_android_tint, -1)
@@ -132,7 +127,7 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
      * [InputView] properties
      */
     private val editText: EditText
-        get() = bind.inputEditText
+        get() = bind.editText
 
     var text: String?
         get() {
@@ -158,16 +153,16 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
             return editText.trimText
         }
 
-    var hint: String?
-        get() = bind.inputTextViewHint.text?.toString()
+    var title: String?
+        get() = bind.textViewTitle.text?.toString()
         set(value) {
-            bind.inputTextViewHint.text = value
+            bind.textViewTitle.text = value
         }
 
     var error: String?
-        get() = bind.inputTextViewError.text?.toString()
+        get() = bind.textViewError.text?.toString()
         set(value) {
-            bind.inputTextViewError.text = value
+            bind.textViewError.text = value
             if (value.isNullOrEmpty()) {
                 updateUiOnFocusChanged()
             } else {
@@ -180,8 +175,8 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
     var src: Int = 0
         set(value) {
             val isGone = value <= 0
-            bind.inputImageViewIcon.isGone(isGone)
-            bind.inputImageViewIcon.setImageResource(value)
+            bind.imageViewIcon.isGone(isGone)
+            bind.imageViewIcon.setImageResource(value)
         }
 
     var isSilent: Boolean = false
@@ -195,7 +190,7 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
     /**
      * [OnFocusChangeListener] implements
      */
-    private val onFocusChange = mutableListOf<(Boolean) -> Unit>()
+    private val onFocusChange = mutableListOf<Block<Boolean>>()
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
         onFocusChange.iterator().forEach {
@@ -235,7 +230,7 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
         onFocusChange.add(block)
     }
 
-    var onTextChanged: () -> Unit = { }
+    var onTextChanged: Void? = null
 
     fun addActionDoneListener(block: (String?) -> Unit) {
         editText.addActionDoneListener(block)
@@ -262,8 +257,8 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
     fun clear() {
         editText.text = null
         error = null
-        bind.inputTextViewHint.textColor(R.color.colorInputUnfocused)
-        bind.inputTextViewHint.background = null
+        bind.textViewTitle.textColor(R.color.colorInputUnfocused)
+        bind.textViewTitle.background = null
     }
 
     /**
@@ -314,7 +309,7 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
      * [SimpleTextWatcher] implements
      */
     override fun afterTextChanged(s: Editable?) {
-        onTextChanged()
+        onTextChanged.does()
         when {
             isSilent -> {
                 return
@@ -367,15 +362,15 @@ class InputView(context : Context, attrs: AttributeSet?) : AppBindCustomView<Inp
     }
 
     private fun setBorderColor(@ColorRes res: Int) {
-        bind.inputEditText.backgroundTintRes(res)
+        bind.editText.backgroundTintRes(res)
     }
 
     private fun setIconColor(@ColorRes res: Int) {
-        bind.inputImageViewIcon.tintRes(res)
+        bind.imageViewIcon.tintRes(res)
     }
 
     private fun setHintBackground(@ColorRes res: Int) {
-        bind.inputTextViewHint.setBackgroundResource(res)
+        bind.textViewTitle.setBackgroundResource(res)
     }
 
 

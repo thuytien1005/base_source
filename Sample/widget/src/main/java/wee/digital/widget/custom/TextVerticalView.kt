@@ -16,7 +16,7 @@ class TextVerticalView : AppCustomView<TextVerticalBinding> {
         return TextVerticalBinding::inflate
     }
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
 
     override fun onInitialize(context: Context, types: TypedArray) {
         title = types.title

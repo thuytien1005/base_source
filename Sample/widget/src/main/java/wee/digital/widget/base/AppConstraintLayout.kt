@@ -19,25 +19,25 @@ open class AppConstraintLayout : ConstraintLayout {
     var path: Path? = null
 
     /** corner radius */
-    var cornerLeftTop: Float = 0f
+    var cornerLeftTop: Float = 0F
         set(value) {
             field = value
             postInvalidate()
         }
 
-    var cornerRightTop: Float = 0f
+    var cornerRightTop: Float = 0F
         set(value) {
             field = value
             postInvalidate()
         }
 
-    var cornerLeftBottom: Float = 0f
+    var cornerLeftBottom: Float = 0F
         set(value) {
             field = value
             postInvalidate()
         }
 
-    var cornerRightBottom: Float = 0f
+    var cornerRightBottom: Float = 0F
         set(value) {
             field = value
             postInvalidate()
@@ -49,7 +49,7 @@ open class AppConstraintLayout : ConstraintLayout {
             postInvalidate()
         }
 
-    var strokeLineWidth: Float = 0f
+    var strokeLineWidth: Float = 0F
         set(value) {
             field = value
             postInvalidate()
@@ -61,13 +61,13 @@ open class AppConstraintLayout : ConstraintLayout {
             postInvalidate()
         }
 
-    var dashLineGap: Float = 0f
+    var dashLineGap: Float = 0F
         set(value) {
             field = value
             postInvalidate()
         }
 
-    var dashLineWidth: Float = 0f
+    var dashLineWidth: Float = 0F
         set(value) {
             field = value
             postInvalidate()
@@ -83,7 +83,7 @@ open class AppConstraintLayout : ConstraintLayout {
             context.obtainStyledAttributes(it, R.styleable.AppConstraintLayout).apply {
                 val radius = pixels(R.styleable.AppConstraintLayout_radius)
 
-                if (radius != 0f) {
+                if (radius != 0F) {
                     cornerLeftTop = radius
                     cornerRightTop = radius
                     cornerLeftBottom = radius
@@ -126,7 +126,7 @@ open class AppConstraintLayout : ConstraintLayout {
                     cornerLeftTop, cornerLeftTop, cornerRightTop, cornerRightTop,
                     cornerRightBottom, cornerRightBottom, cornerLeftBottom, cornerLeftBottom
             )
-            if (strokeLineWidth != 0f && strokeLineColor != null) {
+            if (strokeLineWidth != 0F && strokeLineColor != null) {
                 this.setStroke(strokeLineWidth.toInt(), strokeLineColor, dashLineWidth, dashLineGap)
             }
             backgroundColor?.let {
@@ -146,7 +146,7 @@ open class AppConstraintLayout : ConstraintLayout {
     private fun clipPathCanvas(canvas: Canvas, floatArray: FloatArray) {
         path?.let {
             it.addRoundRect(
-                    RectF(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat()),
+                    RectF(0F, 0F, canvas.width.toFloat(), canvas.height.toFloat()),
                     floatArray,
                     Path.Direction.CW
             )

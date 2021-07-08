@@ -69,12 +69,13 @@ val navigationBarHeight: Int
         } else 0
     }
 
+var currentToast: Toast? = null
+
 fun toast(message: String?) {
     message ?: return
-    if (isOnUiThread) {
-        Toast.makeText(app.applicationContext, message, Toast.LENGTH_SHORT).show()
-    } else uiHandler.post {
-        Toast.makeText(app.applicationContext, message, Toast.LENGTH_SHORT).show()
+    onUi {
+        currentToast = Toast.makeText(app.applicationContext, message, Toast.LENGTH_SHORT)
+        currentToast?.show()
     }
 }
 

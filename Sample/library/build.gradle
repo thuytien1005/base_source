@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
+
 android {
     compileSdkVersion builds.compile_sdk
     defaultConfig {
@@ -31,13 +32,29 @@ android {
         viewBinding = true
     }
 }
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url "https://maven.google.com" }
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     implementation deps.kotlin.stdlib
 
+    // concurrency pattern
+    implementation deps.kotlin.coroutines_core
+    implementation deps.kotlin.coroutines_android
+
     // android
+    implementation deps.android.corektx
     implementation deps.android.appcompat
+    implementation deps.android.activity
+    implementation deps.android.fragment
     implementation deps.android.material
     implementation deps.android.recyclerview
     implementation deps.android.constraintlayout
@@ -48,7 +65,7 @@ dependencies {
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
-
+    
     // paging recycler view adapter
     implementation deps.paging.runtime
     implementation deps.paging.rx
