@@ -1,7 +1,14 @@
 package wee.digital.sample.ui.splash
 
 import android.view.LayoutInflater
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import wee.digital.library.extension.start
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.databinding.SplashBinding
@@ -27,6 +34,13 @@ class SplashActivity : BaseActivity<SplashBinding>() {
 
     override fun onViewCreated() {
         vm.syncAuthUser()
+
+        flow {
+            delay(3000)
+            emit(true)
+        }.flowOn(Dispatchers.IO).onEach {
+            println("")
+        }.launchIn(lifecycleScope)
     }
 
     override fun onLiveDataObserve() {

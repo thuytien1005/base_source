@@ -9,6 +9,22 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
+typealias Void = () -> Unit
+
+fun Void?.does() {
+    this?.also { it() }
+}
+
+typealias Block<reified T> = T.() -> Unit
+
+fun <T> Block<T>?.doThis(t: T) {
+    this?.also { t.it() }
+}
+
+fun <T> Block<T>?.doIt(t: T) {
+    this?.also { it(t) }
+}
+
 interface SimpleOnTabSelectedListener : TabLayout.OnTabSelectedListener {
     override fun onTabSelected(tab: TabLayout.Tab?) {
 

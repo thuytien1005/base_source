@@ -16,13 +16,10 @@
         <!--<item name="android:drawableStart">@drawable/ic_radio</item>-->
     </style>
 
-    <!--FRAGMENT-->
     <style name="Fragment" />
 
-    <!--DIALOG-->
     <style name="Dialog" />
 
-    <!--DIALOG-->
     <style name="Dialog.BottomLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -49,21 +46,11 @@
         <item name="android:tint">#424242</item>
     </style>
 
-    <!--CUSTOM VIEW COMPONENTS-->
-    <style name="InputView">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColorHint">#6E6E6E</item>
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:minWidth">@dimen/_24sdp</item>
-    </style>
-
-
     <style name="Login" />
 
     <style name="Login.ProviderButton">
-        <item name="android:layout_width">@dimen/_32sdp</item>
-        <item name="android:layout_height">@dimen/_32sdp</item>
+        <item name="android:layout_width">@dimen/rowHeight</item>
+        <item name="android:layout_height">@dimen/rowHeight</item>
         <item name="android:background">@drawable/drw_oval</item>
         <item name="android:padding">@dimen/_8sdp</item>
         <item name="android:tint">@color/colorWhite</item>

@@ -1,6 +1,5 @@
 package wee.digital.sample.ui.main.vm
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -8,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import wee.digital.library.util.EventLiveData
 import wee.digital.sample.repository.model.RegisterData
 
-open class MainVM : ViewModel() {
+class MainVM : BaseVM() {
 
     /**
      * View model on initialized

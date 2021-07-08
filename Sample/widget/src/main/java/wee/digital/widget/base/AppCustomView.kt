@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.*
@@ -23,8 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.viewbinding.ViewBinding
 import wee.digital.widget.R
-import wee.digital.widget.extension.backgroundTint
-import wee.digital.widget.extension.color
 
 abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
 
@@ -38,14 +35,14 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
 
     abstract fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> B
 
-    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
         onViewInit(context, attrs)
     }
 
     private fun onViewInit(context: Context, attrs: AttributeSet?) {
+        bind = inflating().invoke(LayoutInflater.from(context), this, true)
         val types = context.theme.obtainStyledAttributes(attrs, styleResource(), 0, 0)
         try {
-            bind = inflating().invoke(LayoutInflater.from(context), this, true)
             onInitialize(context, types)
         } finally {
             types.recycle()
@@ -262,147 +259,7 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
         setTextColor(ContextCompat.getColor(context, color))
     }
 
-}
-
-
-typealias Inflate<V> = (LayoutInflater, ViewGroup?, Boolean) -> V
-
-abstract class AppBindCustomView<VB : ViewBinding>(
-        context: Context,
-        attrs: AttributeSet?,
-        val inflate: Inflate<VB>,
-) : FrameLayout(context, attrs) {
-
-    var bind: VB
-
-    protected abstract fun onViewInit(context: Context, types: TypedArray)
-
-    protected open fun styleResource(): IntArray {
-        return R.styleable.AppCustomView
-    }
-
-    init {
-        val types = context.theme.obtainStyledAttributes(attrs, styleResource(), 0, 0)
-        try {
-            bind = inflate.invoke(LayoutInflater.from(context), this, true)
-            onViewInit(context, types)
-        } finally {
-
-            types.recycle()
-        }
-    }
-
-    /**
-     * Text
-     */
-    val TypedArray.text: String?
-        get() = getString(R.styleable.AppCustomView_android_text)
-
-    val TypedArray.title: String?
-        get() = getString(R.styleable.AppCustomView_android_title)
-
-    val TypedArray.hint: String?
-        get() = getString(R.styleable.AppCustomView_android_hint)
-
-    /**
-     * Input type
-     */
-    val TypedArray.maxLength: Int
-        get() = getInt(R.styleable.AppCustomView_android_maxLength, 256)
-
-    val TypedArray.maxLines: Int
-        get() = getInt(R.styleable.AppCustomView_android_maxLines, 1)
-
-    val TypedArray.textAllCaps: Boolean
-        get() = getBoolean(R.styleable.AppCustomView_android_textAllCaps, false)
-
-    /**
-     * Color
-     */
-    val TypedArray.tint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_tint, Color.BLACK)
-        }
-
-    val TypedArray.backgroundTint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_backgroundTint, Color.WHITE)
-        }
-
-    val TypedArray.textColor: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_textColor, Color.BLACK)
-        }
-
-    val TypedArray.hintColor: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_textColorHint, Color.DKGRAY)
-        }
-
-    /**
-     * Drawable
-     */
-    val TypedArray.drawableStart: Drawable?
-        get() {
-            return getDrawable(R.styleable.AppCustomView_android_drawableStart)
-                    ?.constantState?.newDrawable()?.mutate()
-        }
-
-    val TypedArray.drawableEnd: Drawable?
-        get() {
-            return getDrawable(R.styleable.AppCustomView_android_drawableEnd)
-                    ?.constantState?.newDrawable()?.mutate()
-        }
-
-    val TypedArray.drawable: Drawable?
-        get() {
-            return getDrawable(R.styleable.AppCustomView_android_drawable)
-                    ?.constantState?.newDrawable()?.mutate()
-        }
-
-    val TypedArray.src: Drawable?
-        get() {
-            return getDrawable(R.styleable.AppCustomView_android_src)
-                    ?.constantState?.newDrawable()?.mutate()
-        }
-
-    val TypedArray.srcRes: Int
-        get() {
-            return getResourceId(R.styleable.AppCustomView_android_src, 0)
-        }
-
-    val TypedArray.background: Int
-        get() {
-            return getResourceId(R.styleable.AppCustomView_android_background, 0)
-        }
-
-    /**
-     * Checkable
-     */
-    val TypedArray.checkable: Boolean
-        get() = getBoolean(R.styleable.AppCustomView_android_checkable, false)
-
-    val TypedArray.checked: Boolean
-        get() = getBoolean(R.styleable.AppCustomView_android_checked, false)
-
-    /**
-     * Padding
-     */
-    val TypedArray.paddingStart: Int
-        get() = getDimensionPixelSize(R.styleable.AppCustomView_android_paddingStart, 0)
-
-    val TypedArray.paddingEnd: Int
-        get() = getDimensionPixelSize(R.styleable.AppCustomView_android_paddingEnd, 0)
-
-    val TypedArray.paddingTop: Int
-        get() = getDimensionPixelSize(R.styleable.AppCustomView_android_paddingTop, 0)
-
-    val TypedArray.paddingBottom: Int
-        get() = getDimensionPixelSize(R.styleable.AppCustomView_android_paddingBottom, 0)
-
-    fun View.backgroundTintRes(@ColorRes colorRes: Int) {
-        backgroundTint(color(colorRes))
-    }
-
 
 }
+
+

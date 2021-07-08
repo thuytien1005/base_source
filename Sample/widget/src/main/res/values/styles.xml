@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!--CUSTOM VIEW-->
+    <style name="InputView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">#6E6E6E</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:minWidth">@dimen/_24sdp</item>
+    </style>
+
+
     <!--TEXT VIEW-->
     <style name="TextView"
         parent="WrapContent">
@@ -40,7 +50,7 @@
     <style name="EditText"
         parent="TextView">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">@dimen/_38sdp</item>
+        <item name="android:layout_height">@dimen/rowHeight</item>
         <item name="android:textSize">@dimen/_14ssp</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:maxLines">1</item>

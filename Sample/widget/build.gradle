@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
+
 android {
     compileSdkVersion builds.compile_sdk
     defaultConfig {
@@ -31,6 +32,15 @@ android {
         viewBinding = true
     }
 }
+
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url "https://maven.google.com" }
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
 

@@ -18,7 +18,7 @@
     <dimen name="radius3">@dimen/_11sdp</dimen>
     <dimen name="radius4">@dimen/_14sdp</dimen>
 
-    <dimen name="rowHeight">@dimen/_40sdp</dimen>
+    <dimen name="rowHeight">@dimen/_34sdp</dimen>
     <dimen name="rowRadius">@dimen/_6sdp</dimen>
 
 </resources>

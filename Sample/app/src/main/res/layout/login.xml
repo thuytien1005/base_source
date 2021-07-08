@@ -13,13 +13,12 @@
         android:background="@color/colorWhite"
         android:elevation="@dimen/_1sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,9:5"
+        app:layout_constraintDimensionRatio="w,5:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.496"
-        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintHeight_percent="0.75"
         app:radius="@dimen/radius4">
 
         <androidx.constraintlayout.widget.Guideline
@@ -54,7 +53,7 @@
             style="@style/InputView"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/contentMarginX2"
-            android:hint="Email"
+            android:title="Email"
             android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -65,7 +64,7 @@
             style="@style/InputView"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/contentMarginD2"
-            android:hint="Password"
+            android:title="Password"
             android:src="@drawable/ic_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"

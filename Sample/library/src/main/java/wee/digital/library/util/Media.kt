@@ -5,7 +5,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import wee.digital.library.app
-import wee.digital.library.extension.post
+import wee.digital.library.extension.onIo
 
 object Media {
 
@@ -35,7 +35,7 @@ object Media {
         if (soundIndex == -1) {
             soundIndex = soundPool.load(app, raw, 1)
         }
-        post(100) {
+        onIo (100) {
             if (soundIndex != -1) {
                 soundPool.play(soundIndex, 1f, 1f, 1, 0, 1.0f)
             }

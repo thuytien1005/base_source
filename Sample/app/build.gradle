@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
 }
+
 android {
     compileSdkVersion builds.compile_sdk
     defaultConfig {
@@ -101,6 +102,11 @@ dependencies {
     implementation deps.android.legacy_v4
     implementation deps.android.material
     implementation deps.android.browser
+
+    // android lifecycle aware
+    implementation deps.lifecycle.viewmodel
+    implementation deps.lifecycle.livedata
+    kapt deps.lifecycle.compiler
 
     // fragment navigation
     implementation deps.navigation.fragment

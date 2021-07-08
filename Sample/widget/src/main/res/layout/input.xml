@@ -9,7 +9,7 @@
 
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/inputEditText"
+        android:id="@+id/editText"
         style="@style/EditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -28,18 +28,17 @@
         tools:text="text" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/inputImageViewIcon"
-        android:layout_width="@dimen/_24sdp"
-        android:layout_height="@dimen/_24sdp"
+        android:id="@+id/imageViewIcon"
+        android:layout_width="@dimen/_14sdp"
+        android:layout_height="@dimen/_14sdp"
         android:clickable="false"
-        android:padding="@dimen/_2sdp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_placeholder"
         android:tint="@color/colorInputUnfocused"
         app:tint="@color/colorInputFocused" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/inputTextViewHint"
+        android:id="@+id/textViewTitle"
         style="@style/TextView"
         android:clickable="false"
         android:paddingStart="@dimen/_4sdp"
@@ -49,7 +48,7 @@
         tools:text="Hint text" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/inputTextViewError"
+        android:id="@+id/textViewError"
         style="@style/TextView.Error"
         android:layout_marginTop="@dimen/_2sdp"
         tools:text="Error text" />
