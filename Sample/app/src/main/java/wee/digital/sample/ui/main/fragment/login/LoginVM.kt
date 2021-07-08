@@ -3,6 +3,7 @@ package wee.digital.sample.ui.main.fragment.login
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.shared.auth
 import wee.digital.sample.shared.currentUser
+import wee.digital.sample.shared.progressLiveData
 import wee.digital.sample.ui.main.vm.BaseVM
 import wee.digital.widget.extension.isEmail
 import wee.digital.widget.extension.notNullOrEmpty
@@ -24,8 +25,11 @@ class LoginVM : BaseVM() {
 
     private fun login(email: String, password: String) {
         log.d("login with email: %s , password: %s".format(email, password))
+        progressLiveData.value = true
         auth.signInWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener {
+                    Thread.sleep(1000)
+                    progressLiveData.value = false
                     when {
                         it.isSuccessful -> onLoginSuccess()
                         else -> onLoginFailure(it.exception!!)
@@ -34,7 +38,7 @@ class LoginVM : BaseVM() {
     }
 
     private fun onLoginSuccess() {
-        log.d("onLoginSuccess with user providerId: %s".format(currentUser?.providerId))
+        log.d("onLoginSuccess with user provider: %s, uid: %s".format(currentUser?.providerId, currentUser!!.uid))
     }
 
     private fun onLoginFailure(e: Exception) {

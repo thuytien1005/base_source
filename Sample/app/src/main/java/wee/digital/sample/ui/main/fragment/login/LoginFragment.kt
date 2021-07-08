@@ -17,13 +17,15 @@ class LoginFragment : MainFragment<LoginBinding>() {
 
     override fun onViewCreated() {
         addClickListener(bind.viewLogin, bind.viewRegister)
-        bind.inputViewEmail.text = "huyquocvu.sg@gmail.com"
+        bind.inputViewEmail.text = "quochuy@wee.vn"
         bind.inputViewPassword.text = "concacv1p"
     }
 
     override fun onLiveDataObserve() {
-        firebaseVM.hasAuthLiveData.observe {
-            onAuthSuccess()
+        firebaseVM.userLiveData.observe {
+            if (null != it) {
+                onAuthSuccess()
+            }
         }
         loginVM.emailErrorLiveData.observe {
             setEmailError(it)

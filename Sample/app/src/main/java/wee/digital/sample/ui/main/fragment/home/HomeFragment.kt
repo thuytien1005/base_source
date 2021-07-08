@@ -26,8 +26,10 @@ class HomeFragment : MainFragment<HomeBinding>() {
     }
 
     override fun onLiveDataObserve() {
-        firebaseVM.noAuthLiveData.observe {
-            onLogout()
+        firebaseVM.userLiveData.observe {
+            if (null == it) {
+                navigateLogin()
+            }
         }
     }
 
@@ -39,8 +41,10 @@ class HomeFragment : MainFragment<HomeBinding>() {
         }
     }
 
-    private fun onLogout() {
-        navigate(R.id.action_global_loginFragment) { setLaunchSingleTop() }
+    private fun navigateLogin() {
+        navigate(R.id.action_global_loginFragment) {
+            setLaunchSingleTop()
+        }
     }
 
 }

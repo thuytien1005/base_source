@@ -94,6 +94,7 @@ interface BaseView {
     fun NavOptions.Builder.setLaunchSingleTop(): NavOptions.Builder {
         setLaunchSingleTop(true)
         navController()?.graph?.id?.also {
+            setLaunchSingleTop(true)
             setPopUpTo(it, false)
         }
         return this

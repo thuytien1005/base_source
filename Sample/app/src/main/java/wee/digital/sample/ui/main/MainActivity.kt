@@ -45,6 +45,9 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
                     progressDialog = ProgressDialog()
                     progressDialog?.show()
                 }
+                else->{
+                    progressDialog?.dismiss()
+                }
             }
         }
     }
