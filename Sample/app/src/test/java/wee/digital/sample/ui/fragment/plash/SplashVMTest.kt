@@ -19,6 +19,8 @@ class SplashVMTest {
     fun setUp() {
         user = null
         app.onCreate()
+
+
     }
 
     @After

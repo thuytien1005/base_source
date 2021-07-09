@@ -13,7 +13,7 @@ import wee.digital.sample.ui.main.MainFragment
  */
 class SplashFragment : MainFragment<SplashBinding>() {
 
-    private val vm by viewModel(SplashVM::class)
+    val vm by viewModel(SplashVM::class)
 
     override fun inflating(): (LayoutInflater) -> SplashBinding {
         return SplashBinding::inflate

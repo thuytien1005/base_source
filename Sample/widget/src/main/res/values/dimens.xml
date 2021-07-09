@@ -16,12 +16,8 @@
     <dimen name="textSize4">@dimen/_14ssp</dimen>
     <dimen name="textSize5">@dimen/_17ssp</dimen>
 
-    <dimen name="radius">@dimen/_6sdp</dimen>
-    <dimen name="radius2">@dimen/_10sdp</dimen>
-    <dimen name="radius3">@dimen/_11sdp</dimen>
-    <dimen name="radius4">@dimen/_14sdp</dimen>
-
     <dimen name="rowHeight">@dimen/_34sdp</dimen>
     <dimen name="rowRadius">@dimen/_4sdp</dimen>
+    <dimen name="cardRadius">@dimen/_6sdp</dimen>
 
 </resources>

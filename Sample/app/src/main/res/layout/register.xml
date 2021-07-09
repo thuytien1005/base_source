@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".8"
-        app:radius="@dimen/radius4">
+        app:radius="@dimen/cardRadius">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"

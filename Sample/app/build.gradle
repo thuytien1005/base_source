@@ -138,11 +138,13 @@ dependencies {
     implementation deps.roundedimageview
     implementation deps.firebase_firestore
     implementation deps.firebase_storage
-    
+
     testImplementation deps.kotlin.test
     testImplementation "junit:junit:4.13.1"
     testImplementation "org.mockito:mockito-core:1.10.19"
     testImplementation 'org.mockito:mockito-inline:2.13.0'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+    androidTestImplementation "androidx.test:runner:1.1.0"
     androidTestImplementation deps.navigation.test
     androidTestImplementation "androidx.test:core:1.0.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"
