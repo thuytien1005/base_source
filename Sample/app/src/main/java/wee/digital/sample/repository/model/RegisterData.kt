@@ -4,5 +4,8 @@ data class RegisterData(
     var name: String = "",
     var email: String = "",
     var password: String = "",
-    var face: String = ""
+    var urlAvatar : String = "",
+    var face: ByteArray? = null
 )
+
+data class UserData(var name: String, var url: String)

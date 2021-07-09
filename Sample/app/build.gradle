@@ -130,6 +130,7 @@ dependencies {
     // round image view
     implementation deps.roundedimageview
     implementation deps.firebase_firestore
+    implementation deps.firebase_storage
 }
 
 apply plugin: "com.google.gms.google-services"

@@ -1,6 +1,6 @@
 package wee.digital.sample.ui.main.fragment.face
 
-import android.util.Base64
+import android.net.Uri
 import android.view.LayoutInflater
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.MainScope
@@ -29,16 +29,9 @@ class FaceCaptureFragment : MainFragment<FaceCaptureBinding>() {
     }
 
     override fun onLiveDataObserve() {
-        vm.addUserStatusEvent.observe {
-            if (it.isEmpty()) {
-                navigate(R.id.homeFragment){setLaunchSingleTop()}
-            } else {
-                toast(it)
-                bind.faceCapture.show()
-                bind.faceCaptureProgress.hide()
-                bind.faceCaptureCamera.resetCamera()
-            }
-        }
+        vm.addUserSuccessEvent.observe { navigateHome() }
+        vm.errorAccountEvent.observe { navigateFail(it) }
+        vm.getLinkAvatar.observe { updateUser(it) }
     }
 
     private fun captureSuccess(byte: ByteArray?) {
@@ -46,11 +39,24 @@ class FaceCaptureFragment : MainFragment<FaceCaptureBinding>() {
             byte ?: return@launch
             bind.faceCapture.hide()
             bind.faceCaptureProgress.show()
-            val user = mainVM.userInfo.apply {
-                face = Base64.encodeToString(byte, Base64.NO_WRAP)
-            }
-            vm.addUser(user)
+            val user = mainVM.userInfo.apply { face = byte }
+            vm.createAccount(user)
         }
+    }
+
+    private fun navigateHome() {
+        navigate(R.id.homeFragment) {
+            setLaunchSingleTop()
+        }
+    }
+
+    private fun navigateFail(it: String) {
+        toast(it)
+        navigateUp()
+    }
+
+    private fun updateUser(uri: Uri) {
+        mainVM.userInfo.urlAvatar = uri.toString()
     }
 
     override fun onResume() {

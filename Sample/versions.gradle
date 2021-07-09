@@ -266,3 +266,4 @@ deps.compressor = "id.zelory:compressor:2.1.0"
  * Cloud Firestore
  * */
 deps.firebase_firestore = "com.google.firebase:firebase-firestore-ktx"
+deps.firebase_storage = "com.google.firebase:firebase-storage-ktx"

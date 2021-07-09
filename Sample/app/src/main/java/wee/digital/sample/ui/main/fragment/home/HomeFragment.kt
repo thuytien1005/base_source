@@ -1,7 +1,5 @@
 package wee.digital.sample.ui.main.fragment.home
 
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import wee.digital.library.extension.load
@@ -18,9 +16,7 @@ class HomeFragment : MainFragment<HomeBinding>() {
 
     override fun onViewCreated() {
         addClickListener(bind.viewLogout)
-        val byteAvatar = Base64.decode(mainVM.userInfo.face, Base64.NO_WRAP)
-        val avatar = BitmapFactory.decodeByteArray(byteAvatar, 0, byteAvatar.size)
-        bind.homeAvatar.load(avatar)
+        bind.homeAvatar.load(mainVM.userInfo.urlAvatar)
         bind.homeEmail.text = mainVM.userInfo.email
         bind.homePassword.text = mainVM.userInfo.password
     }
