@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.login
+package wee.digital.sample.ui.fragment.login
 
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.shared.auth

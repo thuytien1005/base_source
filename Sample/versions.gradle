@@ -6,18 +6,16 @@ builds.version_code = 1
 builds.version_name = "1.0.0"
 ext.builds = builds
 
-def versions = [:]
-versions.kotlin = "1.4.32"
-ext.versions = versions
-
 def deps = [:]
 deps.android_gradle = "com.android.tools.build:gradle:4.1.3"
 ext.deps = deps
 
 def kotlin = [:]
-kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-kotlin.gradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-kotlin.extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin"
+kotlin.version = "1.4.32"
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin.version"
+kotlin.gradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin.version"
+kotlin.extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin.version"
+kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$kotlin.version"
 /**
  * Concurrency design pattern
  * [https://developer.android.com/kotlin/coroutines]
@@ -35,7 +33,7 @@ def android = [:]
 android.corektx = "androidx.core:core-ktx:1.5.0"
 android.appcompat = "androidx.appcompat:appcompat:1.3.0"
 android.activity = "androidx.activity:activity-ktx:1.2.3"
-android.fragment = "androidx.fragment:fragment-ktx:1.3.4"
+android.fragment = "androidx.fragment:fragment-ktx:1.3.5"
 android.recyclerview = "androidx.recyclerview:recyclerview:1.2.0"
 android.cardview = "androidx.cardview:cardview:1.0.0"
 android.constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.4"
@@ -64,6 +62,7 @@ navigation.version = "2.3.5"
 navigation.safe_args = "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation.version"
 navigation.fragment = "androidx.navigation:navigation-fragment-ktx:$navigation.version"
 navigation.ui = "androidx.navigation:navigation-ui-ktx:$navigation.version"
+navigation.test = "androidx.navigation:navigation-testing:$navigation.version" //androidTestImplementation
 deps.navigation = navigation
 
 /**
@@ -126,11 +125,7 @@ deps.camera = camera
 /**
  * Test
  */
-def test = [:]
-test.junit = "junit:junit:4.13.1"
-test.extension = "androidx.test.ext:junit:1.1.2"
-test.espresso = "androidx.test.espresso:espresso-core:3.3.0"
-deps.test = test
+
 
 /**
  * Google services

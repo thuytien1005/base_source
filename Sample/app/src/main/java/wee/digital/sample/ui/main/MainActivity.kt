@@ -1,6 +1,7 @@
 package wee.digital.sample.ui.main
 
 import android.view.LayoutInflater
+import androidx.annotation.ColorInt
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import wee.digital.library.extension.isGranted
@@ -57,6 +58,9 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
         isGranted(android.Manifest.permission.CAMERA)
     }
 
+    fun setBackground(@ColorInt color: Int){
+        bind.layoutContent.setBackgroundColor(color)
+    }
 }
 
 

@@ -30,23 +30,17 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:fitsSystemWindows="false"
-            android:theme="@style/App.Theme.Splash"
-            android:windowSoftInputMode="stateHidden">
+            android:fitsSystemWindows="true"
+            android:theme="@style/App.Theme"
+            android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:fitsSystemWindows="true"
-            android:theme="@style/App.Theme"
-            android:windowSoftInputMode="stateHidden|adjustNothing" />
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="face" />

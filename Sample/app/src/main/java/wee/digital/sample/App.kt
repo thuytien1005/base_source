@@ -1,18 +1,19 @@
 package wee.digital.sample
 
 import android.app.Activity
-import androidx.lifecycle.LifecycleObserver
 import androidx.multidex.MultiDexApplication
+import com.google.firebase.FirebaseApp
 import wee.digital.library.Library
 import wee.digital.library.extension.SimpleActivityLifecycleCallbacks
 import wee.digital.widget.Widget
 import java.lang.ref.WeakReference
 
-class App : MultiDexApplication(), LifecycleObserver {
+class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
         app = this
+        FirebaseApp.initializeApp(this)
         Library.init(this)
         Widget.init(this)
         app.registerActivityLifecycleCallbacks(object : SimpleActivityLifecycleCallbacks {
