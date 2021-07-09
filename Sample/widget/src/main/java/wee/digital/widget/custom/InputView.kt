@@ -29,6 +29,8 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     OnFocusChangeListener,
     SimpleTextWatcher {
 
+    var listener: InputListener? = null
+
     override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> InputBinding {
         return InputBinding::inflate
     }
@@ -316,6 +318,7 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
      * [SimpleTextWatcher] implements
      */
     override fun afterTextChanged(s: Editable?) {
+        listener?.textChangeListener(s.toString())
         onTextChanged.does()
         when {
             isSilent -> {
@@ -419,6 +422,10 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
             dest?.writeString(dataInput)
         }
 
+    }
+
+    interface InputListener {
+        fun textChangeListener(s: String)
     }
 
 }

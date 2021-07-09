@@ -16,7 +16,7 @@ class LoginFragment : MainFragment<LoginBinding>() {
     }
 
     override fun onViewCreated() {
-        addClickListener(bind.viewLogin, bind.viewRegister)
+        addClickListener(bind.viewLogin, bind.viewRegister, bind.loginInfo)
         bind.inputViewEmail.text = "quochuy@wee.vn"
         bind.inputViewPassword.text = "concacv1p"
     }
@@ -42,6 +42,9 @@ class LoginFragment : MainFragment<LoginBinding>() {
             }
             bind.viewRegister -> {
                 navigate(R.id.action_global_registerFragment)
+            }
+            bind.loginInfo -> {
+                navigate(R.id.action_global_contactFragment)
             }
         }
     }
