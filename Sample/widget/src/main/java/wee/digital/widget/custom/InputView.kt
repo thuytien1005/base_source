@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.*
 import android.text.Editable
 import android.text.InputFilter
 import android.util.AttributeSet
@@ -14,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import wee.digital.widget.R
@@ -21,10 +23,11 @@ import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.databinding.InputBinding
 import wee.digital.widget.extension.*
 
-class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<InputBinding>(context, attrs),
-        SimpleMotionTransitionListener,
-        OnFocusChangeListener,
-        SimpleTextWatcher {
+class InputView(context: Context, attrs: AttributeSet? = null) :
+    AppCustomView<InputBinding>(context, attrs),
+    SimpleMotionTransitionListener,
+    OnFocusChangeListener,
+    SimpleTextWatcher {
 
     override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> InputBinding {
         return InputBinding::inflate
@@ -67,7 +70,10 @@ class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<I
         it.filters = sFilters.toArray(array)
 
         // Input type
-        val customInputType = types.getInt(R.styleable.AppCustomView_android_inputType, EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+        val customInputType = types.getInt(
+            R.styleable.AppCustomView_android_inputType,
+            EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        )
         if (customInputType == EditorInfo.TYPE_NULL) {
             disableFocus()
         } else {
@@ -265,7 +271,10 @@ class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<I
     fun showKeyboard() {
         editText.post {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-            imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            imm?.toggleSoftInput(
+                InputMethodManager.SHOW_FORCED,
+                InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
         }
     }
 
@@ -371,5 +380,45 @@ class InputView(context: Context, attrs: AttributeSet? = null) : AppCustomView<I
         bind.textViewTitle.setBackgroundResource(res)
     }
 
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState()
+        superState?.let {
+            val state = SaveState(superState)
+            state.dataInput = text.toString()
+            return state
+        } ?: run {
+            return superState
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        super.onRestoreInstanceState(state)
+        when (state) {
+            is SaveState -> {
+                super.onRestoreInstanceState(state.superState)
+                Handler(Looper.getMainLooper()).post {
+                    text = state.dataInput
+                }
+            }
+        }
+    }
+
+    inner class SaveState : AbsSavedState {
+
+        var dataInput: String? = null
+
+        constructor(superState: Parcelable) : super(superState)
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        constructor(source: Parcel, loader: ClassLoader?) : super(source, loader) {
+            dataInput = source.readString()
+        }
+
+        override fun writeToParcel(dest: Parcel?, flags: Int) {
+            super.writeToParcel(dest, flags)
+            dest?.writeString(dataInput)
+        }
+
+    }
 
 }
