@@ -15,11 +15,7 @@ fun Void?.does() {
     this?.also { it() }
 }
 
-typealias Block<reified T> = T.() -> Unit
-
-fun <T> Block<T>?.doThis(t: T) {
-    this?.also { t.it() }
-}
+typealias Block<reified T> = (T) -> Unit
 
 fun <T> Block<T>?.doIt(t: T) {
     this?.also { it(t) }

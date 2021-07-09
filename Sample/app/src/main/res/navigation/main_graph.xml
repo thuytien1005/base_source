@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="wee.digital.sample.ui.main.fragment.home.HomeFragment"
+        android:name="wee.digital.sample.ui.fragment.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/home" />
     <action
@@ -26,7 +26,7 @@
 
     <dialog
         android:id="@+id/alertFragment"
-        android:name="wee.digital.sample.ui.main.fragment.alert.AlertFragment"
+        android:name="wee.digital.sample.ui.fragment.alert.AlertFragment"
         android:label="AlertFragment"
         tools:layout="@layout/alert" />
     <action
@@ -43,7 +43,7 @@
 
     <dialog
         android:id="@+id/selectableFragment"
-        android:name="wee.digital.sample.ui.main.fragment.selectable.SelectableFragment"
+        android:name="wee.digital.sample.ui.fragment.selectable.SelectableFragment"
         android:label="SelectableFragment"
         tools:layout="@layout/selectable" />
     <action
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="wee.digital.sample.ui.main.fragment.register.RegisterFragment"
+        android:name="wee.digital.sample.ui.fragment.register.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/register" />
     <action
@@ -61,12 +61,20 @@
 
     <fragment
         android:id="@+id/faceCaptureFragment"
-        android:name="wee.digital.sample.ui.main.fragment.face.FaceCaptureFragment"
+        android:name="wee.digital.sample.ui.fragment.face.FaceCaptureFragment"
         android:label="face_capture"
         tools:layout="@layout/face_capture" />
     <action
         android:id="@+id/action_global_faceCaptureFragment"
         app:destination="@id/faceCaptureFragment" />
 
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="wee.digital.sample.ui.fragment.contact.ContactFragment"
+        android:label="contact"
+        tools:layout="@layout/contact" />
+    <action
+        android:id="@+id/action_global_contactFragment"
+        app:destination="@id/contactFragment" />
 
 </navigation>

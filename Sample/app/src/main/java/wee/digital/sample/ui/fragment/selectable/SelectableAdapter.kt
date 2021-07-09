@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.selectable
+package wee.digital.sample.ui.fragment.selectable
 
 import androidx.viewbinding.ViewBinding
 import wee.digital.library.adapter.BaseListAdapter

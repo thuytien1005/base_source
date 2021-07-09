@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.vm
+package wee.digital.sample.ui.vm
 
 import android.app.Application
 import com.google.firebase.FirebaseApp

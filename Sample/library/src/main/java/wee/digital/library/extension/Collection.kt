@@ -18,10 +18,10 @@ fun <T> List<T>?.join(collection: Collection<T>?): List<T>? {
     return if (list.isEmpty()) return null else list
 }
 
-fun <T, R> Collection<T>.convert(block: (T, Int) -> R?): List<R> {
+fun <T, R> Collection<T>.transform(block: (T) -> R?): List<R> {
     val list = mutableListOf<R>()
-    for (i in this.indices) {
-        block(elementAt(i), i)?.also {
+    for (item in this) {
+        block(item)?.also {
             list.add(it)
         }
     }

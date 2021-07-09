@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.alert
+package wee.digital.sample.ui.fragment.alert
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes

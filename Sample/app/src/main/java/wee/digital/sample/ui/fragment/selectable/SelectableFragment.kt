@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.selectable
+package wee.digital.sample.ui.fragment.selectable
 
 import android.view.LayoutInflater
 import android.view.View

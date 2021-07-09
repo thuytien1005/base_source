@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.face
+package wee.digital.sample.ui.fragment.face
 
 import android.net.Uri
 import android.view.LayoutInflater

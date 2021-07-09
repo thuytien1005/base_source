@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.face
+package wee.digital.sample.ui.fragment.face
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import wee.digital.sample.repository.model.UserData
 import wee.digital.sample.shared.auth
 import wee.digital.sample.shared.fireStorage
 import wee.digital.sample.shared.fireStore
-import wee.digital.sample.ui.main.vm.BaseVM
+import wee.digital.sample.ui.vm.BaseVM
 
 class FaceVM : BaseVM() {
 

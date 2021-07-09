@@ -1,9 +1,9 @@
-package wee.digital.sample.ui.main.vm
+package wee.digital.sample.ui.vm
 
 import androidx.lifecycle.MutableLiveData
-import wee.digital.sample.ui.main.fragment.alert.AlertArg
-import wee.digital.sample.ui.main.fragment.selectable.SelectableArg
-import wee.digital.sample.ui.main.fragment.web.WebArg
+import wee.digital.sample.ui.fragment.alert.AlertArg
+import wee.digital.sample.ui.fragment.selectable.SelectableArg
+import wee.digital.sample.ui.fragment.web.WebArg
 
 class DialogVM : BaseVM() {
 

@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.selectable
+package wee.digital.sample.ui.fragment.selectable
 
 class SelectableArg {
 

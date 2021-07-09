@@ -4,7 +4,7 @@ import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.shared.auth
 import wee.digital.sample.shared.currentUser
 import wee.digital.sample.shared.progressLiveData
-import wee.digital.sample.ui.main.vm.BaseVM
+import wee.digital.sample.ui.vm.BaseVM
 import wee.digital.widget.extension.isEmail
 import wee.digital.widget.extension.notNullOrEmpty
 

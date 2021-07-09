@@ -29,6 +29,8 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     OnFocusChangeListener,
     SimpleTextWatcher {
 
+    var onTextChanged: Block<String>? = null
+
     override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> InputBinding {
         return InputBinding::inflate
     }
@@ -234,7 +236,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         onFocusChange.add(block)
     }
 
-    var onTextChanged: Void? = null
 
     fun addActionDoneListener(block: (String?) -> Unit) {
         editText.addActionDoneListener(block)
@@ -316,7 +317,7 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
      * [SimpleTextWatcher] implements
      */
     override fun afterTextChanged(s: Editable?) {
-        onTextChanged.does()
+        onTextChanged.doIt(s.toString())
         when {
             isSilent -> {
                 return
@@ -420,5 +421,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         }
 
     }
+
 
 }

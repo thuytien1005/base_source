@@ -11,10 +11,9 @@ import wee.digital.sample.app
 import wee.digital.sample.databinding.MainBinding
 import wee.digital.sample.shared.progressLiveData
 import wee.digital.sample.ui.base.BaseActivity
-import wee.digital.sample.ui.main.fragment.progress.ProgressDialog
-import wee.digital.sample.ui.main.vm.DialogVM
-import wee.digital.sample.ui.main.vm.FirebaseVM
-import wee.digital.sample.ui.main.vm.MainVM
+import wee.digital.sample.ui.fragment.progress.ProgressDialog
+import wee.digital.sample.ui.vm.DialogVM
+import wee.digital.sample.ui.vm.FirebaseVM
 
 class MainActivity : BaseActivity<MainBinding>(), MainView {
 

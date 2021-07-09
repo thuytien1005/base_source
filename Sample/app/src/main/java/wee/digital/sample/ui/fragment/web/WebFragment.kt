@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.web
+package wee.digital.sample.ui.fragment.web
 
 import android.view.LayoutInflater
 import android.view.View

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.onEach
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.R
 import wee.digital.sample.shared.currentUser
-import wee.digital.sample.ui.main.vm.BaseVM
+import wee.digital.sample.ui.vm.BaseVM
 
 class SplashVM : BaseVM() {
 

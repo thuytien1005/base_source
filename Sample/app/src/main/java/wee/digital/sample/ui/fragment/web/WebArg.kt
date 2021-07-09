@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.web
+package wee.digital.sample.ui.fragment.web
 
 data class WebArg(
         val title: String,

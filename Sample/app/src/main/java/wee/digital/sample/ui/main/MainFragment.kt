@@ -4,9 +4,8 @@ import androidx.viewbinding.ViewBinding
 import wee.digital.library.extension.activityVM
 import wee.digital.library.util.Logger
 import wee.digital.sample.ui.base.BaseFragment
-import wee.digital.sample.ui.main.vm.DialogVM
-import wee.digital.sample.ui.main.vm.FirebaseVM
-import wee.digital.sample.ui.main.vm.MainVM
+import wee.digital.sample.ui.vm.DialogVM
+import wee.digital.sample.ui.vm.FirebaseVM
 
 abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainView {
 

@@ -1,7 +1,7 @@
-package wee.digital.sample.ui.main.fragment.register
+package wee.digital.sample.ui.fragment.register
 
 import wee.digital.library.util.EventLiveData
-import wee.digital.sample.ui.main.vm.BaseVM
+import wee.digital.sample.ui.vm.BaseVM
 import wee.digital.widget.extension.isEmail
 import wee.digital.widget.extension.notNullOrEmpty
 

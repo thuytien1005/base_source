@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.vm
+package wee.digital.sample.ui.vm
 
 import androidx.lifecycle.ViewModel
 import wee.digital.library.util.Logger

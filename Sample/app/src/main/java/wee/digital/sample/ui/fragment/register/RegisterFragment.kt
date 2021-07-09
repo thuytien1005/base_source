@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.main.fragment.register
+package wee.digital.sample.ui.fragment.register
 
 import android.view.LayoutInflater
 import android.view.View
