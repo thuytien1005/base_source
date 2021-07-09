@@ -26,8 +26,6 @@ class ContactFragment : MainFragment<ContactBinding>(), InputView.InputListener 
     }
 
     override fun onViewCreated() {
-        adapter.set(listOf())
-        adapter.bind(bind.contactRecycler)
         bind.contactSearch.listener = this
     }
 
