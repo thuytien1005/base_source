@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        style="@style/TextView"
+        android:text="Login"
+        android:textSize="@dimen/textSize4"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/layoutDialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    x<wee.digital.widget.base.AppConstraintLayout
+        android:id="@+id/layoutDialog"
+        style="@style/Fragment.CenterDialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/contentMarginX2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/contentMarginX2" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/contentMarginX2"
+            android:src="@drawable/ic_placeholder"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".15" />
+
+        <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewEmail"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/contentMarginX2"
+            android:inputType="textEmailAddress"
+            android:title="Email"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
+
+        <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewPassword"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/contentMarginD2"
+            android:title="Password"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewEmail" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewSignIn"
+            style="@style/Button.Primary"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/contentMarginX2"
+            android:text="Sign in"
+            app:layout_constraintEnd_toEndOf="@+id/inputViewEmail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewPassword" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewGoogle"
+            style="@style/Login.ProviderButton"
+            android:layout_marginTop="@dimen/contentMarginX2"
+            android:backgroundTint="#E53935"
+            android:text="Google"
+            app:layout_constraintEnd_toStartOf="@+id/viewFacebook"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/viewSignIn" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewFacebook"
+            style="@style/Login.ProviderButton"
+            android:text="Facebook"
+            android:backgroundTint="#3949AB"
+            app:layout_constraintEnd_toStartOf="@+id/viewTwitter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/viewGoogle"
+            app:layout_constraintTop_toTopOf="@+id/viewGoogle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewTwitter"
+            style="@style/Login.ProviderButton"
+            android:text="Twitter"
+            android:backgroundTint="#1E88E5"
+            app:layout_constraintEnd_toStartOf="@+id/viewPhone"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/viewFacebook"
+            app:layout_constraintTop_toTopOf="@+id/viewFacebook" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewPhone"
+            style="@style/Login.ProviderButton"
+            android:text="Phone"
+            android:backgroundTint="#00897B"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/viewTwitter"
+            app:layout_constraintTop_toTopOf="@+id/viewTwitter" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewRegister"
+            style="@style/Button"
+            android:layout_marginBottom="@dimen/contentMarginX2"
+            android:text="Register"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewFacebook"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </wee.digital.widget.base.AppConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

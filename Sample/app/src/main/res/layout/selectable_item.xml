@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/selectableView"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_50sdp"
+    android:layout_height="50dp"
     android:clickable="true">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -13,12 +13,12 @@
         style="@style/TextView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/drw_underline"
         android:clickable="false"
         android:gravity="center_vertical"
         android:maxLines="4"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/selectableImageView"
@@ -27,10 +27,10 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/selectableImageView"
-        android:layout_width="@dimen/_34sdp"
-        android:layout_height="@dimen/_34sdp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:clickable="false"
-        android:padding="@dimen/_6sdp"
+        android:padding="6dp"
         android:src="@drawable/ic_placeholder"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

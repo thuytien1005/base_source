@@ -7,19 +7,17 @@
     style="@style/MatchWidth"
     app:layoutDescription="@xml/motion_input">
 
-
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editText"
         style="@style/EditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/drw_input_border"
-        android:paddingStart="@dimen/_36sdp"
-        android:paddingEnd="@dimen/_16sdp"
+        android:paddingStart="@dimen/contentMarginX2"
+        android:paddingEnd="@dimen/contentMarginX2"
         android:textColor="#000000"
         android:textColorHint="#595959"
         android:textCursorDrawable="@drawable/drw_input_cursor"
-        android:textSize="@dimen/_13ssp"
         android:tint="@color/colorInputUnfocused"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,30 +25,31 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="text" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <!--<androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewIcon"
-        android:layout_width="@dimen/_14sdp"
-        android:layout_height="@dimen/_14sdp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:clickable="false"
+        android:visibility="gone"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_placeholder"
         android:tint="@color/colorInputUnfocused"
-        app:tint="@color/colorInputFocused" />
+        app:tint="@color/colorInputFocused" />-->
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewTitle"
         style="@style/TextView"
         android:clickable="false"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="@dimen/_4sdp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:textColor="@color/colorInputUnfocused"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/textSize2"
         tools:text="Hint text" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewError"
         style="@style/TextView.Error"
-        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginTop="2dp"
         tools:text="Error text" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

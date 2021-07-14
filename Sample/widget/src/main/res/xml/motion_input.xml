@@ -17,10 +17,8 @@
             android:id="@id/editText"
             android:layout_width="0dp"
             android:layout_height="@dimen/rowHeight"
-            android:layout_marginStart="1px"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginEnd="1px"
-            android:textSize="@dimen/_10ssp"
+            android:layout_marginTop="14dp"
+            android:textSize="10sp"
             motion:layout_constrainedWidth="true"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias="0.0"
@@ -32,31 +30,21 @@
                 motion:customColorValue="#00000000" />
         </Constraint>
         <Constraint
-            android:id="@id/imageViewIcon"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:scaleX="1.0"
-            android:scaleY="1.0"
-            motion:layout_constraintBottom_toBottomOf="@+id/editText"
-            motion:layout_constraintStart_toStartOf="@id/editText"
-            motion:layout_constraintTop_toTopOf="@+id/editText" />
-        <Constraint
             android:id="@id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginStart="@dimen/contentMarginX2"
             android:scaleX="1"
             android:scaleY="1"
             motion:layout_constraintBottom_toBottomOf="@+id/editText"
-            motion:layout_constraintStart_toEndOf="@+id/imageViewIcon"
+            motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="@+id/editText" />
         <Constraint
             android:id="@id/textViewError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
             motion:layout_constraintStart_toStartOf="@id/editText"
             motion:layout_constraintTop_toBottomOf="@id/editText" />
     </ConstraintSet>
@@ -66,9 +54,7 @@
             android:id="@id/editText"
             android:layout_width="0dp"
             android:layout_height="@dimen/rowHeight"
-            android:layout_marginStart="1px"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:layout_marginEnd="1px"
+            android:layout_marginTop="14dp"
             motion:layout_constrainedWidth="true"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -79,30 +65,20 @@
                 motion:customColorValue="#000000" />
         </Constraint>
         <Constraint
-            android:id="@id/imageViewIcon"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:scaleX="1.0"
-            android:scaleY="1.0"
-            motion:layout_constraintBottom_toBottomOf="@+id/editText"
-            motion:layout_constraintStart_toStartOf="@id/editText"
-            motion:layout_constraintTop_toTopOf="@+id/editText" />
-        <Constraint
             android:id="@id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleX=".8"
             android:scaleY=".8"
             motion:layout_constraintBottom_toTopOf="@+id/editText"
-            motion:layout_constraintStart_toStartOf="@+id/imageViewIcon"
+            motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="@+id/editText" />
         <Constraint
             android:id="@id/textViewError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
             motion:layout_constraintStart_toStartOf="@id/editText"
             motion:layout_constraintTop_toBottomOf="@id/editText" />
     </ConstraintSet>

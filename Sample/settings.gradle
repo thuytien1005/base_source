@@ -1,6 +1,4 @@
 rootProject.name = "Sample"
 include ':widget'
-//include ':ml'
 include ':library'
 include ':app'
-include ':cameraX'

@@ -1,6 +1,5 @@
 package wee.digital.sample.shared
 
-import com.google.firebase.auth.FirebaseAuth
 import wee.digital.library.util.SharedPref
 import wee.digital.sample.BuildConfig
 

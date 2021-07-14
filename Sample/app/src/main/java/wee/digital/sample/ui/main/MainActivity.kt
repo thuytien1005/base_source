@@ -11,9 +11,10 @@ import wee.digital.sample.app
 import wee.digital.sample.databinding.MainBinding
 import wee.digital.sample.shared.progressLiveData
 import wee.digital.sample.ui.base.BaseActivity
-import wee.digital.sample.ui.fragment.progress.ProgressDialog
 import wee.digital.sample.ui.vm.DialogVM
-import wee.digital.sample.ui.vm.FirebaseVM
+import wee.digital.sample.ui.vm.UserVM
+import wee.digital.widget.extension.hide
+import wee.digital.widget.extension.show
 
 class MainActivity : BaseActivity<MainBinding>(), MainView {
 
@@ -21,9 +22,7 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
 
     private val dialogVM by viewModel(DialogVM::class)
 
-    private val firebaseVM by viewModel(FirebaseVM::class)
-
-    private var progressDialog: ProgressDialog? = null
+    private val firebaseVM by viewModel(UserVM::class)
 
     override fun navController(): NavController? {
         return findNavController(R.id.fragment)
@@ -40,14 +39,8 @@ class MainActivity : BaseActivity<MainBinding>(), MainView {
     override fun onLiveDataObserve() {
         progressLiveData.observe {
             when (it) {
-                true -> {
-                    progressDialog?.dismiss()
-                    progressDialog = ProgressDialog()
-                    progressDialog?.show(supportFragmentManager, "progress")
-                }
-                else -> {
-                    progressDialog?.dismiss()
-                }
+                true -> show(bind.progressBar)
+                else -> hide(bind.progressBar)
             }
         }
     }

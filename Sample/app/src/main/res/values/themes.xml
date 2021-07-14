@@ -9,7 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar"
             tools:targetApi="m">true</item>
         <item name="android:windowActivityTransitions">true</item>
@@ -21,9 +21,6 @@
         <item name="android:navigationBarColor">#00000000</item>
     </style>
 
-    <style name="App.Theme.Splash" parent="App.Theme">
-        <item name="android:windowBackground">@drawable/drw_plash_bg</item>
-    </style>
 
     <style name="App.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@null</item>

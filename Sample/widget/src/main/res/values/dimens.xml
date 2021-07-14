@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="contentMarginD4">@dimen/_4sdp</dimen>
-    <dimen name="contentMarginD2">@dimen/_8sdp</dimen>
-    <dimen name="contentMargin">@dimen/_16sdp</dimen>
-    <dimen name="contentMarginX2">@dimen/_32sdp</dimen>
-    <dimen name="contentMarginX3">@dimen/_48sdp</dimen>
-    <dimen name="contentMarginX4">@dimen/_64sdp</dimen>
-    <dimen name="contentMarginX5">@dimen/_80sdp</dimen>
-    <dimen name="contentMarginX6">@dimen/_96sdp</dimen>
+    <dimen name="contentMarginD4">2dp</dimen>
+    <dimen name="contentMarginD2">4dp</dimen>
+    <dimen name="contentMargin">8dp</dimen>
+    <dimen name="contentMarginX2">16dp</dimen>
+    <dimen name="contentMarginX3">24dp</dimen>
+    <dimen name="contentMarginX4">32dp</dimen>
+    <dimen name="contentMarginX5">40dp</dimen>
+    <dimen name="contentMarginX6">48dp</dimen>
 
-    <dimen name="textSize">@dimen/_8ssp</dimen>
-    <dimen name="textSize2">@dimen/_9ssp</dimen>
-    <dimen name="textSize3">@dimen/_11ssp</dimen>
-    <dimen name="textSize4">@dimen/_14ssp</dimen>
-    <dimen name="textSize5">@dimen/_17ssp</dimen>
+    <dimen name="textSize">10sp</dimen>
+    <dimen name="textSize2">14sp</dimen>
+    <dimen name="textSize3">18sp</dimen>
+    <dimen name="textSize4">22sp</dimen>
+    <dimen name="textSize5">26sp</dimen>
 
-    <dimen name="rowHeight">@dimen/_34sdp</dimen>
-    <dimen name="rowRadius">@dimen/_4sdp</dimen>
-    <dimen name="cardRadius">@dimen/_6sdp</dimen>
+    <dimen name="rowHeight">46dp</dimen>
+    <dimen name="rowRadius">0dp</dimen>
+    <dimen name="cardRadius">6dp</dimen>
 
 </resources>

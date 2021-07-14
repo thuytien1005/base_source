@@ -60,10 +60,10 @@ val String?.isDigit: Boolean
         return TextUtils.isDigitsOnly(this)
     }
 
-val String?.isEmail: Boolean
+val String?.isNotEmail: Boolean
     get() {
-        this ?: return false
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+        this ?: return true
+        return !android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 
 val String?.isPhoneNumber: Boolean

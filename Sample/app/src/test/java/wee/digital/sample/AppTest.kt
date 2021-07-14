@@ -11,6 +11,7 @@ class AppTest {
 
     @Before
     fun setUp() {
+        app.onCreate()
     }
 
     @After
@@ -18,8 +19,7 @@ class AppTest {
     }
 
     @Test
-    fun onCreate() {
-        app.onCreate()
+    fun test_modules_init() {
         assertNotNull(wee.digital.library.app)
         assertNotNull(wee.digital.widget.app)
     }

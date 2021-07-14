@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import wee.digital.library.extension.hideKeyboard
 import wee.digital.sample.R
 import wee.digital.widget.extension.ViewClickListener
 
@@ -30,6 +31,7 @@ interface BaseView {
     fun addClickListener(vararg views: View?) {
         val listener = object : ViewClickListener() {
             override fun onClicks(v: View?) {
+                v.hideKeyboard()
                 onViewClick(v)
             }
         }

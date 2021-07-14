@@ -32,8 +32,8 @@ fun Float.dpToPx(): Float {
     return (this * scale + 0.5f)
 }
 
-fun Float.spToPx(): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics).roundToInt()
+fun Float.spToPx(): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics).roundToInt().toFloat()
 }
 
 fun Float.dpToSp(): Int {

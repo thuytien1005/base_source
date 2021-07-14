@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.viewbinding.ViewBinding
 import wee.digital.widget.R
+import wee.digital.widget.extension.inflate
 
 abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
 

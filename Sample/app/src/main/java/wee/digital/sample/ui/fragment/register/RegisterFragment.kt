@@ -5,7 +5,6 @@ import android.view.View
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.RegisterBinding
-import wee.digital.sample.repository.model.RegisterData
 import wee.digital.sample.ui.main.MainFragment
 
 class RegisterFragment : MainFragment<RegisterBinding>() {
@@ -18,46 +17,52 @@ class RegisterFragment : MainFragment<RegisterBinding>() {
 
     override fun onViewCreated() {
         addClickListener(bind.viewRegister)
+        bind.inputViewPassword.text = "123"
     }
 
     override fun onLiveDataObserve() {
-        vm.errorNameEvent.observe { errorName(it) }
-        vm.errorEmailEvent.observe { errorEmail(it) }
-        vm.errorPasswordEvent.observe { errorPassword(it) }
-        vm.successInputEvent.observe { navigateFace() }
+        userVM.firebaseUserLiveData.observe {
+            it ?: return@observe
+            onAuthSuccess()
+        }
+        vm.firstNameErrorLiveData.observe {
+            setFirstNameError(it)
+        }
+        vm.emailErrorLiveData.observe {
+            setEmailError(it)
+        }
+        vm.passwordErrorLiveData.observe {
+            setPasswordError(it)
+        }
     }
 
     override fun onViewClick(v: View?) {
         when (v) {
-            bind.viewRegister -> {
-                vm.checkInput(
-                    bind.inputViewName.text,
-                    bind.inputViewEmail.text,
-                    bind.inputViewPassword.text
-                )
-            }
+            bind.viewRegister -> vm.createUser(
+                bind.inputViewFirstName.trimText,
+                bind.inputViewLastName.trimText,
+                bind.inputViewEmail.text,
+                bind.inputViewPassword.text
+            )
         }
     }
 
-    private fun errorName(it: String?) {
-        bind.inputViewName.error = it
+    private fun setFirstNameError(it: String?) {
+        bind.inputViewFirstName.error = it
     }
 
-    private fun errorEmail(it: String?) {
+    private fun setEmailError(it: String?) {
         bind.inputViewEmail.error = it
     }
 
-    private fun errorPassword(it: String?) {
+    private fun setPasswordError(it: String?) {
         bind.inputViewPassword.error = it
     }
 
-    private fun navigateFace() {
-        mainVM.userInfo = RegisterData().apply {
-            name = bind.inputViewName.text.toString()
-            email = bind.inputViewEmail.text.toString()
-            password = bind.inputViewPassword.text.toString()
+    private fun onAuthSuccess() {
+        navigate(R.id.action_global_homeFragment) {
+            setLaunchSingleTop()
         }
-        navigate(R.id.action_global_faceCaptureFragment)
     }
 
 }

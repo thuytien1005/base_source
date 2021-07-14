@@ -13,7 +13,7 @@ abstract class BaseListAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder> {
     }
 
     override fun getItemCount(): Int {
-        return size + 1
+        return size// + 1
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -55,17 +55,17 @@ abstract class BaseListAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder> {
         }
     }
 
-    override fun getCurrentList(): MutableList<T> {
+    /*override fun getCurrentList(): MutableList<T> {
         return differ.currentList
-    }
+    }*/
 
-    override fun submitList(list: MutableList<T>?) {
+   /* override fun submitList(list: MutableList<T>?) {
         differ.submitList(list)
-    }
+    }*/
 
-    override fun submitList(list: MutableList<T>?, commitCallback: Runnable?) {
+    /*override fun submitList(list: MutableList<T>?, commitCallback: Runnable?) {
         differ.submitList(list, commitCallback)
-    }
+    }*/
 
 
     /**
@@ -105,12 +105,7 @@ abstract class BaseListAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder> {
 
     open fun set(collection: Collection<T>?) {
         lastBindIndex = -1
-        submitList(if (collection != null) ArrayList(collection) else null)
-    }
-
-    open fun set(list: MutableList<T>?) {
-        lastBindIndex = -1
-        submitList(if (list != null) ArrayList(list) else null)
+        submitList(collection?.toMutableList())
     }
 
     open fun set(array: Array<T>?) {

@@ -12,9 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/MatchWidth"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_16sdp"
+        android:layout_margin="@dimen/contentMargin"
         android:background="@color/colorWhite"
-        android:padding="@dimen/_32sdp"
+        android:padding="@dimen/contentMarginX2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +22,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageViewIcon"
-            android:layout_width="@dimen/_32sdp"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/ic_placeholder"
             android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@id/textViewTitle"
@@ -34,8 +34,8 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textViewTitle"
             style="@style/TextView"
-            android:layout_marginTop="@dimen/_32sdp"
-            android:layout_marginBottom="@dimen/_24sdp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
             android:gravity="center_horizontal"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/textViewMessage"
@@ -48,7 +48,7 @@
             android:id="@+id/textViewMessage"
             style="@style/TextView"
             android:layout_width="0dp"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:maxLines="6"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/viewAccept"
             style="@style/Button.Primary"
-            android:layout_marginTop="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/contentMarginX2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewMessage"
@@ -68,7 +68,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/viewCancel"
             style="@style/Button"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewAccept"

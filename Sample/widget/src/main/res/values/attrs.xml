@@ -5,6 +5,7 @@
         <!--TEXT-->
         <attr name="android:title" format="string" />
         <attr name="android:text" format="string" />
+        <attr name="android:textSize" format="reference" />
         <attr name="android:hint" format="string" />
         <attr name="android:clickable" format="boolean" />
         <!--INPUT TYPE-->

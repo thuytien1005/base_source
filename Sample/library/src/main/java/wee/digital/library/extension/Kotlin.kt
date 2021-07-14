@@ -1,6 +1,5 @@
 package wee.digital.library.extension
 
-import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -15,12 +14,8 @@ fun Void?.does() {
 
 typealias Block<reified T> = T.() -> Unit
 
-fun <T> Block<T>?.doThis(t: T) {
+fun <T> Block<T>?.does(t: T) {
     this?.also { t.it() }
-}
-
-fun <T> Block<T>?.doIt(t: T) {
-    this?.also { it(t) }
 }
 
 data class Data<T>(val data: T?, val e: Exception?)
@@ -43,7 +38,7 @@ fun <T> Flow<Data<T>>.each(block: (Data<T>) -> Unit) {
 
 val isOnUiThread: Boolean get() = Looper.myLooper() == Looper.getMainLooper()
 
-fun LifecycleOwner.launch(interval: Long = 0, block: Void) {
+fun LifecycleOwner.launch(interval: Long = 0, block: () -> Unit) {
     lifecycleScope.launch {
         if (interval > 0) delay(interval)
         withContext(Dispatchers.Main) {
@@ -52,7 +47,7 @@ fun LifecycleOwner.launch(interval: Long = 0, block: Void) {
     }
 }
 
-fun onUi(interval: Long = 0, block: Void) {
+fun onUi(interval: Long = 0, block: () -> Unit) {
     GlobalScope.launch {
         if (interval > 0) delay(interval)
         withContext(Dispatchers.Main) {
@@ -61,7 +56,7 @@ fun onUi(interval: Long = 0, block: Void) {
     }
 }
 
-fun onIo(interval: Long = 0, block: Void) {
+fun onIo(interval: Long = 0, block: () -> Unit) {
     flow {
         if (interval > 0) delay(interval)
         emit(true)

@@ -10,8 +10,8 @@
         android:id="@+id/textViewTitle"
         style="@style/TextView"
         android:text="Register"
+        android:textSize="@dimen/textSize4"
         android:textColor="@color/colorWhite"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/layoutDialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,44 +30,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/contentMargin" />
+            app:layout_constraintGuide_begin="@dimen/contentMarginX2" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/contentMargin" />
-
+            app:layout_constraintGuide_end="@dimen/contentMarginX2" />
 
         <wee.digital.widget.custom.InputView
-            android:id="@+id/inputViewName"
+            android:id="@+id/inputViewFirstName"
             style="@style/InputView"
             android:layout_width="0dp"
-            android:layout_marginTop="@dimen/contentMargin"
-            android:src="@drawable/ic_user"
-            android:title="Name"
+            android:layout_marginTop="@dimen/contentMarginX2"
+            android:title="First name"
+            android:maxLength="12"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/registerActionLogin" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <wee.digital.widget.custom.InputView
+            android:id="@+id/inputViewLastName"
+            style="@style/InputView"
+            android:layout_width="0dp"
+            android:maxLength="12"
+            android:title="Last name"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@+id/inputViewFirstName" />
 
         <wee.digital.widget.custom.InputView
             android:id="@+id/inputViewEmail"
             style="@style/InputView"
             android:layout_width="0dp"
-            android:src="@drawable/ic_mail"
             android:title="Email"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@+id/inputViewName" />
+            app:layout_constraintTop_toBottomOf="@+id/inputViewLastName" />
 
         <wee.digital.widget.custom.InputView
             android:id="@+id/inputViewPassword"
             style="@style/InputView"
             android:layout_width="0dp"
-            android:inputType="textPassword"
-            android:src="@drawable/ic_lock"
             android:title="Password"
+            android:maxLength="16"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@+id/inputViewEmail" />
@@ -76,10 +83,9 @@
             android:id="@+id/viewRegister"
             style="@style/Button.Primary"
             android:layout_width="0dp"
-            android:layout_marginTop="@dimen/contentMargin"
+            android:layout_marginTop="@dimen/contentMarginX2"
             android:layout_marginBottom="@dimen/contentMargin"
             android:text="Register"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/inputViewEmail"
             app:layout_constraintStart_toStartOf="@+id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@+id/inputViewPassword" />

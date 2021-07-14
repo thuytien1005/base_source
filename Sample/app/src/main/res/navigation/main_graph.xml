@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -34,9 +34,9 @@
         app:destination="@id/alertFragment" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="wee.digital.sample.ui.fragment.login.LoginFragment"
+        android:name="wee.digital.sample.ui.fragment.sign_in.SignInFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/login" />
+        tools:layout="@layout/sign_in" />
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment" />
@@ -58,15 +58,6 @@
     <action
         android:id="@+id/action_global_registerFragment"
         app:destination="@id/registerFragment" />
-
-    <fragment
-        android:id="@+id/faceCaptureFragment"
-        android:name="wee.digital.sample.ui.fragment.face.FaceCaptureFragment"
-        android:label="face_capture"
-        tools:layout="@layout/face_capture" />
-    <action
-        android:id="@+id/action_global_faceCaptureFragment"
-        app:destination="@id/faceCaptureFragment" />
 
     <fragment
         android:id="@+id/contactFragment"

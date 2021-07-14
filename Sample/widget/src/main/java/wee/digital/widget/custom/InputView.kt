@@ -8,6 +8,7 @@ import android.os.*
 import android.text.Editable
 import android.text.InputFilter
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.*
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
@@ -17,7 +18,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatImageView
 import wee.digital.widget.R
 import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.databinding.InputBinding
@@ -39,15 +39,37 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         title = types.title
         bind.editText.setText(types.text)
         bind.editText.addTextChangedListener(this)
-        onIconInitialize(bind.imageViewIcon, types)
+        onIconInitialize(types)
         onEditTextInitialize(bind.editText, types)
         bind.inputViewLayout.addTransitionListener(this)
     }
 
-    private fun onIconInitialize(it: AppCompatImageView, types: TypedArray) {
+    override fun setOnClickListener(listener: OnClickListener?) {
+        if (null == listener) {
+            enableFocus()
+            editText.addViewClickListener(null)
+        } else {
+            disableFocus()
+            editText.addViewClickListener {
+                listener.onClick(this)
+            }
+        }
+    }
+
+    override fun performClick(): Boolean {
+        return editText.performClick()
+    }
+
+    override fun onDetachedFromWindow() {
+        bind.inputViewLayout.clearAnimation()
+        onFocusChange.clear()
+        super.onDetachedFromWindow()
+    }
+
+    private fun onIconInitialize(types: TypedArray) {
         val color = types.getColor(R.styleable.AppCustomView_android_tint, -1)
         if (color != -1) {
-            it.setColorFilter(color)
+            //bind.imageViewIcon.setColorFilter(color)
         }
         src = types.srcRes
     }
@@ -55,7 +77,10 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     private fun onEditTextInitialize(it: AppCompatEditText, types: TypedArray) {
         it.onFocusChangeListener = this
         it.paintFlags = it.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-
+        it.setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            types.getDimension(R.styleable.AppCustomView_android_textSize, getPixels(R.dimen.textSize2))
+        )
         it.maxLines = 1
         it.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(256))
 
@@ -107,27 +132,7 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         it.setOnCreateContextMenuListener { menu, _, _ -> menu.clear() }
     }
 
-    override fun setOnClickListener(listener: OnClickListener?) {
-        if (null == listener) {
-            enableFocus()
-            editText.addViewClickListener(null)
-        } else {
-            disableFocus()
-            editText.addViewClickListener {
-                listener.onClick(this)
-            }
-        }
-    }
 
-    override fun performClick(): Boolean {
-        return editText.performClick()
-    }
-
-    override fun onDetachedFromWindow() {
-        bind.inputViewLayout.clearAnimation()
-        onFocusChange.clear()
-        super.onDetachedFromWindow()
-    }
 
     /**
      * [InputView] properties
@@ -181,8 +186,8 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     var src: Int = 0
         set(value) {
             val isGone = value <= 0
-            bind.imageViewIcon.isGone(isGone)
-            bind.imageViewIcon.setImageResource(value)
+            //bind.imageViewIcon.isGone(isGone)
+            //bind.imageViewIcon.setImageResource(value)
         }
 
     var isSilent: Boolean = false
@@ -235,7 +240,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     fun addOnFocusChangeListener(block: (Boolean) -> Unit) {
         onFocusChange.add(block)
     }
-
 
     fun addActionDoneListener(block: (String?) -> Unit) {
         editText.addActionDoneListener(block)
@@ -374,7 +378,7 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     }
 
     private fun setIconColor(@ColorRes res: Int) {
-        bind.imageViewIcon.tintRes(res)
+        //bind.imageViewIcon.tintRes(res)
     }
 
     private fun setHintBackground(@ColorRes res: Int) {

@@ -7,26 +7,36 @@
 
     <wee.digital.widget.custom.InputView
         android:id="@+id/inputViewSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:src="@drawable/ic_search"
-        android:title="Name"
+        style="@style/InputView"
+        android:layout_margin="@dimen/contentMarginX2"
+        android:title="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        style="@style/RecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/inputViewSearch"
-        app:layout_constraintStart_toStartOf="@+id/inputViewSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputViewSearch"
+        app:layout_constraintVertical_bias="1.0"
         tools:itemCount="2"
         tools:listitem="@layout/contact_item" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/viewSearch"
+        style="@style/Button.Primary"
+        android:layout_width="wrap_content"
+        android:text="Search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

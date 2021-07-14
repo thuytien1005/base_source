@@ -173,7 +173,7 @@ fun String?.normalizer(): String? {
         val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
         pattern.matcher(temp)
                 .replaceAll("")
-                .toLowerCase()
+                .lowercase()
                 .replace(" ", "-")
                 .replace("đ", "d", true)
 
@@ -182,16 +182,6 @@ fun String?.normalizer(): String? {
     } catch (e: IllegalArgumentException) {
         null
     }
-}
-
-fun String?.normalize(): String? {
-    this ?: return null
-    if (this.isEmpty()) return null
-    val s = this.trim { it <= ' ' }
-    return Normalizer.normalize(s, Normalizer.Form.NFD)
-            .toLowerCase()
-            .replace("\\p{M}".toRegex(), "")
-            .replace("đ".toRegex(), "d")
 }
 
 /**

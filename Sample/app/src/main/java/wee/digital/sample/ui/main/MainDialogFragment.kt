@@ -5,7 +5,6 @@ import wee.digital.library.extension.activityVM
 import wee.digital.library.util.Logger
 import wee.digital.sample.ui.base.BaseDialogFragment
 import wee.digital.sample.ui.vm.DialogVM
-import wee.digital.sample.ui.vm.FirebaseVM
 
 abstract class MainDialogFragment<B : ViewBinding> : BaseDialogFragment<B>(), MainView {
 
@@ -16,7 +15,5 @@ abstract class MainDialogFragment<B : ViewBinding> : BaseDialogFragment<B>(), Ma
     protected val mainVM by activityVM(MainVM::class)
 
     protected val dialogVM by activityVM(DialogVM::class)
-
-    protected val firebaseVM by activityVM(FirebaseVM::class)
 
 }
