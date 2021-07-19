@@ -1,5 +1,6 @@
 package wee.digital.widget.extension
 
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.view.animation.Animation
@@ -31,6 +32,10 @@ fun Drawable?.tint(@ColorInt color: Int): Drawable? {
 
 fun pixels(@DimenRes res: Int): Float {
     return app.resources.getDimensionPixelSize(res).toFloat()
+}
+
+fun color(colorStr: String): Int {
+    return Color.parseColor(colorStr)
 }
 
 fun color(@ColorRes res: Int): Int {

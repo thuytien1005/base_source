@@ -27,6 +27,41 @@
         app:layout_constraintTop_toTopOf="@+id/avatarView"
         tools:text="@tools:sample/full_names" />
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/avatarView">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewTest1"
+            style="@style/Button"
+            android:padding="8dp"
+            android:text="Test" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewTest2"
+            style="@style/Button"
+            android:padding="8dp"
+            android:text="Test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.878" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/viewTest3"
+            style="@style/Button"
+            android:padding="8dp"
+            android:text="Test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.878" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/viewSignOut"
         style="@style/Button"

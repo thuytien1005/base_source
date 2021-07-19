@@ -2,8 +2,8 @@ package wee.digital.sample.ui.fragment.register
 
 import com.google.firebase.auth.AuthResult
 import wee.digital.library.extension.SingleLiveData
+import wee.digital.sample.data.repository.StoreRepository
 import wee.digital.sample.shared.auth
-import wee.digital.sample.shared.userCollection
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.sample.ui.vm.BaseVM
 import wee.digital.widget.extension.isNotEmail
@@ -58,7 +58,7 @@ class RegisterVM : BaseVM() {
 
     private fun updateUser(user: StoreUser, password: String) {
         onProgress {
-            userCollection.document(user.uid).set(user)
+            StoreRepository.updateUser(user)
         }.addOnSuccessListener {
             signIn(user, password)
         }.addOnFailureListener {

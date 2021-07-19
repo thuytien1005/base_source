@@ -14,7 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         style="@style/RecyclerView"
@@ -28,15 +27,5 @@
         app:layout_constraintVertical_bias="1.0"
         tools:itemCount="2"
         tools:listitem="@layout/contact_item" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/viewSearch"
-        style="@style/Button.Primary"
-        android:layout_width="wrap_content"
-        android:text="Search"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

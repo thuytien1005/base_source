@@ -7,6 +7,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import wee.digital.library.adapter.FragmentAdapter
 import wee.digital.sample.R
 import wee.digital.sample.databinding.HomeBinding
+import wee.digital.sample.ui.fragment.chat.ChatFragment
 import wee.digital.sample.ui.fragment.contact.ContactFragment
 import wee.digital.sample.ui.fragment.me.MeFragment
 import wee.digital.sample.ui.main.MainFragment
@@ -49,12 +50,13 @@ class HomeFragment : MainFragment<HomeBinding>() {
         bind.bottomNavigation.also {
             it.defaultBackgroundColor = Color.WHITE
             it.isBehaviorTranslationEnabled = true
-            it.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
+            it.titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
             it.inactiveColor = Color.parseColor("#A1A1A1")
             it.accentColor = color(R.color.colorPrimary)
             it.setNotificationBackgroundColor(Color.parseColor("#F04541"))
-            it.addItem(homeNavItem(R.drawable.ic_placeholder))
-            it.addItem(homeNavItem(R.drawable.ic_placeholder))
+            it.addItem(homeNavItem("Chat", R.drawable.ic_placeholder))
+            it.addItem(homeNavItem("Contact", R.drawable.ic_placeholder))
+            it.addItem(homeNavItem("Me", R.drawable.ic_placeholder))
             it.currentItem = 0
             it.setOnTabSelectedListener { position: Int, wasSelected: Boolean ->
                 if (!wasSelected) {
@@ -68,7 +70,11 @@ class HomeFragment : MainFragment<HomeBinding>() {
 
     private fun configViewPager() {
         val adapter = FragmentAdapter(this).also {
-            it.addFragments(ContactFragment(), MeFragment())
+            it.addFragments(
+                ChatFragment(),
+                ContactFragment(),
+                MeFragment()
+            )
         }
         bind.viewPager.also {
             it.offscreenPageLimit = 4

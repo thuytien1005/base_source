@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.MapValueNullException
 import wee.digital.library.extension.toast
+import wee.digital.sample.data.repository.StoreRepository
 import wee.digital.sample.shared.auth
-import wee.digital.sample.shared.userCollection
 import wee.digital.sample.ui.model.StoreUser
 
 
@@ -42,7 +42,7 @@ class UserVM : BaseVM() {
 
     fun syncUser(firebaseUser: FirebaseUser) {
         uid = firebaseUser.uid
-        userRegistration = userCollection.document(firebaseUser.uid)
+        userRegistration = StoreRepository.userReference(firebaseUser.uid)
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.data?.also {
                     syncUser(it)

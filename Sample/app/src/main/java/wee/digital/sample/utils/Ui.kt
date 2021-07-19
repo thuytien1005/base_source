@@ -1,9 +1,11 @@
 package wee.digital.sample.utils
 
+import android.graphics.Color
 import androidx.annotation.DrawableRes
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.widget.custom.AvatarView
+import wee.digital.widget.extension.drawable
 import wee.digital.widget.extension.notNullOrEmpty
 
 fun AvatarView.bind(it: StoreUser?) {
@@ -25,5 +27,10 @@ fun AvatarView.bind(it: StoreUser?) {
     }
 }
 
-
-fun homeNavItem(@DrawableRes res: Int) = AHBottomNavigationItem(0, res, android.R.color.white)
+fun homeNavItem(title: String, @DrawableRes res: Int): AHBottomNavigationItem {
+    return AHBottomNavigationItem(
+        title,
+        drawable(res),
+        Color.WHITE
+    )
+}

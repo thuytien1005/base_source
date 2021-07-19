@@ -2,6 +2,10 @@ package wee.digital.sample.ui.fragment.contact
 
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.databinding.ContactBinding
 import wee.digital.sample.ui.main.MainFragment
@@ -13,16 +17,15 @@ class ContactFragment : MainFragment<ContactBinding>() {
 
     private val vm by viewModel(ContactVM::class)
 
+    private var searchJob: Job? = null
+
     override fun inflating(): (LayoutInflater) -> ContactBinding {
         return ContactBinding::inflate
     }
 
     override fun onViewCreated() {
-        addClickListener(bind.viewSearch)
         adapter.bind(bind.recyclerView)
-        bind.inputViewSearch.onTextChanged = {
-            vm.searchUserByName(it)
-        }
+        bind.inputViewSearch.onTextChanged = this::onSearchUser
     }
 
     override fun onLiveDataObserve() {
@@ -32,14 +35,24 @@ class ContactFragment : MainFragment<ContactBinding>() {
     }
 
     override fun onViewClick(v: View?) {
-        when(v){
-            bind.viewSearch -> vm.searchUserByName("bao-bao")
+        when (v) {
+
         }
     }
 
+    /**
+     *
+     */
     private fun updateListUser(list: List<StoreUser>?) {
         adapter.set(list)
     }
 
+    private fun onSearchUser(searchText: String) {
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            delay(500)
+            vm.searchUserByName(searchText)
+        }
+    }
 
 }

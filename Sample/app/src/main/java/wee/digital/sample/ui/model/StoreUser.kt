@@ -5,7 +5,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import wee.digital.library.extension.MapValueNullException
 import wee.digital.library.extension.strOrNull
 import wee.digital.library.extension.strOrThrow
-import wee.digital.widget.extension.normalizer
 
 class StoreUser {
 
@@ -22,7 +21,7 @@ class StoreUser {
 
     var photoDisplay: String? = null
 
-    val searchKey: String get() = "%s %s".format(firstName, lastName.toString()).normalizer() ?: ""
+    var searchKey: String = ""
 
     override fun equals(other: Any?): Boolean {
         return uid === (other as? StoreUser)?.uid

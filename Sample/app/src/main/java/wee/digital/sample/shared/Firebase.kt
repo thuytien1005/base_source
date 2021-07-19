@@ -7,11 +7,9 @@ import com.google.firebase.storage.ktx.storage
 
 val auth get() = Firebase.auth
 
-val store get() = Firebase.firestore
-
 val storeRef = Firebase.storage.reference
 
-val userCollection get() = store.collection("users")
+var isDev = true
 
 val currentUser get() = auth.currentUser
 
