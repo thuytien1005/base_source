@@ -7,7 +7,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.library.extension.transform
 import wee.digital.sample.data.repository.StoreRepository
@@ -57,9 +56,13 @@ class ContactVM : BaseVM() {
         }
     }
 
+    private var methodUpdateContacts = false
+
     fun syncContactUser(uidAuth: String, uidContact: String) {
         val mapUid = HashMap<String, Any>().apply { put("uid", FieldValue.arrayUnion(uidContact)) }
-        StoreRepository.contactsReference(uidAuth).set(mapUid)
+        StoreRepository.contactsReference(uidAuth).also {
+            if (methodUpdateContacts) it.update(mapUid) else it.set(mapUid)
+        }
     }
 
     fun queryUidContacts(uidAuth: String) {
@@ -68,7 +71,10 @@ class ContactVM : BaseVM() {
             StoreRepository.contactsReference(uidAuth).addSnapshotListener { value, error ->
                 val data = value?.documentToJsObject().parse(ContactData::class)
                 when (data == null || data?.uid.isNullOrEmpty()) {
-                    true -> allListContacts.postValue(listOf())
+                    true -> {
+                        methodUpdateContacts = false
+                        allListContacts.postValue(listOf())
+                    }
                     else -> queryFromUidContact(data.uid)
                 }
             }

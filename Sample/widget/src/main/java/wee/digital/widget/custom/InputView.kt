@@ -33,7 +33,7 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
     OnFocusChangeListener,
     SimpleTextWatcher {
 
-    var onTextChanged: Block<String>? = null//Infinite loop
+    var onTextChanged: Block<String>? = null
 
     override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> InputBinding {
         return InputBinding::inflate
@@ -148,7 +148,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         get() {
             val s = editText.text?.toString()?.trimIndent()?.trim()?.replace("\\s+".toRegex(), " ")
             isSilent = true
-            editText.setText(s)
             if (hasFocus()) {
                 editText.setSelection(s?.length ?: 0)
             }
