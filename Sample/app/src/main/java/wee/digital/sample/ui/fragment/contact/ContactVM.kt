@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.library.extension.transform
 import wee.digital.sample.data.repository.StoreRepository
@@ -17,11 +18,9 @@ import wee.digital.sample.utils.documentToJsObject
 
 class ContactVM : BaseVM() {
 
-    var allListContacts = MutableLiveData<List<StoreUser>>()
+    var allListContacts = SingleLiveData<List<StoreUser>>()
 
-    var contactAdapterSelected = StoreUser()
-
-    val contactsSearchLiveData = MutableLiveData<List<StoreUser>?>()
+    val contactsSearchLiveData = SingleLiveData<List<StoreUser>?>()
 
     private var searchRegistration: ListenerRegistration? = null
 
@@ -56,13 +55,16 @@ class ContactVM : BaseVM() {
         }
     }
 
-    private var methodUpdateContacts = false
-
     fun syncContactUser(uidAuth: String, uidContact: String) {
         val mapUid = HashMap<String, Any>().apply { put("uid", FieldValue.arrayUnion(uidContact)) }
-        StoreRepository.contactsReference(uidAuth).also {
-            if (methodUpdateContacts) it.update(mapUid) else it.set(mapUid)
-        }
+        StoreRepository.contactsReference(uidAuth).get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    StoreRepository.contactsReference(uidAuth).update(mapUid)
+                } else {
+                    StoreRepository.contactsReference(uidAuth).set(mapUid)
+                }
+            }
     }
 
     fun queryUidContacts(uidAuth: String) {
@@ -72,7 +74,6 @@ class ContactVM : BaseVM() {
                 val data = value?.documentToJsObject().parse(ContactData::class)
                 when (data == null || data?.uid.isNullOrEmpty()) {
                     true -> {
-                        methodUpdateContacts = false
                         allListContacts.postValue(listOf())
                     }
                     else -> queryFromUidContact(data.uid)
@@ -95,7 +96,7 @@ class ContactVM : BaseVM() {
                 allListContacts.postValue(list)
             }
             .addOnFailureListener {
-                allListContacts.postValue(listOf<StoreUser>())
+                allListContacts.postValue(listOf())
             }
     }
 

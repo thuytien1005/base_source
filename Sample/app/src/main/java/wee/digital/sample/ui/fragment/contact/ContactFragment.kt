@@ -7,6 +7,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.activityVM
+import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.ContactBinding
 import wee.digital.sample.shared.auth
@@ -17,7 +18,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
 
     private val adapter = ContactAdapter()
 
-    private val vm by activityVM(ContactVM::class)
+    private val vm by viewModel(ContactVM::class)
 
     private var searchJob: Job? = null
 
@@ -53,7 +54,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
     }
 
     private fun userItemClick(data: StoreUser) {
-        vm.contactAdapterSelected = data
+        mainVM.contactAdapterSelected = data
         vm.syncContactUser(auth.uid.toString(), data.uid)
         navigate(R.id.action_global_infoFragment)
     }

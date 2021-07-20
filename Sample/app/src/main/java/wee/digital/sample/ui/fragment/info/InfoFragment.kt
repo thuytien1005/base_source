@@ -7,6 +7,7 @@ import wee.digital.sample.databinding.InfoBinding
 import wee.digital.sample.ui.base.BaseDialogFragment
 import wee.digital.sample.ui.base.BaseFragment
 import wee.digital.sample.ui.fragment.contact.ContactVM
+import wee.digital.sample.ui.main.MainVM
 import wee.digital.sample.utils.bind
 
 
@@ -16,7 +17,7 @@ class InfoFragment : BaseDialogFragment<InfoBinding>() {
         return R.style.App_Dialog_FullScreen_Transparent
     }
 
-    private val vm by activityVM(ContactVM::class)
+    private val vm by activityVM(MainVM::class)
 
     override fun inflating(): (LayoutInflater) -> InfoBinding {
         return InfoBinding::inflate
