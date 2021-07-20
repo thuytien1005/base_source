@@ -1,7 +1,6 @@
 package wee.digital.sample.ui.fragment.contact
 
 import android.view.LayoutInflater
-import androidx.core.view.isEmpty
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -26,12 +25,12 @@ class ContactFragment : MainFragment<ContactBinding>() {
     }
 
     override fun onViewCreated() {
-        lifecycleScope.launch {
-            vm.queryUidContacts(auth.uid.toString())
-            adapter.onItemClick = { it, _ -> userItemClick(it) }
-            bind.inputViewSearch.onTextChanged = this@ContactFragment::onSearchUser
-            adapter.bind(bind.recyclerView)
+        vm.queryUidContacts(auth.uid.toString())
+        adapter.onItemClick = { it, _ -> userItemClick(it) }
+        bind.inputViewSearch.onTextChanged = {
+            onSearchUser(it)
         }
+        adapter.bind(bind.recyclerView)
     }
 
     override fun onLiveDataObserve() {
@@ -46,7 +45,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
      */
     private fun updateListUser(list: List<StoreUser>?) {
         list?.forEach { if (it.uid == auth.uid) (list as MutableList).remove(it) }
-        when (bind.inputViewSearch.isEmpty()) {
+        when (bind.inputViewSearch.text.isNullOrEmpty()) {
             true -> adapter.set(vm.allListContacts.value)
             false -> adapter.set(list)
         }

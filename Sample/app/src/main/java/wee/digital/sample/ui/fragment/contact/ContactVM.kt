@@ -1,5 +1,6 @@
 package wee.digital.sample.ui.fragment.contact
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -17,11 +18,11 @@ import wee.digital.sample.utils.documentToJsObject
 
 class ContactVM : BaseVM() {
 
-    var allListContacts = SingleLiveData<List<StoreUser>>()
+    var allListContacts = MutableLiveData<List<StoreUser>>()
 
     var contactAdapterSelected = StoreUser()
 
-    val contactsSearchLiveData = SingleLiveData<List<StoreUser>?>()
+    val contactsSearchLiveData = MutableLiveData<List<StoreUser>?>()
 
     private var searchRegistration: ListenerRegistration? = null
 
@@ -58,7 +59,7 @@ class ContactVM : BaseVM() {
 
     fun syncContactUser(uidAuth: String, uidContact: String) {
         val mapUid = HashMap<String, Any>().apply { put("uid", FieldValue.arrayUnion(uidContact)) }
-        StoreRepository.contactsReference(uidAuth).update(mapUid)
+        StoreRepository.contactsReference(uidAuth).set(mapUid)
     }
 
     fun queryUidContacts(uidAuth: String) {
