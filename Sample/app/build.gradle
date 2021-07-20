@@ -120,6 +120,7 @@ dependencies {
     // android lifecycle aware
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.lifecycle.compiler
 
     // sq-lite database orm
