@@ -13,11 +13,14 @@ class StoreMessage : ToMap {
 
     var text: String? = null
 
+    var type: String? = null
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "sender" to sender,
             "time" to Timestamp(Date(time)),
-            "text" to text
+            "text" to text,
+            "type" to type,
         )
     }
 
@@ -28,6 +31,7 @@ class StoreMessage : ToMap {
                 it.sender = m.str("sender")
                 it.time = m.long("time")
                 it.text = m.str("text")
+                it.type = m.str("type")
             }
         }
 
