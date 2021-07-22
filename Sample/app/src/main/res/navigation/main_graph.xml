@@ -68,4 +68,13 @@
         android:id="@+id/action_global_contactFragment"
         app:destination="@id/contactFragment" />
 
+    <dialog
+        android:id="@+id/infoFragment"
+        android:name="wee.digital.sample.ui.fragment.info.InfoFragment"
+        android:label="info"
+        tools:layout="@layout/info" />
+    <action
+        android:id="@+id/action_global_infoFragment"
+        app:destination="@id/infoFragment" />
+
 </navigation>

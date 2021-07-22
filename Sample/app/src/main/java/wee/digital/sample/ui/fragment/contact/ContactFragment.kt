@@ -1,13 +1,16 @@
 package wee.digital.sample.ui.fragment.contact
 
 import android.view.LayoutInflater
-import android.view.View
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import wee.digital.library.extension.activityVM
 import wee.digital.library.extension.viewModel
+import wee.digital.sample.R
 import wee.digital.sample.databinding.ContactBinding
+import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.StoreUser
 
@@ -24,19 +27,18 @@ class ContactFragment : MainFragment<ContactBinding>() {
     }
 
     override fun onViewCreated() {
-        adapter.bind(bind.recyclerView)
+        vm.queryUidContacts(auth.uid)
+        adapter.onItemClick = { it, _ -> userItemClick(it) }
         bind.inputViewSearch.onTextChanged = this::onSearchUser
+        adapter.bind(bind.recyclerView)
     }
 
     override fun onLiveDataObserve() {
-        vm.contactsLiveData.observe {
+        vm.contactsSearchLiveData.observe {
             updateListUser(it)
         }
-    }
-
-    override fun onViewClick(v: View?) {
-        when (v) {
-
+        vm.allListContacts.observe {
+            updateListUser(it)
         }
     }
 
@@ -44,12 +46,22 @@ class ContactFragment : MainFragment<ContactBinding>() {
      *
      */
     private fun updateListUser(list: List<StoreUser>?) {
-        adapter.set(list)
+        list?.forEach { if (it.uid == auth.uid) (list as MutableList).remove(it) }
+        when (bind.inputViewSearch.text.isNullOrEmpty()) {
+            true -> adapter.set(vm.allListContacts.value)
+            false -> adapter.set(list)
+        }
+    }
+
+    private fun userItemClick(data: StoreUser) {
+        mainVM.contactAdapterSelected = data
+        vm.syncContactUser(auth.uid.toString(), data.uid)
+        navigate(R.id.action_global_infoFragment)
     }
 
     private fun onSearchUser(searchText: String) {
         searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             delay(500)
             vm.searchUserByName(searchText)
         }

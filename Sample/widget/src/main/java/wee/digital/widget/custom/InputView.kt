@@ -7,6 +7,9 @@ import android.graphics.Rect
 import android.os.*
 import android.text.Editable
 import android.text.InputFilter
+import android.text.TextWatcher
+import android.text.method.KeyListener
+import android.text.method.TextKeyListener
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.*
@@ -14,6 +17,7 @@ import android.view.View.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.SearchView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -144,7 +148,6 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         get() {
             val s = editText.text?.toString()?.trimIndent()?.trim()?.replace("\\s+".toRegex(), " ")
             isSilent = true
-            editText.setText(s)
             if (hasFocus()) {
                 editText.setSelection(s?.length ?: 0)
             }
@@ -425,6 +428,5 @@ class InputView(context: Context, attrs: AttributeSet? = null) :
         }
 
     }
-
 
 }
