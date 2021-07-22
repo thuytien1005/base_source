@@ -57,7 +57,7 @@ object Backup {
         }
     }
 
-    private fun <T : ToMap> WriteBatch.runRestore(obj: JsonObject, refName: String, block: () -> KClass<T>) {
+    private fun <T : ObjectMapper> WriteBatch.runRestore(obj: JsonObject, refName: String, block: () -> KClass<T>) {
         val collectionRef = store.collection(refName)
         obj.obj(refName)?.entrySet()?.forEach {
             log.d("collection: $refName - document: ${it.key}")

@@ -2,7 +2,7 @@ package wee.digital.sample.ui.model
 
 import wee.digital.library.extension.list
 
-class StoreConversation : ToMap {
+class StoreConversation : ObjectMapper {
 
     var conversations: List<String>? = null
 

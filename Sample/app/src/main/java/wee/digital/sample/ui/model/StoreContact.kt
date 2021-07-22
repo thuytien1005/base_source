@@ -2,7 +2,7 @@ package wee.digital.sample.ui.model
 
 import wee.digital.library.extension.list
 
-class StoreContact : ToMap {
+class StoreContact : ObjectMapper {
 
     var uids: List<String>? = null
     override fun toMap(): Map<String, Any?> {

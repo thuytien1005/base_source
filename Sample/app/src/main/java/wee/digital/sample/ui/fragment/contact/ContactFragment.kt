@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import wee.digital.library.extension.activityVM
 import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.ContactBinding
@@ -55,7 +54,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
 
     private fun userItemClick(data: StoreUser) {
         mainVM.contactAdapterSelected = data
-        vm.syncContactUser(auth.uid.toString(), data.uid)
+        vm.insertContact(auth.uid.toString(), data.uid)
         navigate(R.id.action_global_infoFragment)
     }
 

@@ -5,7 +5,7 @@ import wee.digital.library.extension.long
 import wee.digital.library.extension.str
 import java.util.*
 
-class StoreMessage : ToMap {
+class StoreMessage : ObjectMapper {
 
     var sender: String = ""
 

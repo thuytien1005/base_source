@@ -10,8 +10,8 @@
       "messages": [
         {
           "sender": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
-          "text": "Bảo hello Nguyên",
-          "time": 1626195600
+          "time": 1626195,
+          "text": "Bảo hello Nguyên"
         }
       ],
       "type": "contact"
@@ -26,8 +26,8 @@
       "messages": [
         {
           "sender": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
-          "text": "Bảo hello Khang",
-          "time": 1626627600
+          "time": 1626627,
+          "text": "Bảo hello Khang"
         }
       ],
       "type": "contact"
@@ -42,7 +42,7 @@
       "messages": [
         {
           "sender": "lseGLfuquTOmVDDiJHgUYc2oDtD3",
-          "time": 1626627600,
+          "time": 1626627,
           "text": "Nguyên hello Khang"
         }
       ],
@@ -59,13 +59,13 @@
       "messages": [
         {
           "sender": "lseGLfuquTOmVDDiJHgUYc2oDtD3",
-          "time": 1626541200,
+          "time": 1626541,
           "type": "create"
         },
         {
           "sender": "Y8Ooe2mfGwZHTcBRhCQ9VV1r3AI3",
-          "text": "Khang hello Bảo, Nguyên nha",
-          "time": 1626627600
+          "time": 1626627,
+          "text": "Khang hello Bảo, Nguyên nha"
         }
       ],
       "type": "group"
@@ -133,30 +133,30 @@
       "email": "trungnguyen@gmail.com"
     },
     "EerIhkCTS3WWSR1HIO0fOnlU4T23": {
-      "lastName": "V1p",
-      "firstName": "Con Cac",
       "uid": "EerIhkCTS3WWSR1HIO0fOnlU4T23",
+      "firstName": "Con Cac",
+      "lastName": "V1p",
       "searchKey": "con-cac-v1p",
       "email": "quochuy@wee.vn"
     },
     "Y8Ooe2mfGwZHTcBRhCQ9VV1r3AI3": {
       "lastName": "Khang",
-      "firstName": "Khang",
       "uid": "Y8Ooe2mfGwZHTcBRhCQ9VV1r3AI3",
+      "firstName": "Khang",
       "searchKey": "khang-khang",
       "email": "khang@wee.vn"
     },
     "lseGLfuquTOmVDDiJHgUYc2oDtD3": {
-      "lastName": "Mập",
-      "firstName": "Nguyên",
       "uid": "lseGLfuquTOmVDDiJHgUYc2oDtD3",
+      "firstName": "Nguyên",
+      "lastName": "Mập",
       "searchKey": "nguyen-map",
       "email": "khanhnguyen@wee.vn"
     },
     "t2tCGgzv2rV9mCEUMQl9cD1HDRn2": {
+      "uid": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
       "firstName": "Bảo",
       "lastName": "Bảo",
-      "uid": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
       "searchKey": "bao-bao",
       "email": "baonguyen@wee.vn"
     }

@@ -3,7 +3,7 @@ package wee.digital.sample.ui.model
 import wee.digital.library.extension.list
 import wee.digital.library.extension.str
 
-class StoreChat : ToMap {
+class StoreChat : ObjectMapper {
 
     var chatId: String = ""
 
@@ -21,7 +21,7 @@ class StoreChat : ToMap {
             "name" to name,
             "type" to type,
             "recipients" to recipients,
-            "messages" to listMap(messages)
+            "messages" to messages.toMapList()
         )
     }
 

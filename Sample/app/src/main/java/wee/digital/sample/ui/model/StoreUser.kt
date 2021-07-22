@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import wee.digital.library.extension.str
 import wee.digital.widget.extension.normalizer
 
-class StoreUser : ToMap {
+class StoreUser : ObjectMapper {
 
     var uid: String = ""
 
