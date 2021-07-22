@@ -26,7 +26,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
     }
 
     override fun onViewCreated() {
-        vm.queryUidContacts(auth.uid)
+        vm.syncContact(auth.uid)
         adapter.onItemClick = { it, _ -> userItemClick(it) }
         bind.inputViewSearch.onTextChanged = this::onSearchUser
         adapter.bind(bind.recyclerView)

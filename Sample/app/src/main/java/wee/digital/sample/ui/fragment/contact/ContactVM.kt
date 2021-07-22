@@ -70,7 +70,7 @@ class ContactVM : BaseVM() {
             }
     }
 
-    fun queryUidContacts(uid: String?) {
+    fun syncContact(uid: String?) {
         uid ?: return
         uidContactQueryListener?.remove()
         StoreRepository.contactsReference(uid)
