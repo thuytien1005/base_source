@@ -39,7 +39,12 @@ class ContactVM : BaseVM() {
             when {
                 data.isNullOrEmpty() -> contactsLiveData.postValue(null)
                 else -> {
-                    val list = data.transform { StoreUser.from(it) }
+                    val list = data.transform { snapshot: DocumentSnapshot ->
+                        snapshot.data?.also {
+                            return@transform StoreUser.fromMap(it)
+                        }
+                        return@transform null
+                    }
                     contactsLiveData.postValue(list)
                 }
             }

@@ -18,6 +18,11 @@ private val convertFactory: Gson by lazy {
     Gson()
 }
 
+fun readJsonFromAssets(fileName : String): JsonObject?{
+    val s = readAsset(fileName)
+    return s.parse(JsonObject::class)
+}
+
 fun <T> JsonObject?.parse(cls: Class<T>): T? {
     return this?.toString()?.parse(cls)
 }
@@ -43,6 +48,15 @@ fun <T> String?.parse(cls: Class<T>): T? {
         return convertFactory.fromJson(this, cls)
     } catch (ignore: Exception) {
         null
+    }
+}
+
+fun JsonElement?.toMap(): Map<String, Any?>? {
+    try {
+        this ?: return null
+        return convertFactory.fromJson(this, object : TypeToken<HashMap<String?, Any?>?>() {}.type)
+    } catch (e: Exception) {
+        return null
     }
 }
 

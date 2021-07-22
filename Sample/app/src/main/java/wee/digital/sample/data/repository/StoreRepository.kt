@@ -11,24 +11,26 @@ import wee.digital.widget.extension.normalizer
 
 object StoreRepository {
 
-    private val store get() = Firebase.firestore
+    val store get() = Firebase.firestore
 
-    private val conversationCollection get() = store.collection("conversation")
+    val conversations get() = store.collection("conversations")
 
-    private val userCollection get() = store.collection("users")
+    val chats get() = store.collection("chats")
+
+    val users get() = store.collection("users")
+
+    val contacts get() = store.collection("contacts")
 
     fun updateUser(user: StoreUser): Task<Void> {
-        user.searchKey = "%s %s".format(user.firstName, user.lastName.toString()).normalizer() ?: ""
-        return userCollection.document(user.uid).set(user)
+        return this.users.document(user.uid).set(user)
     }
 
     fun userReference(uid: String): DocumentReference {
-        return userCollection.document(uid)
+        return users.document(uid)
     }
 
     fun userSearch(searchText: String): Query {
-        return userCollection.whereEqualTo("searchKey", searchText.normalizer())
+        return users.whereEqualTo("searchKey", searchText.normalizer())
     }
-
 
 }

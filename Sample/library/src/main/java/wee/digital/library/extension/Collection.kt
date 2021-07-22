@@ -18,7 +18,7 @@ fun <T> List<T>?.join(collection: Collection<T>?): List<T>? {
     return if (list.isEmpty()) return null else list
 }
 
-fun <T, R> Collection<T>.transform(block: (T) -> R?): List<R> {
+fun <T,  R> Collection<T>.transform(block: (T) -> R?): List<R> {
     val list = mutableListOf<R>()
     for (item in this) {
         block(item)?.also {
