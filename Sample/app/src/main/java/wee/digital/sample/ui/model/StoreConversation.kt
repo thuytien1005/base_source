@@ -8,7 +8,7 @@ class StoreConversation : ObjectMapper {
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
-            "conversations" to conversations
+            "chatIds" to conversations
         )
     }
 
