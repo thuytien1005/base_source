@@ -1,0 +1,124 @@
+{
+  "data": [
+    {
+      "id": 4,
+      "firstName": null,
+      "lastName": "Android 21",
+      "fullName": "Android 21",
+      "shortName": "A2",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/android21.jpg"
+    },
+    {
+      "id": 6,
+      "firstName": "Black",
+      "lastName": "Goku",
+      "fullName": "Black Goku",
+      "shortName": "BG",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/black%20goku.jpg"
+    },
+    {
+      "id": 10,
+      "firstName": "Byakuya",
+      "lastName": "Kuchiki",
+      "fullName": "Byakuya Kuchiki",
+      "shortName": "BK",
+      "avatar": "https://raw.githubusercontent.com/huyqv/assets/master/users/byakuya%20kuchiki.jpg"
+    },
+    {
+      "id": 14,
+      "firstName": null,
+      "lastName": "Freiza",
+      "fullName": "Freiza",
+      "shortName": "FR",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/freiza.jpg"
+    },
+    {
+      "id": 17,
+      "firstName": "Hitsugaya",
+      "lastName": "Toushirou",
+      "fullName": "Hitsugaya Toushirou",
+      "shortName": "HT",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/hitsugaya%20toushirou.jpg"
+    },
+    {
+      "id": 18,
+      "firstName": null,
+      "lastName": "Ichigo",
+      "fullName": "Ichigo",
+      "shortName": "IC",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/ichigo.jpg"
+    },
+    {
+      "id": 19,
+      "firstName": "Inu",
+      "lastName": "Yasha",
+      "fullName": "Yasha",
+      "shortName": "YA",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/inu%20yasha.jpg"
+    },
+    {
+      "id": 23,
+      "firstName": null,
+      "lastName": "Luffy",
+      "fullName": "Luffy",
+      "shortName": "LU",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/luffy.jpg"
+    },
+    {
+      "id": 24,
+      "firstName": null,
+      "lastName": "Nami",
+      "fullName": "Nami",
+      "shortName": "NA",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/nami.jpg"
+    },
+    {
+      "id": 25,
+      "firstName": null,
+      "lastName": "Natsu",
+      "fullName": "Natsu",
+      "shortName": "NA",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/natsu.jpg"
+    },
+    {
+      "id": 27,
+      "firstName": null,
+      "lastName": "Picolo",
+      "fullName": "Picolo",
+      "shortName": "PI",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/picolo.jpg"
+    },
+    {
+      "id": 30,
+      "firstName": null,
+      "lastName": "Sesshomaru",
+      "fullName": "Sesshomaru",
+      "shortName": "SE",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/sesshomaru.jpg"
+    },
+    {
+      "id": 36,
+      "firstName": "Uzumaki",
+      "lastName": "Naruto",
+      "fullName": "Naruto",
+      "shortName": "NA",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/uzumaki%20naruto.jpg"
+    },
+    {
+      "id": 39,
+      "firstName": null,
+      "lastName": "Zamasu",
+      "fullName": "Zamasu",
+      "shortName": "ZA",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/zamasu.jpg"
+    },
+    {
+      "id": 40,
+      "firstName": null,
+      "lastName": "Zoro",
+      "fullName": "Zoro",
+      "shortName": "ZO",
+      "avatar": "http://raw.githubusercontent.com/huyqv/assets/master/users/zoro.jpg"
+    }
+  ]
+}

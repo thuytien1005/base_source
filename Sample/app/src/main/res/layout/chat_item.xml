@@ -11,24 +11,20 @@
         android:layout_height="50dp"
         android:layout_margin="@dimen/contentMarginX2"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/avatar" />
+        tools:src="@sample/avatar"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/itemContactName"
         style="@style/TextView"
         android:layout_width="0dp"
-        android:minHeight="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/contentMargin"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/contentMargin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemContactAvatar"
-        tools:text="@sample/user.json/data/lastName" />
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/itemContactAvatar"
+        app:layout_constraintStart_toEndOf="@+id/itemContactAvatar"
+        app:layout_constraintTop_toTopOf="@+id/itemContactAvatar"
+        tools:text="@sample/user.json/data/fullName"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

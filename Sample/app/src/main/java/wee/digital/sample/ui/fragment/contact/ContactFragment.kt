@@ -29,7 +29,7 @@ class ContactFragment : MainFragment<ContactBinding>() {
         vm.syncContact(auth.uid)
         adapter.onItemClick = { it, _ -> userItemClick(it) }
         bind.inputViewSearch.onTextChanged = this::onSearchUser
-        adapter.bind(bind.recyclerView)
+        adapter.bind(bind.recyclerView,3)
     }
 
     override fun onLiveDataObserve() {
