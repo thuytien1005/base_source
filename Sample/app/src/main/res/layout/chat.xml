@@ -9,15 +9,19 @@
         android:id="@+id/chat_bar"
         layout="@layout/chat_toolbar" />
 
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recycler_message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/chat_widget_input"
+        app:layout_constraintTop_toBottomOf="@+id/chat_bar" />
+
+    <wee.digital.sample.widget.WidgetChatInput
+        android:id="@+id/chat_widget_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <include
-            android:id="@+id/chat_message"
-            layout="@layout/chat_input_message" />
-
-    </FrameLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chat_input_root"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    app:layoutDescription="@xml/widget_input_message_scene">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chat_input_add"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chat_input_photo"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_input_add"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chat_input_camera"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_camera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_input_photo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chat_input_audio"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_mic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_input_camera"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/chat_input_bg"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@drawable/drw_input_message"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_input_audio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chat_input_emoji"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="14dp"
+        android:background="@null"
+        app:layout_constraintDimensionRatio="h,1:1"
+        android:src="@drawable/ic_emoji"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_input_bg"
+        app:layout_constraintEnd_toEndOf="@+id/chat_input_bg"
+        app:layout_constraintTop_toTopOf="@+id/chat_input_bg" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/chat_input_input"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_wg_input_message"
+        android:textSize="16sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_input_emoji"
+        app:layout_constraintStart_toStartOf="@+id/chat_input_bg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
