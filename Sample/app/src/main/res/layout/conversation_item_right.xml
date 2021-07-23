@@ -7,27 +7,27 @@
     android:minHeight="40dp">
 
     <wee.digital.widget.custom.AvatarView
-        android:id="@+id/chat_item_left_avatar"
+        android:id="@+id/conversation_item_right_avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/chat_item_left_view_message"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/chat_item_left_view_message" />
+        app:layout_constraintBottom_toBottomOf="@+id/conversation_item_right_view_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/conversation_item_right_view_message" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/chat_item_left_view_message"
+        android:id="@+id/conversation_item_right_view_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="right"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@+id/chat_item_left_avatar"
+        app:layout_constraintEnd_toStartOf="@+id/conversation_item_right_avatar"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.7">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/chat_item_left_message"
+            android:id="@+id/conversation_item_right_message"
             style="@style/TextView"
             android:layout_margin="5dp"
             android:background="@drawable/drw_item_chat"

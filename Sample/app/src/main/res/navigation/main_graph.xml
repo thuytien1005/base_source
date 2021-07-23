@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/chatFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -80,9 +80,19 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="wee.digital.sample.ui.fragment.chat.ChatFragment"
-        android:label="ChatFragment" />
+        android:label="ChatFragment"
+        tools:layout="@layout/chat"/>
     <action
         android:id="@+id/action_global_chatFragment"
         app:destination="@id/chatFragment" />
+
+    <fragment
+        android:id="@+id/conversationFragment"
+        android:name="wee.digital.sample.ui.fragment.conversation.ConversationFragment"
+        android:label="ConversationFragment"
+        tools:layout="@layout/conversation"/>
+    <action
+        android:id="@+id/action_global_conversationFragment"
+        app:destination="@id/conversationFragment" />
 
 </navigation>

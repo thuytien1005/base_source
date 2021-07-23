@@ -1,9 +1,9 @@
-package wee.digital.sample.ui.fragment.chat
+package wee.digital.sample.ui.fragment.conversation
 
 import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.model.StoreUser
 
-class ItemChatData {
+class ItemConversationData {
 
     var user: StoreUser = StoreUser()
 
@@ -18,10 +18,10 @@ class ItemChatData {
 
 }
 
-fun createChatListId(): List<ItemChatData> {
+fun createConversationList(): List<ItemConversationData> {
 
     return listOf(
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -29,7 +29,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -37,7 +37,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -45,7 +45,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -53,7 +53,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -61,7 +61,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -69,7 +69,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -77,7 +77,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -85,7 +85,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -93,7 +93,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -101,7 +101,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = auth.uid.toString()
                 firstName = "Bao"
@@ -109,7 +109,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
@@ -117,7 +117,7 @@ fun createChatListId(): List<ItemChatData> {
             },
             message = "dat la test 1"
         ),
-        ItemChatData(
+        ItemConversationData(
             user = StoreUser().apply {
                 uid = "uidtestchatexamplenjadn"
                 firstName = "Nguyen"
