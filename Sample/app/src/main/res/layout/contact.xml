@@ -18,14 +18,17 @@
         android:id="@+id/recyclerView"
         style="@style/RecyclerView"
         android:layout_width="0dp"
+        android:paddingTop="@dimen/contentMarginX2"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputViewSearch"
         app:layout_constraintVertical_bias="1.0"
-        tools:itemCount="2"
+        app:spanCount="3"
+        tools:itemCount="15"
         tools:listitem="@layout/contact_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

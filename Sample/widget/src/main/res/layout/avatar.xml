@@ -30,11 +30,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="AB" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageViewAvatar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:riv_oval="true"
         android:scaleType="centerCrop" />
-
 
 </wee.digital.widget.base.SquareLayout>

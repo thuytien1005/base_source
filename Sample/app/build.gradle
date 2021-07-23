@@ -137,9 +137,10 @@ dependencies {
     implementation deps.firebase.firestore
     implementation deps.firebase.storage
 
-    // round image view
+    // custom view
     implementation deps.bottom_navigation
     implementation deps.image_cropper
+    implementation deps.rounded_image_view
 
     //unit test
     testImplementation deps.kotlin.test

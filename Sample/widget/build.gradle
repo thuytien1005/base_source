@@ -66,4 +66,6 @@ dependencies {
     implementation deps.glide.glide
     kapt deps.glide.compiler
 
+    // custom view
+    implementation deps.rounded_image_view
 }

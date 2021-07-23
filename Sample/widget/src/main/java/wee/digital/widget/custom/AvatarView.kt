@@ -24,6 +24,9 @@ class AvatarView(context: Context, attrs: AttributeSet? = null) :
     }
 
     override fun onInitialize(context: Context, types: TypedArray) {
+        bind.imageViewAvatar.setImageDrawable(types.src)
+        bind.textViewName.text = types.text
+
         bind.textViewName.setTextSize(
             TypedValue.COMPLEX_UNIT_PX,
             types.getDimension(R.styleable.AppCustomView_android_textSize, getPixels(R.dimen.textSize2))
