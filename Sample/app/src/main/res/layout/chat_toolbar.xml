@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_appBar"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@color/colorWhite">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/chat_toolbar_vector"
+            style="@style/ImageButtonChat"
+            android:src="@drawable/ic_vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <wee.digital.widget.custom.AvatarView
+            android:id="@+id/chat_toolbar_avatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toBottomOf="@id/chat_toolbar_vector"
+            app:layout_constraintStart_toEndOf="@+id/chat_toolbar_vector"
+            app:layout_constraintTop_toTopOf="@+id/chat_toolbar_vector" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/chat_toolbar_name"
+            style="@style/TextView"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/appCompatTextView"
+            app:layout_constraintEnd_toStartOf="@+id/chat_toolbar_video"
+            app:layout_constraintStart_toEndOf="@+id/chat_toolbar_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="placeholder name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView"
+            style="@style/TextView"
+            android:layout_width="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/chat_toolbar_video"
+            app:layout_constraintStart_toEndOf="@+id/chat_toolbar_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/chat_toolbar_name"
+            tools:text="placeholder time" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/chat_toolbar_menu"
+            style="@style/ImageButtonChat"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/chat_toolbar_call"
+            style="@style/ImageButtonChat"
+            android:src="@drawable/ic_call"
+            app:layout_constraintEnd_toStartOf="@+id/chat_toolbar_menu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/chat_toolbar_video"
+            style="@style/ImageButtonChat"
+            android:src="@drawable/ic_video"
+            app:layout_constraintEnd_toStartOf="@+id/chat_toolbar_call"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

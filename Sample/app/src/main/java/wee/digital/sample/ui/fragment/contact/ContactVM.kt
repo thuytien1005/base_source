@@ -1,6 +1,5 @@
 package wee.digital.sample.ui.fragment.contact
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -87,10 +86,10 @@ class ContactVM : BaseVM() {
             .addOnSuccessListener {
                 val data = it.documents
                 val list = mutableListOf<StoreUser>()
-                data.forEach {
-                    it.documentToJsObject().parse(StoreUser::class).also {
-                        it ?: return@also
-                        list.add(it)
+                data.forEach { snap ->
+                    snap.documentToJsObject().parse(StoreUser::class).also { user ->
+                        user ?: return@also
+                        list.add(user)
                     }
                 }
                 allListContacts.postValue(list)
