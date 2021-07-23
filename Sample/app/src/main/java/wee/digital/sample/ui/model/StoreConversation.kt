@@ -4,11 +4,11 @@ import wee.digital.library.extension.list
 
 class StoreConversation : ObjectMapper {
 
-    var conversations: List<String>? = null
+    var chatIds: List<String>? = null
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
-            "conversations" to conversations
+            "chatIds" to chatIds
         )
     }
 
@@ -16,7 +16,7 @@ class StoreConversation : ObjectMapper {
 
         fun fromMap(map: Map<String, Any>): StoreConversation {
             return StoreConversation().also {
-                it.conversations = map.list("conversations")
+                it.chatIds = map.list("chatIds")
             }
         }
     }
