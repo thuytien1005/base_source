@@ -29,7 +29,7 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
+        /*if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
             if (v is EditText) {
                 val outRect = Rect()
@@ -40,7 +40,7 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
                 }
             }
-        }
+        }*/
         return super.dispatchTouchEvent(event)
     }
 

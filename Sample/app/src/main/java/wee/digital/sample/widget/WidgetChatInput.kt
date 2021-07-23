@@ -21,8 +21,14 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding> {
     override fun onInitialize(context: Context, types: TypedArray) {
         bind.chatInputInput.setOnFocusChangeListener { _, hasFocus ->
             when (hasFocus) {
-                true -> bind.chatInputRoot.transitionToState(R.id.focus)
-                else -> bind.chatInputRoot.transitionToState(R.id.unFocus)
+                true -> {
+                    bind.chatInputAdd.setImageResource(R.drawable.ic_send)
+                    bind.chatInputRoot.transitionToState(R.id.focus)
+                }
+                else -> {
+                    bind.chatInputAdd.setImageResource(R.drawable.ic_plus)
+                    bind.chatInputRoot.transitionToState(R.id.unFocus)
+                }
             }
         }
     }
@@ -43,11 +49,11 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding> {
     }
 
     fun onMicClick(block: () -> Unit) {
-//        bind.chatInputMic.addViewClickListener { block() }
+        bind.chatInputAudio.addViewClickListener { block() }
     }
 
     fun onEmojiClick(block: () -> Unit) {
-//        bind.chatInputEmoji.addViewClickListener { block() }
+        bind.chatInputEmoji.addViewClickListener { block() }
     }
 
 }

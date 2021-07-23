@@ -8,16 +8,16 @@
     android:paddingEnd="5dp"
     app:layoutDescription="@xml/widget_input_message_scene">
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/chat_input_add"
         android:layout_width="45dp"
         android:layout_height="55dp"
-        android:background="@null"
+        android:background="@color/colorWhite"
         android:padding="10dp"
-        android:src="@drawable/ic_plus"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_plus"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_input_bg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/chat_input_bg" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/chat_input_photo"
@@ -26,9 +26,9 @@
         android:background="@null"
         android:padding="10dp"
         android:src="@drawable/ic_image"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_input_bg"
         app:layout_constraintEnd_toStartOf="@+id/chat_input_add"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/chat_input_bg" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/chat_input_camera"
@@ -37,9 +37,9 @@
         android:background="@null"
         android:padding="10dp"
         android:src="@drawable/ic_camera"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_input_bg"
         app:layout_constraintEnd_toStartOf="@+id/chat_input_photo"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/chat_input_bg" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/chat_input_audio"
@@ -48,9 +48,9 @@
         android:background="@null"
         android:padding="10dp"
         android:src="@drawable/ic_mic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/chat_input_bg"
         app:layout_constraintEnd_toStartOf="@+id/chat_input_camera"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/chat_input_bg" />
 
     <View
         android:id="@+id/chat_input_bg"
