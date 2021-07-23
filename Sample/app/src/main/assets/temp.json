@@ -1,0 +1,16 @@
+{
+  "chatId": "0K5pGbYzBDqlDWwJhS44",
+  "recipients": [
+    "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
+    "lseGLfuquTOmVDDiJHgUYc2oDtD3"
+  ],
+  "name": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2-lseGLfuquTOmVDDiJHgUYc2oDtD3",
+  "messages": [
+    {
+      "sender": "t2tCGgzv2rV9mCEUMQl9cD1HDRn2",
+      "text": "Bảo hello Nguyên",
+      "time": 1626195600
+    }
+  ],
+  "type": "contact"
+}

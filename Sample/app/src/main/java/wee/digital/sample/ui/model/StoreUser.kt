@@ -1,38 +1,41 @@
 package wee.digital.sample.ui.model
 
 import androidx.recyclerview.widget.DiffUtil
-import com.google.firebase.firestore.DocumentSnapshot
-import wee.digital.library.extension.MapValueNullException
-import wee.digital.library.extension.strOrNull
-import wee.digital.library.extension.strOrThrow
+import wee.digital.library.extension.str
+import wee.digital.widget.extension.normalizer
 
-class StoreUser {
+class StoreUser : ObjectMapper {
 
     var uid: String = ""
-        get() = requireNotEmpty(field)
 
     var firstName: String = ""
-        get() = requireNotEmpty(field)
 
     var lastName: String? = null
 
-    var email: String = ""
-        get() = requireNotEmpty(field)
+    var email: String? = null
 
     var photoDisplay: String? = null
 
     var searchKey: String = ""
 
+    fun fullName(): String = "%s %s".format(firstName, lastName.toString()).trim()
+
     override fun equals(other: Any?): Boolean {
         return uid === (other as? StoreUser)?.uid
     }
 
-    companion object {
+    override fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "uid" to uid,
+            "firstName" to firstName,
+            "lastName" to lastName,
+            "email" to email,
+            "photoDisplay" to photoDisplay,
+            "searchKey" to ("%s %s".format(firstName, lastName.toString()).normalizer() ?: ""),
+        )
+    }
 
-        private fun requireNotEmpty(value: String?): String {
-            if (value.isNullOrEmpty()) throw NullPointerException()
-            return value
-        }
+    companion object {
 
         val itemDiffer
             get() = object : DiffUtil.ItemCallback<StoreUser>() {
@@ -46,27 +49,18 @@ class StoreUser {
 
             }
 
-        fun from(map: Map<String, Any>): StoreUser {
-            return StoreUser().apply {
-                uid = map.strOrThrow("uid")
-                email = map.strOrThrow("email")
-                firstName = map.strOrThrow("firstName")
-                lastName = map.strOrNull("lastName")
-                photoDisplay = map.strOrNull("photoDisplay")
-            }
-        }
-
-        fun from(map: DocumentSnapshot): StoreUser {
-            return StoreUser().apply {
-                uid = map.get("uid")?.toString() ?: throw MapValueNullException("uid")
-                email = map.get("email")?.toString()?: throw MapValueNullException("email")
-                firstName = map.get("firstName")?.toString()?: throw MapValueNullException("firstName")
-                lastName = map.get("lastName")?.toString()
-                photoDisplay = map.get("photoDisplay")?.toString()
+        fun fromMap(m: Map<String, Any>): StoreUser {
+            return StoreUser().also {
+                it.uid = m.str("uid")
+                it.firstName = m.str("firstName")
+                it.lastName = m.str("lastName")
+                it.email = m.str("email")
+                it.photoDisplay = m.str("photoDisplay")
+                it.searchKey = m.str("searchKey")
             }
         }
 
     }
 }
 
-val StoreUser.fullName: String get() = "%s %s".format(firstName, lastName.toString()).trim()
+

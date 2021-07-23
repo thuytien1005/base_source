@@ -34,32 +34,22 @@
         app:layout_constraintTop_toBottomOf="@+id/avatarView">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/viewTest1"
+            android:id="@+id/viewBackup"
             style="@style/Button"
             android:padding="8dp"
-            android:text="Test" />
+            android:text="Backup" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/viewTest2"
+            android:id="@+id/viewRestore"
             style="@style/Button"
             android:padding="8dp"
-            android:text="Test"
+            android:text="Restore"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.878" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/viewTest3"
-            style="@style/Button"
-            android:padding="8dp"
-            android:text="Test"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.878" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView

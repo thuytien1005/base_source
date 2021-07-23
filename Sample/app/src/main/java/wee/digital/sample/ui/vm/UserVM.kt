@@ -53,7 +53,7 @@ class UserVM : BaseVM() {
     fun syncUser(map: Map<String, Any>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val user = StoreUser.from(map)
+                val user = StoreUser.fromMap(map)
                 storeUserLiveData.postValue(user)
             } catch (e: MapValueNullException) {
                 toast(e.message)

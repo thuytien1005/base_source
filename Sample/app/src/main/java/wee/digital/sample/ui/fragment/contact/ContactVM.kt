@@ -7,17 +7,16 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
-import wee.digital.library.extension.parse
 import wee.digital.library.extension.transform
 import wee.digital.sample.data.repository.StoreRepository
-import wee.digital.sample.ui.model.ContactData
+import wee.digital.sample.ui.model.StoreContact
 import wee.digital.sample.ui.model.StoreUser
+import wee.digital.sample.ui.model.toDataList
 import wee.digital.sample.ui.vm.BaseVM
-import wee.digital.sample.utils.documentToJsObject
 
 class ContactVM : BaseVM() {
 
-    var allListContacts = SingleLiveData<List<StoreUser>>()
+    var allListContacts = SingleLiveData<List<StoreUser>?>()
 
     val contactsSearchLiveData = SingleLiveData<List<StoreUser>?>()
 
@@ -28,14 +27,14 @@ class ContactVM : BaseVM() {
     fun searchUserByName(name: String?) {
         when {
             name.isNullOrEmpty() -> contactsSearchLiveData.postValue(null)
-            else -> queryUsers(name)
+            else -> userQuery(name)
         }
     }
 
-    private fun queryUsers(name: String) {
+    private fun userQuery(name: String) {
         log.d("queryUser - name: %s".format(name))
         searchRegistration?.remove()
-        searchRegistration = StoreRepository.userSearch(name)
+        searchRegistration = StoreRepository.userQueryBySearchKey(name)
             .addSnapshotListener { value, error ->
                 onQueryUserResult(value?.documents)
             }
@@ -47,56 +46,54 @@ class ContactVM : BaseVM() {
             when {
                 data.isNullOrEmpty() -> contactsSearchLiveData.postValue(null)
                 else -> {
-                    val list = data.transform { StoreUser.from(it) }
+                    val list = data.transform { StoreUser.fromMap(it.data!!) }
                     contactsSearchLiveData.postValue(list)
+
+
                 }
             }
         }
     }
 
-    fun syncContactUser(uidAuth: String, uidContact: String) {
-        val mapUid = HashMap<String, Any>().apply { put("uid", FieldValue.arrayUnion(uidContact)) }
-        StoreRepository.contactsReference(uidAuth).get()
-            .addOnSuccessListener {
-                if (it.exists()) {
-                    StoreRepository.contactsReference(uidAuth).update(mapUid)
-                } else {
-                    StoreRepository.contactsReference(uidAuth).set(mapUid)
-                }
-            }
-    }
-
-    fun queryUidContacts(uidAuth: String) {
-        uidContactQueryListener?.remove()
-        uidContactQueryListener =
-            StoreRepository.contactsReference(uidAuth).addSnapshotListener { value, error ->
-                val data = value?.documentToJsObject().parse(ContactData::class)
-                when (data == null || data?.uid.isNullOrEmpty()) {
-                    true -> {
-                        allListContacts.postValue(listOf())
-                    }
-                    else -> queryFromUidContact(data.uid)
-                }
-            }
-    }
-
-    private fun queryFromUidContact(listUid: List<String>) {
-        StoreRepository.userArrayContainUid(listUid)
+    /**
+     *
+     */
+    fun insertContact(selfUid: String, targetUid: String) {
+        val mapUid = HashMap<String, Any>().apply { put("uid", FieldValue.arrayUnion(targetUid)) }
+        StoreRepository.contactsReference(selfUid)
             .get()
             .addOnSuccessListener {
-                val data = it.documents
-                val list = mutableListOf<StoreUser>()
-                data.forEach { snap ->
-                    snap.documentToJsObject().parse(StoreUser::class).also { user ->
-                        user ?: return@also
-                        list.add(user)
-                    }
+                if (it.exists()) {
+                    StoreRepository.contactsReference(selfUid).update(mapUid)
+                } else {
+                    StoreRepository.contactsReference(selfUid).set(mapUid)
+                }
+            }
+    }
+
+    fun syncContact(uid: String?) {
+        uid ?: return
+        uidContactQueryListener?.remove()
+        StoreRepository.contactsReference(uid)
+            .get()
+            .addOnSuccessListener {
+                val contact = StoreContact.fromMap(it.data!!)
+                when {
+                    contact.uids.isNullOrEmpty() -> allListContacts.postValue(null)
+                    else -> queryFromUidContact(contact)
+                }
+            }
+    }
+
+    private fun queryFromUidContact(contact: StoreContact) {
+        uidContactQueryListener = StoreRepository.userQueryByUid(contact.uids!!)
+            .addSnapshotListener { value, error ->
+                val list = value?.documents.toDataList {
+                    StoreUser.fromMap(it)
                 }
                 allListContacts.postValue(list)
             }
-            .addOnFailureListener {
-                allListContacts.postValue(listOf())
-            }
+
     }
 
 }

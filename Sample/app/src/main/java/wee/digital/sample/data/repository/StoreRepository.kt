@@ -5,40 +5,39 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.widget.extension.normalizer
 
-
 object StoreRepository {
 
-    private val store get() = Firebase.firestore
+    val store get() = Firebase.firestore
 
-    private val conversationCollection get() = store.collection("conversation")
+    val conversations get() = store.collection("conversations")
 
-    private val userCollection get() = store.collection("users")
+    val chats get() = store.collection("chats")
 
-    private val contactsCollection by lazy { store.collection("contacts") }
+    val users get() = store.collection("users")
+
+    val contacts get() = store.collection("contacts")
 
     fun updateUser(user: StoreUser): Task<Void> {
-        user.searchKey = "%s %s".format(user.firstName, user.lastName.toString()).normalizer() ?: ""
-        return userCollection.document(user.uid).set(user)
+        return this.users.document(user.uid).set(user)
     }
 
-    fun userReference(uid: String = auth.uid.toString()): DocumentReference {
-        return userCollection.document(uid)
+    fun userReference(uid: String): DocumentReference {
+        return users.document(uid)
     }
 
-    fun userSearch(searchText: String): Query {
-        return userCollection.whereEqualTo("searchKey", searchText.normalizer())
+    fun userQueryBySearchKey(searchKey: String): Query {
+        return users.whereEqualTo("searchKey", searchKey.normalizer())
     }
 
-    fun contactsReference(uid : String): DocumentReference{
-        return contactsCollection.document(uid)
+    fun contactsReference(uid: String): DocumentReference {
+        return contacts.document(uid)
     }
 
-    fun userArrayContainUid(listUid : List<String>): Query{
-        return userCollection.whereIn("uid", listUid)
+    fun userQueryByUid(uids: List<String>): Query {
+        return users.whereIn("uid", uids)
     }
 
 }

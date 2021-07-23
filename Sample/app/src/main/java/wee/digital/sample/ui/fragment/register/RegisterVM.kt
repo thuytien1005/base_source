@@ -47,7 +47,7 @@ class RegisterVM : BaseVM() {
 
     private fun createUser(user: StoreUser, password: String) {
         onProgress {
-            auth.createUserWithEmailAndPassword(user.email, password)
+            auth.createUserWithEmailAndPassword(user.email!!, password)
         }.addOnSuccessListener {
             user.uid = it.user!!.uid
             updateUser(user, password)
@@ -60,15 +60,15 @@ class RegisterVM : BaseVM() {
         onProgress {
             StoreRepository.updateUser(user)
         }.addOnSuccessListener {
-            signIn(user, password)
+            signIn(user.email!!, password)
         }.addOnFailureListener {
             onRegisterFailure(it)
         }
     }
 
-    private fun signIn(user: StoreUser, password: String) {
+    private fun signIn(email: String, password: String) {
         onProgress {
-            auth.signInWithEmailAndPassword(user.email, password)
+            auth.signInWithEmailAndPassword(email, password)
         }.addOnSuccessListener {
             onRegisterSuccess(it)
         }.addOnFailureListener {

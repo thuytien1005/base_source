@@ -2,12 +2,11 @@ package wee.digital.sample.ui.fragment.me
 
 import android.view.LayoutInflater
 import android.view.View
-import wee.digital.sample.data.repository.BackUp
+import wee.digital.sample.data.repository.Backup
 import wee.digital.sample.databinding.MeBinding
 import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.StoreUser
-import wee.digital.sample.ui.model.fullName
 import wee.digital.sample.utils.bind
 
 class MeFragment : MainFragment<MeBinding>() {
@@ -17,7 +16,7 @@ class MeFragment : MainFragment<MeBinding>() {
     }
 
     override fun onViewCreated() {
-        addClickListener(bind.viewSignOut, bind.viewTest1, bind.viewTest2, bind.viewTest3)
+        addClickListener(bind.viewSignOut, bind.viewBackup, bind.viewRestore)
     }
 
     override fun onLiveDataObserve() {
@@ -31,14 +30,11 @@ class MeFragment : MainFragment<MeBinding>() {
             bind.viewSignOut -> {
                 auth.signOut()
             }
-            bind.viewTest1 -> {
-                BackUp.getUser()
+            bind.viewBackup -> {
+                Backup.runBackupData()
             }
-            bind.viewTest2 -> {
-                BackUp.getConversation()
-            }
-            bind.viewTest3 -> {
-                BackUp.getChat()
+            bind.viewRestore -> {
+                Backup.runRestoreData()
             }
         }
     }
@@ -49,7 +45,7 @@ class MeFragment : MainFragment<MeBinding>() {
     private fun bindUser(it: StoreUser?) {
         it ?: return
         bind.avatarView.bind(it)
-        bind.textViewFullName.text = it.fullName
+        bind.textViewFullName.text = it.fullName()
     }
 
 }
