@@ -1,10 +1,12 @@
 package wee.digital.library.adapter
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
-import androidx.paging.*
-import androidx.recyclerview.widget.*
+import androidx.paging.LoadState
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 abstract class BasePagingAdapter<T: Any> : PagingDataAdapter<T, RecyclerView.ViewHolder> {
@@ -53,11 +55,6 @@ abstract class BasePagingAdapter<T: Any> : PagingDataAdapter<T, RecyclerView.Vie
             }
         }
     }
-
-    @LayoutRes
-    protected abstract fun layoutResource(model: T, position: Int): Int
-
-    protected abstract fun View.onBindModel(model: T, position: Int, @LayoutRes layout: Int)
 
     var onItemClick: (T, Int) -> Unit = { _, _ -> }
 

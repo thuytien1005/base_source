@@ -25,4 +25,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <View
+        android:background="@drawable/shadow"
+        app:layout_constraintBottom_toTopOf="@+id/chat_widget_input"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
