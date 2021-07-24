@@ -8,8 +8,8 @@ import wee.digital.sample.R
 import wee.digital.sample.databinding.ConversationBinding
 import wee.digital.sample.shared.userLogin
 import wee.digital.sample.ui.main.MainDialogFragment
-import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.StoreUser
+import wee.digital.sample.utils.bind
 
 class ConversationFragment : MainDialogFragment<ConversationBinding>() {
 
@@ -35,13 +35,14 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>() {
             toolbar.chatToolbarCall,
             toolbar.chatToolbarMenu
         )
-        configAdapter()
+        configUi()
         handlerClickWidget()
         vm.listenerItemChat(mainVM.chatAdapterSelected.chatId)
     }
 
-    private fun configAdapter() {
+    private fun configUi() {
         val friend = mainVM.chatAdapterSelected.listUserInfo?.first() ?: StoreUser()
+        toolbar.chatToolbarAvatar.bind(friend)
         adapter = ConversationAdapter(userLogin, friend)
         adapter?.bind(bind.conversationRecyclerMessage)
     }
