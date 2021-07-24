@@ -2,7 +2,6 @@ package wee.digital.sample.ui.fragment.conversation
 
 import androidx.viewbinding.ViewBinding
 import wee.digital.library.adapter.BaseListAdapter
-import wee.digital.library.adapter.GoneViewHolder
 import wee.digital.library.adapter.ItemInflating
 import wee.digital.sample.databinding.ConversationItemLeftBinding
 import wee.digital.sample.databinding.ConversationItemRightBinding
@@ -12,7 +11,7 @@ import wee.digital.sample.utils.bind
 import wee.digital.widget.extension.hide
 import wee.digital.widget.extension.show
 
-class ConversationAdapter(user: StoreUser, friends: StoreUser) :
+class ConversationAdapter(user: StoreUser, friends: List<StoreUser>) :
     BaseListAdapter<StoreMessage>(StoreMessage.itemDiffer) {
 
     private val user = user
@@ -40,7 +39,8 @@ class ConversationAdapter(user: StoreUser, friends: StoreUser) :
         when (item.sender == uidBindLast) {
             true -> this.conversationItemLeftAvatar.hide()
             else -> {
-                this.conversationItemLeftAvatar.bind(friends)
+                val friend = friends.filter { it.uid == item.sender }
+                this.conversationItemLeftAvatar.bind(friend.first())
                 this.conversationItemLeftAvatar.show()
             }
         }

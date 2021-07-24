@@ -41,8 +41,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>() {
     }
 
     private fun configUi() {
-        val friend = mainVM.chatAdapterSelected.listUserInfo?.first() ?: StoreUser()
-        toolbar.chatToolbarAvatar.bind(friend)
+        val friend = mainVM.chatAdapterSelected.listUserInfo!!
         adapter = ConversationAdapter(userLogin, friend)
         adapter?.bind(bind.conversationRecyclerMessage)
     }
