@@ -86,7 +86,7 @@
         android:id="@+id/action_global_chatFragment"
         app:destination="@id/chatFragment" />
 
-    <fragment
+    <dialog
         android:id="@+id/conversationFragment"
         android:name="wee.digital.sample.ui.fragment.conversation.ConversationFragment"
         android:label="ConversationFragment"

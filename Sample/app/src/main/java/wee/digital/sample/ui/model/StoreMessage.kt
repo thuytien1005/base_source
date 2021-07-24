@@ -1,5 +1,6 @@
 package wee.digital.sample.ui.model
 
+import androidx.recyclerview.widget.DiffUtil
 import com.google.firebase.Timestamp
 import wee.digital.library.extension.long
 import wee.digital.library.extension.str
@@ -25,6 +26,24 @@ class StoreMessage : ObjectMapper {
     }
 
     companion object {
+
+        val itemDiffer
+            get() = object : DiffUtil.ItemCallback<StoreMessage>() {
+                override fun areItemsTheSame(
+                    oldItem: StoreMessage,
+                    newItem: StoreMessage
+                ): Boolean {
+                    return oldItem.time === newItem.time
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: StoreMessage,
+                    newItem: StoreMessage
+                ): Boolean {
+                    return oldItem.sender == newItem.sender
+                }
+
+            }
 
         fun from(m: Map<String, Any>): StoreMessage {
             return StoreMessage().also {

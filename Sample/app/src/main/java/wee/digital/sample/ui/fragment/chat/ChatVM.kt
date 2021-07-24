@@ -1,6 +1,8 @@
 package wee.digital.sample.ui.fragment.chat
 
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.sample.data.repository.StoreRepository
@@ -14,41 +16,56 @@ class ChatVM : BaseVM() {
 
     val listChatStoreSingle = SingleLiveData<List<StoreChat>>()
 
+    val userLoginSingle = SingleLiveData<StoreUser>()
+
     private var queryCvsIdListener: ListenerRegistration? = null
 
     private var queryChatListener: ListenerRegistration? = null
 
     private var uid: String = ""
 
-    fun queryConversationId(uid: String) {
-        this.uid = uid
-        queryCvsIdListener?.remove()
-        queryCvsIdListener =
-            StoreRepository.conversations.document(uid).addSnapshotListener { value, error ->
-                val idConversation = value?.documentToJsObject().parse(StoreConversation::class)
-                when (idConversation == null || idConversation.chatIds.isNullOrEmpty()) {
-                    true -> ""
-                    else -> {
-                        queryChat(idConversation.chatIds!!)
-                    }
-                }
+    private fun syncUserLogin(uid: String) {
+        StoreRepository.users.document(uid).get()
+            .addOnSuccessListener {
+                val user = it.documentToJsObject().parse(StoreUser::class) ?: StoreUser()
+                userLoginSingle.postValue(user)
             }
     }
 
-    private fun queryChat(listMessage: List<String>) {
-        queryChatListener?.remove()
-        queryChatListener = StoreRepository.chats.whereIn("chatId", listMessage)
-            .addSnapshotListener { value, error ->
-                val listChat = mutableListOf<StoreChat>()
-                value?.documents?.forEach {
-                    val chat = it.documentToJsObject().parse(StoreChat::class)
-                    when (chat == null) {
+    fun queryConversationId(uid: String) {
+        viewModelScope.launch {
+            syncUserLogin(uid)
+            this@ChatVM.uid = uid
+            queryCvsIdListener?.remove()
+            queryCvsIdListener =
+                StoreRepository.conversations.document(uid).addSnapshotListener { value, error ->
+                    val idConversation = value?.documentToJsObject().parse(StoreConversation::class)
+                    when (idConversation == null || idConversation.chatIds.isNullOrEmpty()) {
                         true -> ""
-                        else -> listChat.add(chat)
+                        else -> {
+                            queryChat(idConversation.chatIds!!)
+                        }
                     }
                 }
-                queryListInfoUser(listChat)
-            }
+        }
+    }
+
+    private fun queryChat(listMessage: List<String>) {
+        viewModelScope.launch {
+            queryChatListener?.remove()
+            queryChatListener = StoreRepository.chats.whereIn("chatId", listMessage)
+                .addSnapshotListener { value, error ->
+                    val listChat = mutableListOf<StoreChat>()
+                    value?.documents?.forEach {
+                        val chat = it.documentToJsObject().parse(StoreChat::class)
+                        when (chat == null) {
+                            true -> ""
+                            else -> listChat.add(chat)
+                        }
+                    }
+                    queryListInfoUser(listChat)
+                }
+        }
     }
 
     private fun queryListInfoUser(list: List<StoreChat>) {

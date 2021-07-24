@@ -3,13 +3,23 @@ package wee.digital.sample.ui.fragment.conversation
 import android.view.LayoutInflater
 import android.view.View
 import wee.digital.library.extension.toast
+import wee.digital.library.extension.viewModel
+import wee.digital.sample.R
 import wee.digital.sample.databinding.ConversationBinding
-import wee.digital.sample.shared.auth
+import wee.digital.sample.shared.userLogin
+import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.sample.ui.main.MainFragment
+import wee.digital.sample.ui.model.StoreUser
 
-class ConversationFragment : MainFragment<ConversationBinding>() {
+class ConversationFragment : MainDialogFragment<ConversationBinding>() {
 
-    private val adapter = ConversationAdapter(auth.uid.toString())
+    override fun dialogStyle(): Int {
+        return R.style.App_Dialog_FullScreen_Transparent
+    }
+
+    private val vm by viewModel(ConversationVM::class)
+
+    var adapter: ConversationAdapter? = null
 
     private val toolbar get() = bind.conversationBar
 
@@ -25,9 +35,15 @@ class ConversationFragment : MainFragment<ConversationBinding>() {
             toolbar.chatToolbarCall,
             toolbar.chatToolbarMenu
         )
+        configAdapter()
         handlerClickWidget()
-        adapter.set(createConversationList())
-        adapter.bind(bind.conversationRecyclerMessage)
+        vm.listenerItemChat(mainVM.chatAdapterSelected.chatId)
+    }
+
+    private fun configAdapter() {
+        val friend = mainVM.chatAdapterSelected.listUserInfo?.first() ?: StoreUser()
+        adapter = ConversationAdapter(userLogin, friend)
+        adapter?.bind(bind.conversationRecyclerMessage)
     }
 
     private fun handlerClickWidget() {
@@ -40,7 +56,7 @@ class ConversationFragment : MainFragment<ConversationBinding>() {
 
     override fun onViewClick(v: View?) {
         when (v) {
-            toolbar.chatToolbarVector -> toast("vector")
+            toolbar.chatToolbarVector -> navigateUp()
             toolbar.chatToolbarAvatar -> toast("avatar")
             toolbar.chatToolbarVideo -> toast("video")
             toolbar.chatToolbarCall -> toast("call")
@@ -49,6 +65,9 @@ class ConversationFragment : MainFragment<ConversationBinding>() {
     }
 
     override fun onLiveDataObserve() {
+        vm.chatItemSingle.observe {
+            adapter?.set(it.messages)
+        }
     }
 
 }

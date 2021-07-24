@@ -37,7 +37,7 @@ class StoreChat : ObjectMapper {
                 }
 
                 override fun areContentsTheSame(oldItem: StoreChat, newItem: StoreChat): Boolean {
-                    return oldItem.chatId == newItem.chatId
+                    return oldItem.messages == newItem.messages
                 }
 
             }
