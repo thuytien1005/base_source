@@ -1,5 +1,6 @@
 package wee.digital.sample.ui.model
 
+import androidx.recyclerview.widget.DiffUtil
 import wee.digital.library.extension.list
 import wee.digital.library.extension.str
 
@@ -15,6 +16,8 @@ class StoreChat : ObjectMapper {
 
     var messages: List<StoreMessage>? = null
 
+    var listUserInfo: List<StoreUser>? = null
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "chatId" to chatId,
@@ -26,6 +29,18 @@ class StoreChat : ObjectMapper {
     }
 
     companion object {
+
+        val itemDiffer
+            get() = object : DiffUtil.ItemCallback<StoreChat>() {
+                override fun areItemsTheSame(oldItem: StoreChat, newItem: StoreChat): Boolean {
+                    return oldItem.chatId === newItem.chatId
+                }
+
+                override fun areContentsTheSame(oldItem: StoreChat, newItem: StoreChat): Boolean {
+                    return oldItem.chatId == newItem.chatId
+                }
+
+            }
 
         fun fromMap(map: Map<String, Any>): StoreChat {
             return StoreChat().also {

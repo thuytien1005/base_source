@@ -27,6 +27,20 @@ fun AvatarView.bind(it: StoreUser?) {
     }
 }
 
+fun AvatarView.bind(it: String?) {
+    try {
+        it ?: return
+        var name = ""
+        it.split(" ").forEach {
+            name += it.first()
+        }
+        text = name
+    } catch (e: Exception) {
+        text = "er"
+    }
+
+}
+
 fun homeNavItem(title: String, @DrawableRes res: Int): AHBottomNavigationItem {
     return AHBottomNavigationItem(
         title,

@@ -68,4 +68,5 @@ dependencies {
 
     // custom view
     implementation deps.rounded_image_view
+    
 }

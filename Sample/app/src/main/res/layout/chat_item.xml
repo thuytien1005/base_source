@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <wee.digital.widget.custom.AvatarView
-        android:id="@+id/itemContactAvatar"
+        android:id="@+id/itemChatAvatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="@dimen/contentMarginX2"
@@ -14,17 +14,33 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/avatar"/>
+        tools:src="@sample/avatar" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/itemContactName"
+        android:id="@+id/itemChatName"
+        style="@style/TextView"
+        android:layout_width="0dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/itemChatMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemChatAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@sample/user.json/data/fullName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/itemChatMessage"
         style="@style/TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/itemContactAvatar"
-        app:layout_constraintStart_toEndOf="@+id/itemContactAvatar"
-        app:layout_constraintTop_toTopOf="@+id/itemContactAvatar"
-        tools:text="@sample/user.json/data/fullName"/>
+        android:layout_margin="5dp"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemChatAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/itemChatName"
+        tools:text="@sample/user.json/data/fullName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

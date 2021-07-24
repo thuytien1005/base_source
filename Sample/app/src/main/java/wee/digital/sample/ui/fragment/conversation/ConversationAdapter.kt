@@ -1,7 +1,7 @@
 package wee.digital.sample.ui.fragment.conversation
 
 import androidx.viewbinding.ViewBinding
-import wee.digital.library.adapter.BaseBindRecyclerAdapter
+import wee.digital.library.adapter.BaseListAdapter
 import wee.digital.library.adapter.ItemInflating
 import wee.digital.sample.databinding.ConversationItemLeftBinding
 import wee.digital.sample.databinding.ConversationItemRightBinding
@@ -10,7 +10,7 @@ import wee.digital.sample.utils.bind
 import wee.digital.widget.extension.hide
 import wee.digital.widget.extension.show
 
-class ConversationAdapter(val uid: String) : BaseBindRecyclerAdapter<ItemConversationData>() {
+class ConversationAdapter(val uid: String) : BaseListAdapter<ItemConversationData>(ItemConversationData.itemDiffer) {
 
     private val authUid = uid
 

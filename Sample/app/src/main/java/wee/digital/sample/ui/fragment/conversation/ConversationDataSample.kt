@@ -1,6 +1,8 @@
 package wee.digital.sample.ui.fragment.conversation
 
+import androidx.recyclerview.widget.DiffUtil
 import wee.digital.sample.shared.auth
+import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreUser
 
 class ItemConversationData {
@@ -14,6 +16,22 @@ class ItemConversationData {
     constructor(user: StoreUser, message: String) {
         this.user = user
         this.message = message
+    }
+
+    companion object{
+
+        val itemDiffer
+            get() = object : DiffUtil.ItemCallback<ItemConversationData>() {
+                override fun areItemsTheSame(oldItem: ItemConversationData, newItem: ItemConversationData): Boolean {
+                    return oldItem.user === newItem.user
+                }
+
+                override fun areContentsTheSame(oldItem: ItemConversationData, newItem: ItemConversationData): Boolean {
+                    return oldItem.user == newItem.user
+                }
+
+            }
+
     }
 
 }
