@@ -2,11 +2,10 @@ package wee.digital.sample.ui.fragment.conversation
 
 import android.view.LayoutInflater
 import android.view.View
-import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
+import wee.digital.sample.data.repository.auth
+import wee.digital.sample.data.repository.userLogin
 import wee.digital.sample.databinding.ConversationBinding
-import wee.digital.sample.shared.auth
-import wee.digital.sample.shared.userLogin
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.sample.ui.model.StoreMessage
 import wee.digital.sample.widget.WidgetChatInput
@@ -14,7 +13,7 @@ import wee.digital.sample.widget.WidgetChatInput
 class ConversationFragment : MainDialogFragment<ConversationBinding>(),
     WidgetChatInput.WidgetChatInputListener {
 
-    private val vm by viewModel(ConversationVM::class)
+    private val vm by lazyViewModel(ConversationVM::class)
 
     private var adapter: ConversationAdapter? = null
 

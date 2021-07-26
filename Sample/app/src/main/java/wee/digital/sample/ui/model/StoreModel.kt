@@ -16,7 +16,7 @@ interface ObjectMapper {
 fun <T> List<DocumentSnapshot>?.toDataList(block: (Map<String, Any>) -> T?): List<T> {
     this ?: return listOf()
     val list = mutableListOf<T>()
-    this.forEach { doc: DocumentSnapshot ->
+    this.iterator().forEach { doc: DocumentSnapshot ->
         doc.data?.also { map: Map<String, Any> ->
             block(map)?.also { t: T ->
                 list.add(t)

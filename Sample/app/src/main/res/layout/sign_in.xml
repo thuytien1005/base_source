@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    x<wee.digital.widget.base.AppConstraintLayout
+    <wee.digital.widget.base.AppConstraintLayout
         android:id="@+id/layoutDialog"
         style="@style/Fragment.CenterDialog"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -88,8 +88,9 @@
             android:id="@+id/viewGoogle"
             style="@style/Login.ProviderButton"
             android:layout_marginTop="@dimen/contentMarginX2"
-            android:backgroundTint="#E53935"
+            android:backgroundTint="#EB3B5A"
             android:text="Google"
+            android:layout_marginStart="0dp"
             app:layout_constraintEnd_toStartOf="@+id/viewFacebook"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -100,7 +101,7 @@
             android:id="@+id/viewFacebook"
             style="@style/Login.ProviderButton"
             android:text="Facebook"
-            android:backgroundTint="#3949AB"
+            android:backgroundTint="#3867D6"
             app:layout_constraintEnd_toStartOf="@+id/viewTwitter"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/viewGoogle"
@@ -110,7 +111,7 @@
             android:id="@+id/viewTwitter"
             style="@style/Login.ProviderButton"
             android:text="Twitter"
-            android:backgroundTint="#1E88E5"
+            android:backgroundTint="#0984e3"
             app:layout_constraintEnd_toStartOf="@+id/viewPhone"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/viewFacebook"
@@ -120,7 +121,7 @@
             android:id="@+id/viewPhone"
             style="@style/Login.ProviderButton"
             android:text="Phone"
-            android:backgroundTint="#00897B"
+            android:backgroundTint="#00b894"
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/viewTwitter"

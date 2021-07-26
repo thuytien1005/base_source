@@ -2,9 +2,9 @@ package wee.digital.sample.ui.fragment.me
 
 import android.view.LayoutInflater
 import android.view.View
-import wee.digital.sample.data.repository.Backup
+import wee.digital.sample.data.Backup
+import wee.digital.sample.data.repository.auth
 import wee.digital.sample.databinding.MeBinding
-import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.sample.utils.bind

@@ -2,7 +2,6 @@ package wee.digital.sample.ui.fragment.plash
 
 import android.graphics.Color
 import android.view.LayoutInflater
-import wee.digital.library.extension.viewModel
 import wee.digital.sample.databinding.SplashBinding
 import wee.digital.sample.ui.main.MainFragment
 
@@ -13,7 +12,7 @@ import wee.digital.sample.ui.main.MainFragment
  */
 class SplashFragment : MainFragment<SplashBinding>() {
 
-    val vm by viewModel(SplashVM::class)
+    val vm by lazyViewModel(SplashVM::class)
 
     override fun inflating(): (LayoutInflater) -> SplashBinding {
         return SplashBinding::inflate

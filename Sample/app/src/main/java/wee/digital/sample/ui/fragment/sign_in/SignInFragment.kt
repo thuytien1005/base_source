@@ -2,7 +2,6 @@ package wee.digital.sample.ui.fragment.sign_in
 
 import android.view.LayoutInflater
 import android.view.View
-import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.databinding.SignInBinding
 import wee.digital.sample.ui.main.MainFragment
@@ -20,6 +19,11 @@ class SignInFragment : MainFragment<SignInBinding>() {
         addClickListener(bind.viewSignIn, bind.viewRegister)
         bind.inputViewEmail.text = "khang@wee.vn"
         bind.inputViewPassword.text = "123456"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setSoftInputMode(ADJUST_NOTHING)
     }
 
     override fun onLiveDataObserve() {
@@ -49,7 +53,7 @@ class SignInFragment : MainFragment<SignInBinding>() {
     /**
      * [SignInFragment] properties
      */
-    private val signInVM by viewModel(SignInVM::class)
+    private val signInVM by lazyViewModel(SignInVM::class)
 
     private fun setEmailError(it: String?) {
         bind.inputViewEmail.error = it

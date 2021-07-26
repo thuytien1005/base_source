@@ -5,7 +5,6 @@ import androidx.annotation.ColorInt
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import wee.digital.library.extension.isGranted
-import wee.digital.library.extension.viewModel
 import wee.digital.sample.R
 import wee.digital.sample.app
 import wee.digital.sample.databinding.MainBinding
@@ -18,11 +17,11 @@ import wee.digital.widget.extension.show
 
 class MainActivity : BaseActivity<MainBinding>(), MainView {
 
-    private val mainVM by viewModel(MainVM::class)
+    private val mainVM by lazyViewModel(MainVM::class)
 
-    private val dialogVM by viewModel(DialogVM::class)
+    private val dialogVM by lazyViewModel(DialogVM::class)
 
-    private val firebaseVM by viewModel(UserVM::class)
+    private val firebaseVM by lazyViewModel(UserVM::class)
 
     override fun navController(): NavController? {
         return findNavController(R.id.fragment)

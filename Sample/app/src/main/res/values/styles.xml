@@ -18,6 +18,16 @@
 
     <style name="Fragment" />
 
+    <style name="Fragment.CenterDialog">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:elevation">1dp</item>
+        <item name="layout_constraintHeight_percent">0.8</item>
+        <item name="radius">@dimen/cardRadius</item>
+        <item name="layout_constraintDimensionRatio">h,9:5</item>
+    </style>
+
     <style name="Dialog" />
 
     <style name="Dialog.BottomLayout">
@@ -50,17 +60,18 @@
     <style name="Login.ProviderButton" parent="Button.Primary">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/rowHeight</item>
+        <item name="android:layout_marginStart">2dp</item>
     </style>
 
-    <style name="Fragment.CenterDialog">
+    <style name="Profile" />
+
+    <style name="Profile.ActionButton" parent="Button.Primary">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:background">@color/colorWhite</item>
-        <item name="android:elevation">1dp</item>
-        <item name="layout_constraintHeight_percent">0.8</item>
-        <item name="radius">@dimen/cardRadius</item>
-        <item name="layout_constraintDimensionRatio">h,9:5</item>
+        <item name="android:layout_height">@dimen/rowHeight</item>
+        <item name="android:layout_marginStart">8dp</item>
     </style>
+
+
 
 
 </resources>

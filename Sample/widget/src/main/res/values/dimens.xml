@@ -17,7 +17,7 @@
     <dimen name="textSize5">26sp</dimen>
 
     <dimen name="rowHeight">46dp</dimen>
-    <dimen name="rowRadius">0dp</dimen>
+    <dimen name="rowRadius">4dp</dimen>
     <dimen name="cardRadius">6dp</dimen>
 
 </resources>

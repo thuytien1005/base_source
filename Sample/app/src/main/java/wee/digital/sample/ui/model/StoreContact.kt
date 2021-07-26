@@ -4,7 +4,8 @@ import wee.digital.library.extension.list
 
 class StoreContact : ObjectMapper {
 
-    var uids: List<String>? = null
+    var uids: List<String> = listOf()
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "uids" to uids
@@ -13,10 +14,11 @@ class StoreContact : ObjectMapper {
 
     companion object {
 
-        fun fromMap(map: Map<String, Any>): StoreContact {
+        fun fromMap(map: Map<String, Any>?): StoreContact {
             return StoreContact().also {
                 it.uids = map.list("uids")
             }
         }
+
     }
 }

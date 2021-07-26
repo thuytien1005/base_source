@@ -11,10 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.MapValueNullException
 import wee.digital.library.extension.toast
-import wee.digital.sample.data.repository.StoreRepository
-import wee.digital.sample.shared.auth
+import wee.digital.sample.data.repository.auth
+import wee.digital.sample.data.repository.selfUserRef
 import wee.digital.sample.ui.model.StoreUser
-
 
 class UserVM : BaseVM() {
 
@@ -26,8 +25,10 @@ class UserVM : BaseVM() {
             userRegistration?.remove()
             val user = it.currentUser
             firebaseUserLiveData.value = user
-            if (null != user) {
-                syncUser(user)
+            if(null != user) {
+                syncUser()
+            } else {
+                userRegistration?.remove()
             }
         }
         auth.addIdTokenListener(FirebaseAuth.IdTokenListener {
@@ -38,11 +39,8 @@ class UserVM : BaseVM() {
 
     private var userRegistration: ListenerRegistration? = null
 
-    private var uid: String? = null
-
-    fun syncUser(firebaseUser: FirebaseUser) {
-        uid = firebaseUser.uid
-        userRegistration = StoreRepository.userReference(firebaseUser.uid)
+    private fun syncUser() {
+        userRegistration = selfUserRef
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.data?.also {
                     syncUser(it)
@@ -50,12 +48,12 @@ class UserVM : BaseVM() {
             }
     }
 
-    fun syncUser(map: Map<String, Any>) {
+    private fun syncUser(map: Map<String, Any>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val user = StoreUser.fromMap(map)
                 storeUserLiveData.postValue(user)
-            } catch (e: MapValueNullException) {
+            } catch(e: MapValueNullException) {
                 toast(e.message)
             }
         }

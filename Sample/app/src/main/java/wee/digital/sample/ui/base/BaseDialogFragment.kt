@@ -40,7 +40,10 @@ abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = bind.root
-        view.setOnTouchListener { _, _ -> true }
+        view.setOnTouchListener { _, _ ->
+            dismiss()
+            true
+        }
         return view
     }
 
@@ -77,7 +80,7 @@ abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
      * [BaseDialogFragment] properties
      */
     protected open fun dialogStyle(): Int {
-        return R.style.App_Dialog
+        return R.style.App_Dialog_FullScreen
     }
 
     protected open fun onBackPressed() {

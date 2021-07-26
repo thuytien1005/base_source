@@ -3,9 +3,12 @@ package wee.digital.sample.ui.base
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import kotlin.reflect.KClass
 
 interface FragmentView : BaseView {
 
@@ -33,6 +36,14 @@ interface FragmentView : BaseView {
 
     fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> T): Lazy<T> {
         return lazy { block.invoke(fragment.layoutInflater) }
+    }
+
+    fun <T : ViewModel> Fragment.lazyActivityVM(cls: KClass<T>): Lazy<T> {
+        return lazy { ViewModelProvider(requireActivity()).get(cls.java) }
+    }
+
+    fun <T : ViewModel> Fragment.activityVM(cls: KClass<T>): T {
+        return ViewModelProvider(requireActivity()).get(cls.java)
     }
 
     fun post(runnable: Runnable) {

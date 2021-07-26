@@ -4,7 +4,7 @@ import wee.digital.library.extension.list
 
 class StoreConversation : ObjectMapper {
 
-    var chatIds: List<String>? = null
+    var chatIds: List<String> = listOf()
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -14,7 +14,7 @@ class StoreConversation : ObjectMapper {
 
     companion object {
 
-        fun fromMap(map: Map<String, Any>): StoreConversation {
+        fun fromMap(map: Map<String, Any>?): StoreConversation {
             return StoreConversation().also {
                 it.chatIds = map.list("chatIds")
             }

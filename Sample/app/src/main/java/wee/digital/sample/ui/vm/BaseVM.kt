@@ -10,11 +10,4 @@ abstract class BaseVM : ViewModel() {
 
     val log by lazy { Logger(this::class.java.name) }
 
-    fun <T> onProgress(task: () -> Task<T>): Task<T> {
-        progressLiveData.value = true
-        return task().addOnCompleteListener {
-            progressLiveData.value = false
-        }
-    }
-
 }

@@ -1,4 +1,4 @@
-package wee.digital.sample.data.repository
+package wee.digital.sample.data
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot

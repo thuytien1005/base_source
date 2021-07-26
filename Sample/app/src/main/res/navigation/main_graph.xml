@@ -68,15 +68,6 @@
         android:id="@+id/action_global_contactFragment"
         app:destination="@id/contactFragment" />
 
-    <dialog
-        android:id="@+id/infoFragment"
-        android:name="wee.digital.sample.ui.fragment.info.InfoFragment"
-        android:label="info"
-        tools:layout="@layout/info" />
-    <action
-        android:id="@+id/action_global_infoFragment"
-        app:destination="@id/infoFragment" />
-
     <fragment
         android:id="@+id/chatFragment"
         android:name="wee.digital.sample.ui.fragment.chat.ChatFragment"
@@ -90,9 +81,20 @@
         android:id="@+id/conversationFragment"
         android:name="wee.digital.sample.ui.fragment.conversation.ConversationFragment"
         android:label="ConversationFragment"
-        tools:layout="@layout/conversation"/>
+        tools:layout="@layout/conversation" />
     <action
         android:id="@+id/action_global_conversationFragment"
         app:destination="@id/conversationFragment" />
+
+    <dialog
+        android:id="@+id/profileFragment"
+        android:name="wee.digital.sample.ui.fragment.profile.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/profile" />
+
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment" />
+
 
 </navigation>

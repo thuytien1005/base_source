@@ -63,20 +63,9 @@ fun Map<String, Any>?.mapOrThrow(key: String): Map<String, Any> {
     return mapOrNull(key) ?: throw MapValueNullException(key)
 }
 
-inline fun <reified T> Map<String, Any>?.arrayOrNull(key: String): Array<T>? {
-    return this?.get(key) as? Array<T>
-}
-
-inline fun <reified T> Map<String, Any>?.array(key: String): Array<T> {
-    return arrayOrNull(key) ?: arrayOf()
-}
-
-inline fun <reified T> Map<String, Any>?.arrayOrThrow(key: String): Array<T> {
-    return arrayOrNull(key) ?: throw MapValueNullException(key)
-}
-
 inline fun <reified T> Map<String, Any>?.listOrNull(key: String): List<T>? {
-    return (this?.get(key) as? Array<T>)?.toList()
+    val a = this?.get(key)
+    return (a as? Array<T>)?.toList() ?: (a as? ArrayList<T>)
 }
 
 inline fun <reified T> Map<String, Any>?.list(key: String): List<T> {

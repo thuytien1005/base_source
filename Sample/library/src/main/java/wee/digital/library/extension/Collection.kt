@@ -18,13 +18,15 @@ fun <T> List<T>?.join(collection: Collection<T>?): List<T>? {
     return if (list.isEmpty()) return null else list
 }
 
-fun <T,  R> Collection<T>.transform(block: (T) -> R?): List<R> {
+fun <T, R> Collection<T>?.transform(block: (T) -> R?): List<R>? {
+    if(this.isNullOrEmpty()) return null
     val list = mutableListOf<R>()
-    for (item in this) {
+    for(item in this) {
         block(item)?.also {
             list.add(it)
         }
     }
+    if(list.isEmpty()) return null
     return list
 }
 

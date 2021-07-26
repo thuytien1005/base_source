@@ -343,17 +343,16 @@ fun RecyclerView.initLayoutManager(block: (LinearLayoutManager.() -> Unit) = {})
 
 fun RecyclerView.initLayoutManager(spanCount: Int, block: (GridLayoutManager.() -> Unit) = {}): GridLayoutManager {
     val lm = GridLayoutManager(context, spanCount)
-    lm.spanSizeLookup =
-            object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    adapter?.also {
-                        if (it.itemCount < 2 || position == it.itemCount) {
-                            return lm.spanCount
-                        }
-                    }
-                    return 1
+    lm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+        override fun getSpanSize(position: Int): Int {
+            adapter?.also {
+                if(it.itemCount < 2 || position == it.itemCount) {
+                    return lm.spanCount
                 }
             }
+            return 1
+        }
+    }
     lm.block()
     layoutManager = lm
     return lm

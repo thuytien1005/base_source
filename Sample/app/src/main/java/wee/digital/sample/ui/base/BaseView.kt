@@ -2,12 +2,10 @@ package wee.digital.sample.ui.base
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
@@ -15,6 +13,7 @@ import androidx.navigation.Navigator
 import wee.digital.library.extension.hideKeyboard
 import wee.digital.sample.R
 import wee.digital.widget.extension.ViewClickListener
+import kotlin.reflect.KClass
 
 interface BaseView {
 
@@ -135,6 +134,22 @@ interface BaseView {
 
     fun <T : Fragment> remove(cls: Class<T>) {
         baseActivity?.remove(cls)
+    }
+
+    fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
+        return lazy { ViewModelProvider(this).get(cls.java) }
+    }
+
+    fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
+        return ViewModelProvider(this).get(cls.java)
+    }
+
+    val ADJUST_PAN get() = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+
+    val ADJUST_NOTHING get() = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+
+    fun setSoftInputMode(mode: Int) {
+        baseActivity?.window?.setSoftInputMode(mode)
     }
 
 }

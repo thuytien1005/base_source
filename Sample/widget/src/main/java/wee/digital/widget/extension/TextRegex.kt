@@ -56,15 +56,17 @@ val String?.isPassword: Boolean
 
 val String?.isDigit: Boolean
     get() {
-        if (isNullOrEmpty()) return false
+        if(isNullOrEmpty()) return false
         return TextUtils.isDigitsOnly(this)
     }
 
-val String?.isNotEmail: Boolean
+val String?.isEmail: Boolean
     get() {
-        this ?: return true
-        return !android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+        this ?: return false
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
+
+val String?.isNotEmail: Boolean get() = !isEmail
 
 val String?.isPhoneNumber: Boolean
     get() {

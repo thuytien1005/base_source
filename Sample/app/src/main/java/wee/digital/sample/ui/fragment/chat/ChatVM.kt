@@ -4,8 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
+import wee.digital.library.extension.notNullOrEmpty
 import wee.digital.library.extension.parse
-import wee.digital.sample.data.repository.StoreRepository
+import wee.digital.library.extension.transform
+import wee.digital.sample.data.repository.*
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreConversation
 import wee.digital.sample.ui.model.StoreUser
@@ -25,7 +27,7 @@ class ChatVM : BaseVM() {
     private var uid: String = ""
 
     private fun syncUserLogin(uid: String) {
-        StoreRepository.users.document(uid).get()
+        users.document(uid).get()
             .addOnSuccessListener {
                 val user = it.documentToJsObject().parse(StoreUser::class) ?: StoreUser()
                 userLoginSingle.postValue(user)
@@ -38,13 +40,10 @@ class ChatVM : BaseVM() {
             this@ChatVM.uid = uid
             queryCvsIdListener?.remove()
             queryCvsIdListener =
-                StoreRepository.conversations.document(uid).addSnapshotListener { value, error ->
-                    val idConversation = value?.documentToJsObject().parse(StoreConversation::class)
-                    when (idConversation == null || idConversation.chatIds.isNullOrEmpty()) {
-                        true -> ""
-                        else -> {
-                            queryChat(idConversation.chatIds!!)
-                        }
+                conversations.document(uid).addSnapshotListener { value, _ ->
+                    val conversation = StoreConversation.fromMap(value?.data)
+                    when  {
+                        conversation.chatIds.isNotEmpty() -> queryChat( conversation.chatIds)
                     }
                 }
         }
@@ -53,7 +52,7 @@ class ChatVM : BaseVM() {
     private fun queryChat(listMessage: List<String>) {
         viewModelScope.launch {
             queryChatListener?.remove()
-            queryChatListener = StoreRepository.chats.whereIn("chatId", listMessage)
+            queryChatListener = chats.whereIn("chatId", listMessage)
                 .addSnapshotListener { value, error ->
                     val listChat = mutableListOf<StoreChat>()
                     value?.documents?.forEach {
@@ -71,7 +70,7 @@ class ChatVM : BaseVM() {
     private fun queryListInfoUser(list: List<StoreChat>) {
         list.forEach { chat ->
             val listUid = chat.recipients?.filter { it != uid } ?: listOf()
-            StoreRepository.userQueryByUid(listUid)
+            userByUids(listUid)
                 .get()
                 .addOnSuccessListener {
                     val listUser = mutableListOf<StoreUser>()

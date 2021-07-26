@@ -1,24 +1,23 @@
 package wee.digital.sample.ui.fragment.plash
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.R
-import wee.digital.sample.shared.currentUser
+import wee.digital.sample.data.repository.currentUser
 import wee.digital.sample.ui.vm.BaseVM
 
 class SplashVM : BaseVM() {
 
     val nextDestinationLiveData = SingleLiveData<Int>()
 
-    fun syncCurrentUser(user: FirebaseUser? = currentUser) {
+    fun syncCurrentUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(1000)
+            delay(500)
             nextDestinationLiveData.postValue(
-                when (user) {
+                when(currentUser) {
                     null -> R.id.action_global_loginFragment
                     else -> R.id.action_global_homeFragment
                 }
