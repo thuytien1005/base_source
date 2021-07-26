@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import wee.digital.library.extension.list
 import wee.digital.library.extension.str
 
-class StoreChat : ObjectMapper {
+class StoreChat : ObjectMapper, Comparable<StoreChat> {
 
     var chatId: String = ""
 
@@ -50,6 +50,14 @@ class StoreChat : ObjectMapper {
                 it.recipients = map.list("recipients")
                 it.messages = map.list("messages", StoreMessage::from)
             }
+        }
+    }
+
+    override fun compareTo(other: StoreChat): Int {
+        return when {
+            messages?.last()?.time ?: 0 > other.messages?.last()?.time ?: 0 -> -1
+            messages?.last()?.time ?: 0 < other.messages?.last()?.time ?: 0 -> 1
+            else -> 0
         }
     }
 }

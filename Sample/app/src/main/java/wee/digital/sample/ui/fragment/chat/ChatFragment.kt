@@ -6,6 +6,7 @@ import wee.digital.sample.R
 import wee.digital.sample.databinding.ChatBinding
 import wee.digital.sample.shared.auth
 import wee.digital.sample.ui.main.MainFragment
+import java.util.*
 
 class ChatFragment : MainFragment<ChatBinding>() {
 
@@ -28,6 +29,7 @@ class ChatFragment : MainFragment<ChatBinding>() {
 
     override fun onLiveDataObserve() {
         vm.listChatStoreSingle.observe {
+            Collections.sort(it)
             adapter.set(it)
         }
         vm.userLoginSingle.observe {
