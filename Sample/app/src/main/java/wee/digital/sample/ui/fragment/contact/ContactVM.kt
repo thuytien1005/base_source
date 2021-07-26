@@ -77,6 +77,7 @@ class ContactVM : BaseVM() {
         StoreRepository.contactsReference(uid)
             .get()
             .addOnSuccessListener {
+                it.data ?: return@addOnSuccessListener
                 val contact = StoreContact.fromMap(it.data!!)
                 when {
                     contact.uids.isNullOrEmpty() -> allListContacts.postValue(null)
