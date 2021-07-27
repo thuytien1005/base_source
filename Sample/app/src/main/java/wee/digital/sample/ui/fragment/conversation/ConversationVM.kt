@@ -3,6 +3,7 @@ package wee.digital.sample.ui.fragment.conversation
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
@@ -21,20 +22,22 @@ class ConversationVM : BaseVM() {
     private var chatItemListener: ListenerRegistration? = null
 
     fun listenerItemChat(uidChat: String) {
-        chatItemListener?.remove()
-        chatItemListener = chats.document(uidChat)
-            .addSnapshotListener { value, _ ->
-                val data = value?.documentToJsObject().parse(StoreChat::class) ?: StoreChat()
-                chatItemSingle.postValue(data)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            chatItemListener?.remove()
+            chatItemListener = chats.document(uidChat)
+                .addSnapshotListener { value, _ ->
+                    val data = value?.documentToJsObject().parse(StoreChat::class) ?: StoreChat()
+                    chatItemSingle.postValue(data)
+                }
+        }
     }
 
     fun insertChat(chatId: String, chatMessage: StoreMessage) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val map =
                 HashMap<String, Any>().apply { put("messages", FieldValue.arrayUnion(chatMessage)) }
             chats.document(chatId).get().addOnSuccessListener {
-                if(it.exists()) {
+                if (it.exists()) {
                     chats.document(chatId).update(map)
                         .addOnSuccessListener { statusInsertChatSingle.postValue(true) }
                         .addOnFailureListener { statusInsertChatSingle.postValue(false) }

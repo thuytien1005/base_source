@@ -8,7 +8,7 @@ class MainVM : BaseVM() {
 
     var contactAdapterSelected = StoreUser()
 
-    var chatAdapterSelected = StoreChat()
+    var chatAdapterSelected :StoreChat? = null
 
     var userLogin = StoreUser()
 

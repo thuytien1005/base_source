@@ -2,9 +2,11 @@ package wee.digital.sample.ui.fragment.profile
 
 import android.view.LayoutInflater
 import android.view.View
-import wee.digital.library.extension.toast
+import wee.digital.sample.R
+import wee.digital.sample.data.repository.auth
 import wee.digital.sample.databinding.ProfileBinding
 import wee.digital.sample.ui.main.MainDialogFragment
+import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.widget.extension.load
 
@@ -27,13 +29,29 @@ class ProfileFragment : MainDialogFragment<ProfileBinding>() {
         vm.addContactSuccessLiveData.observe {
             dismiss()
         }
+        vm.chatStoreSingle.observe {
+            navigateConversation(it)
+        }
+        vm.chatStoreEmptySingle.observe {
+            navigateConversation(null)
+        }
     }
 
     override fun onViewClick(v: View?) {
-        when(v) {
+        when (v) {
             bind.viewAdd -> vm.insertContact()
-            bind.viewMessage -> toast("viewMessage click")
+            bind.viewMessage -> {
+                val uidLogin = auth.uid.toString()
+                val uidContact = mainVM.contactAdapterSelected.uid
+                vm.checkConversationExists(uidLogin, uidContact)
+            }
         }
+    }
+
+    private fun navigateConversation(it: StoreChat?) {
+        dismiss()
+        mainVM.chatAdapterSelected = it
+        navigate(R.id.action_global_conversationFragment)
     }
 
     /**

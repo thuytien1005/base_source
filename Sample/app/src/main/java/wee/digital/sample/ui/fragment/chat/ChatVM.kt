@@ -2,6 +2,7 @@ package wee.digital.sample.ui.fragment.chat
 
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.notNullOrEmpty
@@ -35,7 +36,7 @@ class ChatVM : BaseVM() {
     }
 
     fun queryConversationId(uid: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             syncUserLogin(uid)
             this@ChatVM.uid = uid
             queryCvsIdListener?.remove()
@@ -50,7 +51,7 @@ class ChatVM : BaseVM() {
     }
 
     private fun queryChat(listMessage: List<String>) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             queryChatListener?.remove()
             queryChatListener = chats.whereIn("chatId", listMessage)
                 .addSnapshotListener { value, error ->

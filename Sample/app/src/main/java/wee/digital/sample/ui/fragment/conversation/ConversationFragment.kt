@@ -1,7 +1,9 @@
 package wee.digital.sample.ui.fragment.conversation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
+import wee.digital.library.extension.hideKeyboard
 import wee.digital.sample.R
 import wee.digital.sample.data.repository.auth
 import wee.digital.sample.data.repository.userLogin
@@ -27,22 +29,28 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         return ConversationBinding::inflate
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated() {
         addClickListener(toolbar.chatToolbarVector)
-        configUi()
         bind.conversationWidgetInput.listener = this
-        vm.listenerItemChat(mainVM.chatAdapterSelected.chatId)
-    }
-
-    private fun configUi() {
-        val friend = mainVM.chatAdapterSelected.listUserInfo!!
-        adapter = ConversationAdapter(userLogin, friend)
-        adapter?.bind(bind.conversationRecyclerMessage)
+        bind.conversationRecyclerMessage.setOnTouchListener { v, event ->
+            hideKeyboard()
+            false
+        }
+        when (mainVM.chatAdapterSelected == null) {
+            true -> ""
+            else -> {
+                val friend = mainVM.chatAdapterSelected!!.listUserInfo!!
+                adapter = ConversationAdapter(userLogin, friend)
+                adapter?.bind(bind.conversationRecyclerMessage)
+                vm.listenerItemChat(mainVM.chatAdapterSelected!!.chatId)
+            }
+        }
     }
 
     override fun onViewClick(v: View?) {
         when (v) {
-            toolbar.chatToolbarVector -> navigateUp()
+            toolbar.chatToolbarVector -> dismiss()
         }
     }
 
@@ -62,10 +70,12 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
      * handler click widget input
      */
     override fun onSendClick(mess: String) {
-        when (mess.isEmpty()) {
+        if (mess.isEmpty()) return
+
+        when (mainVM.chatAdapterSelected == null) {
             true -> ""
             else -> {
-                val chatId = mainVM.chatAdapterSelected.chatId
+                val chatId = mainVM.chatAdapterSelected!!.chatId
                 val messSend = StoreMessage().apply {
                     sender = auth.uid.toString()
                     time = System.currentTimeMillis()

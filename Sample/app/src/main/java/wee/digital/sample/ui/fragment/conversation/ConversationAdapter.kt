@@ -48,13 +48,6 @@ class ConversationAdapter(user: StoreUser, friends: List<StoreUser>) :
     }
 
     private fun ConversationItemRightBinding.onBindMessage(item: StoreMessage) {
-        when (item.sender == uidBindLast) {
-            true -> this.conversationItemRightAvatar.hide()
-            else -> {
-                this.conversationItemRightAvatar.bind(user)
-                this.conversationItemRightAvatar.show()
-            }
-        }
         this.conversationItemRightMessage.text = item.text.toString()
     }
 

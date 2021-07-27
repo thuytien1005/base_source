@@ -3,7 +3,6 @@ package wee.digital.sample.data.repository
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import wee.digital.sample.ui.model.StoreUser
@@ -34,4 +33,8 @@ fun updateUser(user: StoreUser): Task<Void> {
 
 fun userByUids(uids: List<String>): Query {
     return users.whereIn("uid", uids)
+}
+
+fun conversationByUid(listUid: List<String>): Query {
+    return chats.whereEqualTo("recipients", listUid)
 }
