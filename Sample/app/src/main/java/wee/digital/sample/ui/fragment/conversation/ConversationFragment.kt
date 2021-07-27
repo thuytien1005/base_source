@@ -76,6 +76,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
     }
 
     private fun handlerInsertChat(it: StoreChat?) {
+        bind.conversationWidgetInput.text = ""
         when (it == null) {
             true -> toast("insert chat failt")
             else -> {
@@ -105,7 +106,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
                     recipients = arrayListOf(auth.uid.toString(), uidFriend)
                     type = "contact"
                 }
-                vm.insertChat(uidFriend, chat)
+                vm.insertChat(auth.uid.toString(), uidFriend, chat)
             }
             else -> {
                 val chatId = mainVM.chatAdapterSelected!!.chatId

@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.sample.data.repository.chats
+import wee.digital.sample.data.repository.conversations
 import wee.digital.sample.data.repository.users
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
@@ -54,43 +55,59 @@ class ConversationVM : BaseVM() {
         }
     }
 
-    fun insertChat(uidFriend: String, chat: StoreChat) {
+    private var chatInsert = StoreChat()
+
+    private var authUid: String = ""
+
+    private var friendUid: String = ""
+
+    fun insertChat(auth: String, uidFriend: String, chat: StoreChat) {
         viewModelScope.launch(Dispatchers.IO) {
+            authUid = auth
+            friendUid = uidFriend
+            chatInsert = chat
             val document = chats.document()
-            chat.chatId = document.id
-            document.set(chat).addOnSuccessListener {
-                getFriendInfo(uidFriend, chat)
+            chatInsert.chatId = document.id
+            document.set(chatInsert).addOnSuccessListener {
+                getFriendInfo()
             }.addOnFailureListener {
                 statusInsertChatSingle.postValue(null)
             }
         }
     }
 
-    private fun getFriendInfo(authUid: String, chat: StoreChat) {
+    private fun getFriendInfo() {
         viewModelScope.launch(Dispatchers.IO) {
             users.document(authUid).get().addOnSuccessListener {
                 val user = it.documentToJsObject().parse(StoreUser::class) ?: StoreUser()
-                chat.listUserInfo = listOf(user)
-                statusInsertChatSingle.postValue(chat)
+                chatInsert.listUserInfo = listOf(user)
+                statusInsertChatSingle.postValue(chatInsert)
+                syncConversation()
             }.addOnFailureListener {
                 statusInsertChatSingle.postValue(null)
             }
-            /*val data =
-                HashMap<String, Any>().apply { put("chatIds", FieldValue.arrayUnion(chat.chatId)) }
-            conversations.document(authUid).get().addOnSuccessListener {
-                when (it.exists()) {
-                    true -> {
-                        conversations.document(authUid).update(data)
-                            .addOnSuccessListener { statusInsertChatSingle.postValue(chat) }
-                            .addOnFailureListener { statusInsertChatSingle.postValue(null) }
-                    }
-                    else -> {
-                        conversations.document(authUid).set(data)
-                            .addOnSuccessListener { statusInsertChatSingle.postValue(chat) }
-                            .addOnFailureListener { statusInsertChatSingle.postValue(null) }
+        }
+    }
+
+    private fun syncConversation() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val chatIds = HashMap<String, Any>().apply {
+                put("chatIds", FieldValue.arrayUnion(chatInsert.chatId))
+            }
+            conversations.document(authUid).get()
+                .addOnSuccessListener {
+                    when (it.exists()) {
+                        true -> conversations.document(authUid).update(chatIds)
+                        else -> conversations.document(authUid).set(chatIds)
                     }
                 }
-            }*/
+            conversations.document(friendUid).get()
+                .addOnSuccessListener {
+                    when (it.exists()) {
+                        true -> conversations.document(friendUid).update(chatIds)
+                        else -> conversations.document(friendUid).set(chatIds)
+                    }
+                }
         }
     }
 
