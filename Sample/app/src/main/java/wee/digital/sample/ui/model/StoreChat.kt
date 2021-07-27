@@ -1,6 +1,7 @@
 package wee.digital.sample.ui.model
 
 import androidx.recyclerview.widget.DiffUtil
+import com.google.firebase.firestore.Exclude
 import wee.digital.library.extension.list
 import wee.digital.library.extension.str
 
@@ -16,6 +17,7 @@ class StoreChat : ObjectMapper, Comparable<StoreChat> {
 
     var messages: List<StoreMessage>? = null
 
+    @Exclude
     var listUserInfo: List<StoreUser>? = null
 
     override fun toMap(): Map<String, Any?> {

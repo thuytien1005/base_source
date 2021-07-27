@@ -67,7 +67,9 @@ class ContactFragment : MainFragment<ContactBinding>() {
 
     private fun setContactAdapter(adapter: RecyclerView.Adapter<*>) {
         if(bind.recyclerView.adapter != adapter) {
-            bind.recyclerView.adapter = adapter
+            lifecycleScope.launch(Dispatchers.Main) {
+                bind.recyclerView.adapter = adapter
+            }
         }
     }
 
