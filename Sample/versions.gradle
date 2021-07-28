@@ -246,4 +246,4 @@ deps.bottom_navigation = "com.aurelhubert:ahbottomnavigation:2.3.4"
 /**
  * [https://github.com/CanHub/Android-Image-Cropper]
  */
-deps.image_cropper = "com.github.CanHub:Android-Image-Cropper:3.2.0"
+deps.image_cropper = "com.github.CanHub:Android-Image-Cropper:3.2.1"

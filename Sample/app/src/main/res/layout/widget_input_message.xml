@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_input_root"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
+    tools:background="@color/colorWhite"
     app:layoutDescription="@xml/widget_input_message_scene">
 
     <androidx.appcompat.widget.AppCompatImageView

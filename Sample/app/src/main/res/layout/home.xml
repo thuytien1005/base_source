@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/MatchParent">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MatchParent"
+    tools:background="@color/colorWhite">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

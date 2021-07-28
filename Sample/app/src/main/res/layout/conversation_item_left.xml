@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="40dp">
+    android:minHeight="40dp"
+    tools:background="@color/colorWhite">
 
     <wee.digital.widget.custom.AvatarView
         android:id="@+id/conversation_item_left_avatar"

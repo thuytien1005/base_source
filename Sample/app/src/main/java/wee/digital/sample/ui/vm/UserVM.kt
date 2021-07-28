@@ -39,7 +39,7 @@ class UserVM : BaseVM() {
 
     private var userRegistration: ListenerRegistration? = null
 
-    private fun syncUser() {
+    fun syncUser() {
         userRegistration = selfUserRef
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.data?.also {

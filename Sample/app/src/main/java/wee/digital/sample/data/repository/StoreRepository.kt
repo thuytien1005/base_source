@@ -5,9 +5,12 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import wee.digital.sample.ui.model.StoreUser
 
 val store get() = Firebase.firestore
+
+val storage get() = Firebase.storage.reference
 
 val conversations get() = store.collection("conversations")
 

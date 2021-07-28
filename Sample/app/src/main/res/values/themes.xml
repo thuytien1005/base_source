@@ -3,15 +3,14 @@
     <!-- BASE APPLICATION THEME. -->
     <style name="App" />
 
-    <style name="App.Theme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="App.Theme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:windowLightStatusBar"
-            tools:targetApi="m">true</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
