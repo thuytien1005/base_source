@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import wee.digital.library.extension.hideKeyboard
+import wee.digital.library.extension.hideSystemUI
 import wee.digital.library.extension.toast
 import wee.digital.sample.R
 import wee.digital.sample.data.repository.auth
@@ -70,6 +71,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
                 val friend = mainVM.chatAdapterSelected!!.listUserInfo!!
                 adapter = ConversationAdapter(userLogin, friend)
                 adapter?.bind(bind.conversationRecyclerMessage)
+                adapter?.onItemClick = { _, _ -> hideKeyboard() }
                 vm.listenerItemChat(mainVM.chatAdapterSelected!!.chatId)
             }
         }

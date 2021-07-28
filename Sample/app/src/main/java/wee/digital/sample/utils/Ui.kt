@@ -1,6 +1,9 @@
 package wee.digital.sample.utils
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
+import android.view.WindowManager
 import androidx.annotation.DrawableRes
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import wee.digital.sample.ui.model.StoreUser
@@ -47,4 +50,12 @@ fun homeNavItem(title: String, @DrawableRes res: Int): AHBottomNavigationItem {
         drawable(res),
         Color.WHITE
     )
+}
+
+fun Context.heightRecycler(): Int {
+    val wm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val display = wm.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return (size.y / 2.4).toInt()
 }
