@@ -31,9 +31,6 @@ class ChatFragment : MainFragment<ChatBinding>() {
             Collections.sort(it)
             adapter.set(it)
         }
-        vm.userLoginSingle.observe {
-            mainVM.userLogin = it
-        }
     }
 
 }

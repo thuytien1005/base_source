@@ -5,9 +5,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
-import wee.digital.library.extension.notNullOrEmpty
 import wee.digital.library.extension.parse
-import wee.digital.library.extension.transform
 import wee.digital.sample.data.repository.*
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreConversation
@@ -19,32 +17,21 @@ class ChatVM : BaseVM() {
 
     val listChatStoreSingle = SingleLiveData<List<StoreChat>>()
 
-    val userLoginSingle = SingleLiveData<StoreUser>()
-
     private var queryCvsIdListener: ListenerRegistration? = null
 
     private var queryChatListener: ListenerRegistration? = null
 
     private var uid: String = ""
 
-    private fun syncUserLogin(uid: String) {
-        users.document(uid).get()
-            .addOnSuccessListener {
-                val user = it.documentToJsObject().parse(StoreUser::class) ?: StoreUser()
-                userLoginSingle.postValue(user)
-            }
-    }
-
     fun queryConversationId(uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            syncUserLogin(uid)
             this@ChatVM.uid = uid
             queryCvsIdListener?.remove()
             queryCvsIdListener =
                 conversations.document(uid).addSnapshotListener { value, _ ->
                     val conversation = StoreConversation.fromMap(value?.data)
-                    when  {
-                        conversation.chatIds.isNotEmpty() -> queryChat( conversation.chatIds)
+                    when {
+                        conversation.chatIds.isNotEmpty() -> queryChat(conversation.chatIds)
                     }
                 }
         }

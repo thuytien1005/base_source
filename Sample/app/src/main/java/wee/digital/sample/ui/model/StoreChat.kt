@@ -19,7 +19,8 @@ class StoreChat : ObjectMapper, Comparable<StoreChat> {
 
     var messages: List<StoreMessage>? = null
 
-    @Exclude @JvmField
+    @Exclude
+    @JvmField
     var listUserInfo: List<StoreUser>? = null
 
     override fun toMap(): Map<String, Any?> {

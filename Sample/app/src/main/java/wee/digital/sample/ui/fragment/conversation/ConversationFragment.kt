@@ -16,6 +16,7 @@ import wee.digital.sample.databinding.ConversationBinding
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
+import wee.digital.sample.utils.bind
 import wee.digital.sample.widget.WidgetChatInput
 
 
@@ -36,6 +37,18 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
 
     private val toolbar get() = bind.conversationBar
 
+    private var chatInfo
+        get() = mainVM.chatAdapterSelected
+        set(value) {
+            mainVM.chatAdapterSelected = value
+        }
+
+    private var contactInfo
+        get() = mainVM.contactAdapterSelected
+        set(value) {
+            mainVM.contactAdapterSelected = value
+        }
+
     override fun dialogStyle(): Int {
         return R.style.App_Dialog_FullScreen_Transparent
     }
@@ -47,7 +60,8 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated() {
         addClickListener(toolbar.chatToolbarVector)
-        bindData()
+        bindInfoToolbar()
+        bindDataMessage()
         bind.conversationWidgetInput.listener = this
         bind.conversationRecyclerMessage.setOnTouchListener { v, event ->
             hideKeyboard()
@@ -79,15 +93,28 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         }
     }
 
-    private fun bindData() {
-        when (mainVM.chatAdapterSelected == null) {
+    private fun bindInfoToolbar() {
+        when (chatInfo != null) {
+            true -> {
+                val name = toolbar.chatToolbarAvatar.bind(chatInfo!!)
+                toolbar.chatToolbarName.text = name
+            }
+            else -> {
+                toolbar.chatToolbarAvatar.bind(contactInfo)
+                toolbar.chatToolbarName.text = "${contactInfo.firstName} ${contactInfo.lastName}"
+            }
+        }
+    }
+
+    private fun bindDataMessage() {
+        when (chatInfo == null) {
             true -> ""
             else -> {
-                val friend = mainVM.chatAdapterSelected!!.listUserInfo!!
+                val friend = chatInfo!!.listUserInfo!!
                 adapter = ConversationAdapter(userLogin, friend)
                 adapter?.bind(bind.conversationRecyclerMessage)
                 adapter?.onItemClick = { _, _ -> hideKeyboard() }
-                vm.listenerItemChat(mainVM.chatAdapterSelected!!.chatId)
+                vm.listenerItemChat(chatInfo!!.chatId)
             }
         }
     }
@@ -97,16 +124,16 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         when (it == null) {
             true -> toast("insert chat failt")
             else -> {
-                mainVM.chatAdapterSelected = it
-                bindData()
+                chatInfo = it
+                bindDataMessage()
             }
         }
     }
 
     private fun handlerGallerySelected(uri: Uri?) {
         uri ?: return
-        val chatId = mainVM.chatAdapterSelected?.name.let {
-            if(it.isNullOrEmpty()) "${auth.uid}-${mainVM.contactAdapterSelected.uid}" else it
+        val chatId = chatInfo?.name.let {
+            if (it.isNullOrEmpty()) "${auth.uid}-${contactInfo.uid}" else it
         }
         vm.uploadImageGallery(chatId, uri)
     }
@@ -122,9 +149,9 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
             text = mess
             type = typeData
         }
-        when (mainVM.chatAdapterSelected == null) {
+        when (chatInfo == null) {
             true -> {
-                val uidFriend = mainVM.contactAdapterSelected.uid
+                val uidFriend = contactInfo.uid
                 val chat = StoreChat().apply {
                     name = "${auth.uid}-${uidFriend}"
                     messages = listOf(messSend)
@@ -134,7 +161,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
                 vm.insertChat(auth.uid.toString(), uidFriend, chat)
             }
             else -> {
-                val chatId = mainVM.chatAdapterSelected!!.chatId
+                val chatId = chatInfo!!.chatId
                 vm.insertMessage(chatId, messSend)
             }
         }

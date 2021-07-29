@@ -10,6 +10,4 @@ class MainVM : BaseVM() {
 
     var chatAdapterSelected :StoreChat? = null
 
-    var userLogin = StoreUser()
-
 }

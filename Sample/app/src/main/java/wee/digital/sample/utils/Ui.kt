@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.view.WindowManager
 import androidx.annotation.DrawableRes
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
+import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.widget.custom.AvatarView
 import wee.digital.widget.extension.drawable
@@ -41,7 +42,20 @@ fun AvatarView.bind(it: String?) {
     } catch (e: Exception) {
         text = "er"
     }
+}
 
+fun AvatarView.bind(it: StoreChat): String {
+    return when (it.type == "group") {
+        true -> {
+            bind(it.name)
+            it.name
+        }
+        else -> {
+            val user = it.listUserInfo?.first() ?: StoreUser()
+            bind(user)
+            "${user.firstName} ${user.lastName}"
+        }
+    }
 }
 
 fun homeNavItem(title: String, @DrawableRes res: Int): AHBottomNavigationItem {
