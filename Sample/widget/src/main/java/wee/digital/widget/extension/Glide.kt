@@ -41,7 +41,6 @@ interface SimpleRequestListener : RequestListener<Drawable> {
 fun ImageView.load(url: String?) {
     val request = GlideApp.with(context)
         .load(url)
-        .override(width, height)
     request.into(this)
 }
 

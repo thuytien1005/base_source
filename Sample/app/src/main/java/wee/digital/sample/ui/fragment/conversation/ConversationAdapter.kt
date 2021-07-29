@@ -1,6 +1,10 @@
 package wee.digital.sample.ui.fragment.conversation
 
+import android.graphics.BitmapFactory
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import wee.digital.library.adapter.BaseListAdapter
 import wee.digital.library.adapter.ItemInflating
 import wee.digital.sample.databinding.ConversationImageLeftBinding
@@ -10,7 +14,11 @@ import wee.digital.sample.databinding.ConversationItemRightBinding
 import wee.digital.sample.ui.model.StoreMessage
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.sample.utils.bind
-import wee.digital.widget.extension.*
+import wee.digital.widget.extension.hide
+import wee.digital.widget.extension.load
+import wee.digital.widget.extension.show
+import java.net.URL
+
 
 class ConversationAdapter(user: StoreUser, friends: List<StoreUser>) :
     BaseListAdapter<StoreMessage>(StoreMessage.itemDiffer) {
