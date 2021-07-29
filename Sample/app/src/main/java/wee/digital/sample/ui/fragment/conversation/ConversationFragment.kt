@@ -105,7 +105,9 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
 
     private fun handlerGallerySelected(uri: Uri?) {
         uri ?: return
-        val chatId = mainVM.chatAdapterSelected?.chatId ?: return
+        val chatId = mainVM.chatAdapterSelected?.name.let {
+            if(it.isNullOrEmpty()) "${auth.uid}-${mainVM.contactAdapterSelected.uid}" else it
+        }
         vm.uploadImageGallery(chatId, uri)
     }
 
