@@ -25,14 +25,6 @@ class StoreMessage : ObjectMapper {
         )
     }
 
-    fun messageLastType(userLogin: StoreUser): String {
-        return when {
-            type == "image" && sender == userLogin.uid -> "you send a photo"
-            type == "image" && sender != userLogin.uid -> "${userLogin.firstName} ${userLogin.lastName} send a photo"
-            else -> text.toString()
-        }
-    }
-
     companion object {
 
         val itemDiffer

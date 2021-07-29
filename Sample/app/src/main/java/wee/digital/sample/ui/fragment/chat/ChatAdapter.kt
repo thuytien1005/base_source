@@ -43,7 +43,23 @@ class ChatAdapter(authId: String) : BaseListAdapter<StoreChat>(StoreChat.itemDif
             }
         }
         val messageLast = item.messages?.last() ?: StoreMessage()
-        itemChatMessage.text = messageLast.messageLastType(user)
+        itemChatMessage.text = messageLastType(item.listUserInfo, messageLast)
     }
+
+
+    private fun messageLastType(userInfo: List<StoreUser>?, message: StoreMessage): String {
+        userInfo ?: return ""
+        return when {
+            message.type == "image" && message.sender != myUid -> {
+                val user = userInfo.filter { it.uid == message.sender }.let {
+                    if (it.isNullOrEmpty()) StoreUser() else it.first()
+                }
+                "${user.firstName} ${user.lastName} send a photo"
+            }
+            message.type == "image" && message.sender == myUid -> "you send a photo"
+            else -> message.text.toString()
+        }
+    }
+
 
 }

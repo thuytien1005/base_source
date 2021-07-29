@@ -58,6 +58,8 @@ class MeFragment : MainFragment<MeBinding>() {
                 Backup.runBackupData()
             }
             bind.viewRestore -> {
+                return
+                //data error chat, conversation
                 Backup.runRestoreData()
             }
             bind.meCamera -> {

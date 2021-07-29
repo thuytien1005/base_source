@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.7">
 
-        <com.makeramen.roundedimageview.RoundedImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/conversation_image_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
