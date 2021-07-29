@@ -1,10 +1,13 @@
 package wee.digital.sample.ui.fragment.conversation
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import wee.digital.library.extension.hideKeyboard
-import wee.digital.library.extension.hideSystemUI
 import wee.digital.library.extension.toast
 import wee.digital.sample.R
 import wee.digital.sample.data.repository.auth
@@ -15,8 +18,17 @@ import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
 import wee.digital.sample.widget.WidgetChatInput
 
+
 class ConversationFragment : MainDialogFragment<ConversationBinding>(),
     WidgetChatInput.WidgetChatInputListener {
+
+    private var resultGallery =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                handlerGallerySelected(data?.data)
+            }
+        }
 
     private val vm by lazyViewModel(ConversationVM::class)
 
@@ -62,6 +74,9 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         vm.statusInsertChatSingle.observe {
             handlerInsertChat(it)
         }
+        vm.urlImageGallerySingle.observe {
+            this.onSendClick(it, "image")
+        }
     }
 
     private fun bindData() {
@@ -88,16 +103,22 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         }
     }
 
+    private fun handlerGallerySelected(uri: Uri?) {
+        uri ?: return
+        val chatId = mainVM.chatAdapterSelected?.chatId ?: return
+        vm.uploadImageGallery(chatId, uri)
+    }
+
     /**
      * handler click widget input
      */
-    override fun onSendClick(mess: String) {
+    override fun onSendClick(mess: String, typeData: String?) {
         if (mess.isEmpty()) return
         val messSend = StoreMessage().apply {
             sender = auth.uid.toString()
             time = System.currentTimeMillis()
             text = mess
-            type = null
+            type = typeData
         }
         when (mainVM.chatAdapterSelected == null) {
             true -> {
@@ -115,6 +136,13 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
                 vm.insertMessage(chatId, messSend)
             }
         }
+    }
+
+    override fun onPhotoClick() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        resultGallery.launch(intent)
     }
 
 }

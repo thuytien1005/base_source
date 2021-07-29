@@ -5,7 +5,7 @@
     android:id="@+id/chat_input_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="@color/colorWhite">
+    android:background="@color/colorWhite">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chat_input_parent_view"
@@ -102,20 +102,26 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chat_input_parent_recycler"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat_input_parent_view">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_input_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

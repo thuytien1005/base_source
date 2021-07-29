@@ -9,7 +9,7 @@ import java.util.*
 
 class ChatFragment : MainFragment<ChatBinding>() {
 
-    private val adapter = ChatAdapter()
+    private val adapter = ChatAdapter(auth.uid.toString())
 
     private val vm by lazyViewModel(ChatVM::class)
 

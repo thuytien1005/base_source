@@ -2,6 +2,7 @@ package wee.digital.widget.extension
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.DataSource
@@ -9,7 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestListener
-import wee.digital.widget.R
+import java.io.File
 
 @GlideModule
 class MyGlideApp : AppGlideModule()
@@ -68,6 +69,13 @@ fun ImageView.load(bytes: ByteArray?) {
 fun ImageView.load(drawable: Drawable?) {
     val request = GlideApp.with(context)
         .load(drawable)
+        .override(width, height)
+    request.into(this)
+}
+
+fun ImageView.load(file: File) {
+    val request = GlideApp.with(context)
+        .load(file)
         .override(width, height)
     request.into(this)
 }

@@ -1,5 +1,6 @@
 package wee.digital.sample.ui.fragment.conversation
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
@@ -9,6 +10,7 @@ import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.sample.data.repository.chats
 import wee.digital.sample.data.repository.conversations
+import wee.digital.sample.data.repository.storage
 import wee.digital.sample.data.repository.users
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
@@ -110,5 +112,27 @@ class ConversationVM : BaseVM() {
                 }
         }
     }
+
+    /**
+     * send image chat
+     */
+    val urlImageGallerySingle = SingleLiveData<String>()
+
+    fun uploadImageGallery(chatId: String, uri: Uri) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val path = "chatImages/$chatId/${System.currentTimeMillis()}"
+            storage.child(path).putFile(uri)
+                .addOnSuccessListener {
+                    getUrlImageGallery(path)
+                }
+        }
+    }
+
+    private fun getUrlImageGallery(path: String) {
+        storage.child(path).downloadUrl.addOnSuccessListener {
+            urlImageGallerySingle.postValue(it.toString())
+        }
+    }
+
 
 }

@@ -18,7 +18,7 @@ class MeVM : BaseVM() {
     fun uploadAvatar(uri: Uri, auth: String) {
         viewModelScope.launch(Dispatchers.IO) {
             authId = auth
-            val path = "images/$auth"
+            val path = "avatars/$auth"
             storage.child(path).putFile(uri)
                 .addOnSuccessListener {
                     getUrlAvatar(path)

@@ -57,5 +57,5 @@ fun Context.heightRecycler(): Int {
     val display = wm.defaultDisplay
     val size = Point()
     display.getSize(size)
-    return (size.y / 2.4).toInt()
+    return (size.y / 2.6).toInt()
 }
