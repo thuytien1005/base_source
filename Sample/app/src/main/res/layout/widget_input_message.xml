@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_input_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,7 +10,7 @@
         android:id="@+id/chat_input_parent_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/chat_input_parent_recycler"
+        app:layout_constraintBottom_toTopOf="@+id/chat_input_aware_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -102,26 +101,21 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chat_input_parent_recycler"
+    <wee.digital.sample.widget.attach.InputAwareLayout
+        android:id="@+id/chat_input_aware_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat_input_parent_view">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chat_input_recycler"
+        <ViewStub
+            android:id="@+id/chat_input_stub"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            android:layout="@layout/widget_input_photo_stub" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </wee.digital.sample.widget.attach.InputAwareLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

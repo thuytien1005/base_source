@@ -1,6 +1,7 @@
 package wee.digital.sample.widget
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
 import android.text.Editable
@@ -9,17 +10,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.ChangeBounds
-import wee.digital.library.extension.hideKeyboard
 import wee.digital.sample.R
 import wee.digital.sample.databinding.WidgetInputMessageBinding
-import wee.digital.sample.utils.heightRecycler
+import wee.digital.sample.ui.model.Media
+import wee.digital.sample.widget.attach.KeyboardAwareLinearLayout
+import wee.digital.sample.widget.attach.Stub
+import wee.digital.sample.widget.attach.findStubById
 import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.extension.SimpleTextWatcher
 import wee.digital.widget.extension.addViewClickListener
 import wee.digital.widget.extension.beginTransition
+import wee.digital.widget.extension.post
 
 
-class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatcher {
+class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatcher,
+    KeyboardAwareLinearLayout.OnKeyboardShownListener {
 
     var listener: WidgetChatInputListener? = null
 
@@ -32,6 +37,10 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
             bind.chatInputInput.setText(value)
         }
 
+    private lateinit var act: Activity
+
+    private var galleryStub: Stub<WidgetPhotoView>? = null
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     override fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> WidgetInputMessageBinding {
@@ -41,7 +50,6 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
     @SuppressLint("ClickableViewAccessibility")
     override fun onInitialize(context: Context, types: TypedArray) {
         bind.chatInputInput.addTextChangedListener(this)
-        bind.chatInputRecycler.layoutParams = LayoutParams(0, context.heightRecycler())
 
         bind.chatInputAudio.addViewClickListener {
             listener?.onMicClick()
@@ -53,8 +61,8 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
             listener?.onSendClick(text)
         }
         bind.chatInputPhoto.addViewClickListener {
-            bind.chatInputInput.hideKeyboard()
-            listener?.onPhotoClick()
+            bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub!!.get()!!)
+            galleryStub?.get()?.bindAdapterView()
         }
         bind.chatInputInput.setOnTouchListener { _, _ ->
             animViewFocus()
@@ -79,6 +87,24 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
             true -> bind.chatInputSend.setImageResource(R.drawable.ic_like)
             else -> bind.chatInputSend.setImageResource(R.drawable.ic_send)
         }
+    }
+
+    fun setupStubGallery(act: Activity) {
+        this.act = act
+
+        bind.chatInputAwareLayout.setIsBubble(false)
+        bind.chatInputAwareLayout.addOnKeyboardShownListener(this)
+        bind.chatInputAwareLayout.hideAttachedInput(false)
+
+        galleryStub = findStubById(this.act, bind.chatInputStub.id)
+        bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub!!.get()!!)
+        post(100) { bind.chatInputAwareLayout.hideAttachedInput(true) }
+
+        galleryStub?.get()?.adapter?.onItemClick = { media, _ -> listener?.onPhotoClick(media) }
+    }
+
+    override fun onKeyboardShown() {
+        bind.chatInputAwareLayout.hideAttachedInput(true)
     }
 
     /**
@@ -111,7 +137,7 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
     interface WidgetChatInputListener {
         fun onAddClick() {}
         fun onMicClick() {}
-        fun onPhotoClick() {}
+        fun onPhotoClick(media: Media) {}
         fun onEmojiClick() {}
         fun onSendClick(mess: String, typeData : String? = null) {}
     }

@@ -79,6 +79,12 @@ fun ImageView.load(file: File) {
     request.into(this)
 }
 
+fun ImageView.load(uri: Uri) {
+    val request = GlideApp.with(context)
+        .load(uri)
+    request.into(this)
+}
+
 fun ImageView.reload(res: Int) {
     val request = GlideApp.with(context)
         .load(res)

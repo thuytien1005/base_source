@@ -22,7 +22,9 @@ class ChatFragment : MainFragment<ChatBinding>() {
         adapter.bind(bind.chatRecyclerMessage)
         adapter.onItemClick = { chat, _ ->
             mainVM.chatAdapterSelected = chat
-            navigate(R.id.action_global_conversationFragment)
+            navigate(R.id.action_global_conversationFragment) {
+                setLaunchSingleTop()
+            }
         }
     }
 

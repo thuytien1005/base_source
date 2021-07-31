@@ -54,7 +54,9 @@ class ProfileFragment : MainDialogFragment<ProfileBinding>() {
     private fun navigateConversation(it: StoreChat?) {
         dismiss()
         mainVM.chatAdapterSelected = it
-        navigate(R.id.action_global_conversationFragment)
+        navigate(R.id.action_global_conversationFragment){
+            setLaunchSingleTop()
+        }
     }
 
     /**
