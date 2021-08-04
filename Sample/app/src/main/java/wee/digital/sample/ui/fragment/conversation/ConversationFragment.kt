@@ -8,6 +8,7 @@ import wee.digital.sample.R
 import wee.digital.sample.data.repository.auth
 import wee.digital.sample.data.repository.userLogin
 import wee.digital.sample.databinding.ConversationBinding
+import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.Media
 import wee.digital.sample.ui.model.StoreChat
@@ -15,7 +16,7 @@ import wee.digital.sample.ui.model.StoreMessage
 import wee.digital.sample.utils.bind
 import wee.digital.sample.widget.WidgetChatInput
 
-class ConversationFragment : MainFragment<ConversationBinding>(),
+class ConversationFragment : MainDialogFragment<ConversationBinding>(),
     WidgetChatInput.WidgetChatInputListener {
 
     private val vm by lazyViewModel(ConversationVM::class)
@@ -36,6 +37,10 @@ class ConversationFragment : MainFragment<ConversationBinding>(),
             mainVM.contactAdapterSelected = value
         }
 
+    override fun dialogStyle(): Int {
+        return R.style.App_Dialog_FullScreen_Transparent
+    }
+
     override fun inflating(): (LayoutInflater) -> ConversationBinding {
         return ConversationBinding::inflate
     }
@@ -45,13 +50,12 @@ class ConversationFragment : MainFragment<ConversationBinding>(),
         addClickListener(toolbar.chatToolbarVector)
         bindInfoToolbar()
         bindDataMessage()
-        bind.conversationWidgetInput.setupStubGallery(requireActivity())
         bind.conversationWidgetInput.listener = this
     }
 
     override fun onViewClick(v: View?) {
         when (v) {
-            toolbar.chatToolbarVector -> navigate(R.id.action_global_homeFragment) { setLaunchSingleTop() }
+            toolbar.chatToolbarVector -> dismiss()
         }
     }
 

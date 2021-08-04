@@ -1,7 +1,6 @@
 package wee.digital.sample.widget
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
 import android.text.Editable
@@ -14,8 +13,6 @@ import wee.digital.sample.R
 import wee.digital.sample.databinding.WidgetInputMessageBinding
 import wee.digital.sample.ui.model.Media
 import wee.digital.sample.widget.attach.KeyboardAwareLinearLayout
-import wee.digital.sample.widget.attach.Stub
-import wee.digital.sample.widget.attach.findStubById
 import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.extension.SimpleTextWatcher
 import wee.digital.widget.extension.addViewClickListener
@@ -37,9 +34,7 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
             bind.chatInputInput.setText(value)
         }
 
-    private lateinit var act: Activity
-
-    private var galleryStub: Stub<WidgetPhotoView>? = null
+    private val galleryStub get() = bind.chatInputStub
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
@@ -49,6 +44,7 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onInitialize(context: Context, types: TypedArray) {
+        setupStubGallery()
         bind.chatInputInput.addTextChangedListener(this)
 
         bind.chatInputAudio.addViewClickListener {
@@ -61,8 +57,8 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
             listener?.onSendClick(text)
         }
         bind.chatInputPhoto.addViewClickListener {
-            bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub!!.get()!!)
-            galleryStub?.get()?.bindAdapterView()
+            bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub)
+            bind.chatInputStub.bindAdapterView()
         }
         bind.chatInputInput.setOnTouchListener { _, _ ->
             animViewFocus()
@@ -89,18 +85,14 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
         }
     }
 
-    fun setupStubGallery(act: Activity) {
-        this.act = act
-
+    private fun setupStubGallery() {
         bind.chatInputAwareLayout.setIsBubble(false)
         bind.chatInputAwareLayout.addOnKeyboardShownListener(this)
         bind.chatInputAwareLayout.hideAttachedInput(false)
 
-        galleryStub = findStubById(this.act, bind.chatInputStub.id)
-        bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub!!.get()!!)
+        bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub)
+        bind.chatInputStub.adapter.onItemClick = {media, _ -> listener?.onPhotoClick(media) }
         post(100) { bind.chatInputAwareLayout.hideAttachedInput(true) }
-
-        galleryStub?.get()?.adapter?.onItemClick = { media, _ -> listener?.onPhotoClick(media) }
     }
 
     override fun onKeyboardShown() {

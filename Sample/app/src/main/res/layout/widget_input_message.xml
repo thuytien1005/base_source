@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_input_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -110,11 +111,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat_input_parent_view">
 
-        <ViewStub
+        <wee.digital.sample.widget.WidgetPhotoView
             android:id="@+id/chat_input_stub"
+            tools:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout="@layout/widget_input_photo_stub" />
+            android:layout_height="wrap_content"/>
 
     </wee.digital.sample.widget.attach.InputAwareLayout>
 

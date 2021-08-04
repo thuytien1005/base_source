@@ -22,7 +22,7 @@ import wee.digital.widget.extension.load
 
 class WidgetPhotoView : AppCustomView<WidgetInputPhotoBinding>, InputAwareLayout.InputView {
 
-    constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
+    constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet)
 
     val adapter = AdapterGallery()
 
