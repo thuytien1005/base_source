@@ -9,7 +9,6 @@ import wee.digital.sample.data.repository.auth
 import wee.digital.sample.data.repository.userLogin
 import wee.digital.sample.databinding.ConversationBinding
 import wee.digital.sample.ui.main.MainDialogFragment
-import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.Media
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
@@ -38,7 +37,7 @@ class ConversationFragment : MainDialogFragment<ConversationBinding>(),
         }
 
     override fun dialogStyle(): Int {
-        return R.style.App_Dialog_FullScreen_Transparent
+        return R.style.Theme_AppCompat_Light_NoActionBar
     }
 
     override fun inflating(): (LayoutInflater) -> ConversationBinding {

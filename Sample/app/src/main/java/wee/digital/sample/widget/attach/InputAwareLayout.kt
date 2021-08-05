@@ -3,6 +3,7 @@ package wee.digital.sample.widget.attach
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.EditText
+import wee.digital.library.extension.hideKeyboard
 
 class InputAwareLayout(context: Context, attrs: AttributeSet?) :
     KeyboardAwareLinearLayout(context, attrs), KeyboardAwareLinearLayout.OnKeyboardShownListener {
@@ -28,6 +29,7 @@ class InputAwareLayout(context: Context, attrs: AttributeSet?) :
             listener.show(getKeyboardHeight(), current != null)
             current = listener
         }
+        hideKeyboard()
     }
 
     fun hideAttachedInput(bool: Boolean) {

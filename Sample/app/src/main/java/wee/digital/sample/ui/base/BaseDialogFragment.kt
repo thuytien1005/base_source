@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import wee.digital.library.extension.hideKeyboard
+import wee.digital.library.extension.hideSystemUI
 import wee.digital.sample.R
 
 abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),

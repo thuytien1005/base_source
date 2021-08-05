@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.ChangeBounds
+import wee.digital.library.extension.hideSystemUI
 import wee.digital.sample.R
 import wee.digital.sample.databinding.WidgetInputMessageBinding
 import wee.digital.sample.ui.model.Media
@@ -18,7 +19,6 @@ import wee.digital.widget.extension.SimpleTextWatcher
 import wee.digital.widget.extension.addViewClickListener
 import wee.digital.widget.extension.beginTransition
 import wee.digital.widget.extension.post
-
 
 class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatcher,
     KeyboardAwareLinearLayout.OnKeyboardShownListener {
@@ -59,9 +59,11 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
         bind.chatInputPhoto.addViewClickListener {
             bind.chatInputAwareLayout.show(bind.chatInputInput, galleryStub)
             bind.chatInputStub.bindAdapterView()
+            listener?.hideSystemUI()
         }
         bind.chatInputInput.setOnTouchListener { _, _ ->
             animViewFocus()
+            listener?.hideSystemUI()
             false
         }
         bind.chatInputInput.setOnFocusChangeListener { _, hasFocus ->
@@ -132,6 +134,7 @@ class WidgetChatInput : AppCustomView<WidgetInputMessageBinding>, SimpleTextWatc
         fun onPhotoClick(media: Media) {}
         fun onEmojiClick() {}
         fun onSendClick(mess: String, typeData : String? = null) {}
+        fun hideSystemUI(){}
     }
 
 }
