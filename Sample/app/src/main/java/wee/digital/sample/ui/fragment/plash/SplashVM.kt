@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.R
-import wee.digital.sample.data.repository.currentUser
+import wee.digital.sample.data.firebase.currentUser
 import wee.digital.sample.ui.vm.BaseVM
 
 class SplashVM : BaseVM() {

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import wee.digital.library.extension.toast
 import wee.digital.sample.R
-import wee.digital.sample.data.repository.auth
-import wee.digital.sample.data.repository.userLogin
+import wee.digital.sample.data.firebase.auth
+import wee.digital.sample.data.firebase.userLogin
 import wee.digital.sample.databinding.ConversationBinding
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.sample.ui.model.Media

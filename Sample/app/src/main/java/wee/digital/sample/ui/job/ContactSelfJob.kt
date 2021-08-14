@@ -1,15 +1,15 @@
-package wee.digital.sample.ui.usecase
+package wee.digital.sample.ui.job
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.ListenerRegistration
-import wee.digital.sample.data.repository.auth
-import wee.digital.sample.data.repository.selfContactRef
-import wee.digital.sample.data.repository.userByUids
+import wee.digital.sample.data.firebase.auth
+import wee.digital.sample.data.firebase.selfContactRef
+import wee.digital.sample.data.firebase.userByUids
 import wee.digital.sample.ui.model.StoreContact
 import wee.digital.sample.ui.model.StoreUser
 import wee.digital.sample.ui.model.toDataList
 
-class SelfContactUseCase(
+class ContactSelfJob(
     private val contactsLiveData: MutableLiveData<List<StoreUser>?>
 ) {
 

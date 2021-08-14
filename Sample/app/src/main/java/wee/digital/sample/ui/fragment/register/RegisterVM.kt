@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.ui.model.StoreUser
-import wee.digital.sample.ui.usecase.RegisterUseCase
+import wee.digital.sample.ui.job.RegisterJob
 import wee.digital.sample.ui.vm.BaseVM
 import wee.digital.widget.extension.isNotEmail
 
@@ -52,7 +52,7 @@ class RegisterVM : BaseVM() {
 
     private fun createUserAndSignIn(user: StoreUser, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            RegisterUseCase(user, password,
+            RegisterJob(user, password,
                 onSuccess = {
                     val user = it.user ?: throw NullPointerException()
                     log.d("sign in with user provider: %s, uid: %s".format(user.providerId, user.uid))

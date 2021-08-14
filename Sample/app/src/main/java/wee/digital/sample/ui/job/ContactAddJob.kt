@@ -1,9 +1,9 @@
-package wee.digital.sample.ui.usecase
+package wee.digital.sample.ui.job
 
 import com.google.firebase.firestore.FieldValue
-import wee.digital.sample.data.repository.selfContactRef
+import wee.digital.sample.data.firebase.selfContactRef
 
-class AddContactUseCase(
+class ContactAddJob(
     private val uid: String,
     private val onSuccess: () -> Unit,
     private val onFailure: (Exception) -> Unit

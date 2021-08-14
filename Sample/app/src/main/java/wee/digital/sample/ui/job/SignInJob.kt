@@ -1,11 +1,11 @@
-package wee.digital.sample.ui.usecase
+package wee.digital.sample.ui.job
 
 import com.google.firebase.auth.AuthResult
 import wee.digital.library.util.Logger
-import wee.digital.sample.data.repository.auth
+import wee.digital.sample.data.firebase.auth
 import wee.digital.sample.shared.onProgress
 
-class SignInUseCase(
+class SignInJob(
     private val email: String,
     private val password: String,
     private val onSuccess: (AuthResult) -> Unit,

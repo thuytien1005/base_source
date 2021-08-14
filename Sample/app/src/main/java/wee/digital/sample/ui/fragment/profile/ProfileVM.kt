@@ -7,11 +7,11 @@ import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
 import wee.digital.library.extension.toast
-import wee.digital.sample.data.repository.conversationByUid
-import wee.digital.sample.data.repository.userByUids
+import wee.digital.sample.data.firebase.conversationByUid
+import wee.digital.sample.data.firebase.userByUids
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreUser
-import wee.digital.sample.ui.usecase.AddContactUseCase
+import wee.digital.sample.ui.job.ContactAddJob
 import wee.digital.sample.ui.vm.BaseVM
 import wee.digital.sample.utils.documentToJsObject
 
@@ -28,7 +28,7 @@ class ProfileVM : BaseVM() {
     private var authUid = ""
 
     fun insertContact() {
-        AddContactUseCase(
+        ContactAddJob(
             uid = userLiveData.value!!.uid,
             onSuccess = {
                 addContactSuccessLiveData.value = true

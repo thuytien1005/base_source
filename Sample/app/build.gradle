@@ -136,6 +136,7 @@ dependencies {
     implementation deps.firebase.auth
     implementation deps.firebase.firestore
     implementation deps.firebase.storage
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta02'
 
     // custom view
     implementation deps.bottom_navigation

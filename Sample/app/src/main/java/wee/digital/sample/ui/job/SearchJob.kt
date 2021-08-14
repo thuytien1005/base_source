@@ -1,12 +1,12 @@
-package wee.digital.sample.ui.usecase
+package wee.digital.sample.ui.job
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ListenerRegistration
-import wee.digital.sample.data.repository.users
+import wee.digital.sample.data.firebase.users
 import wee.digital.widget.extension.isEmail
 import wee.digital.widget.extension.normalizer
 
-class SearchUseCase(
+class SearchJob(
     private val onResult: (List<DocumentSnapshot>?) -> Unit
 ) {
 

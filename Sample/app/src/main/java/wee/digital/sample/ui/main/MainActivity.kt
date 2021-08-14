@@ -7,7 +7,6 @@ import androidx.navigation.findNavController
 import wee.digital.library.extension.isGranted
 import wee.digital.sample.R
 import wee.digital.sample.app
-import wee.digital.sample.data.repository.chats
 import wee.digital.sample.databinding.MainBinding
 import wee.digital.sample.shared.progressLiveData
 import wee.digital.sample.ui.base.BaseActivity

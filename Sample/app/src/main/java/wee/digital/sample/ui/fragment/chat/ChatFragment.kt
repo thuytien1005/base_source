@@ -2,7 +2,7 @@ package wee.digital.sample.ui.fragment.chat
 
 import android.view.LayoutInflater
 import wee.digital.sample.R
-import wee.digital.sample.data.repository.auth
+import wee.digital.sample.data.firebase.auth
 import wee.digital.sample.databinding.ChatBinding
 import wee.digital.sample.ui.main.MainFragment
 import java.util.*

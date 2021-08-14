@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import wee.digital.library.extension.onGranted
 import wee.digital.library.extension.toast
 import wee.digital.sample.data.Backup
-import wee.digital.sample.data.repository.auth
+import wee.digital.sample.data.firebase.auth
 import wee.digital.sample.databinding.MeBinding
 import wee.digital.sample.ui.main.MainFragment
 import wee.digital.sample.ui.model.StoreUser

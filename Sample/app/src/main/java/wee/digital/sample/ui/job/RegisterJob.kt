@@ -1,13 +1,13 @@
-package wee.digital.sample.ui.usecase
+package wee.digital.sample.ui.job
 
 import com.google.firebase.auth.AuthResult
 import wee.digital.library.util.Logger
-import wee.digital.sample.data.repository.auth
-import wee.digital.sample.data.repository.updateUser
+import wee.digital.sample.data.firebase.auth
+import wee.digital.sample.data.firebase.updateUser
 import wee.digital.sample.shared.onProgress
 import wee.digital.sample.ui.model.StoreUser
 
-class RegisterUseCase(
+class RegisterJob(
     private val user: StoreUser,
     private val password: String,
     private val onSuccess: (AuthResult) -> Unit,

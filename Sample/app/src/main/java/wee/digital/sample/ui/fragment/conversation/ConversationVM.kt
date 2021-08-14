@@ -8,10 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.parse
-import wee.digital.sample.data.repository.chats
-import wee.digital.sample.data.repository.conversations
-import wee.digital.sample.data.repository.storage
-import wee.digital.sample.data.repository.users
+import wee.digital.sample.data.firebase.chats
+import wee.digital.sample.data.firebase.conversations
+import wee.digital.sample.data.firebase.storage
+import wee.digital.sample.data.firebase.users
 import wee.digital.sample.ui.model.StoreChat
 import wee.digital.sample.ui.model.StoreMessage
 import wee.digital.sample.ui.model.StoreUser

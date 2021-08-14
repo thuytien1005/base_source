@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
-import wee.digital.sample.data.repository.storage
-import wee.digital.sample.data.repository.users
+import wee.digital.sample.data.firebase.storage
+import wee.digital.sample.data.firebase.users
 import wee.digital.sample.ui.vm.BaseVM
 
 class MeVM : BaseVM() {

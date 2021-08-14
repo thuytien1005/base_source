@@ -1,4 +1,4 @@
-package wee.digital.sample.data.repository
+package wee.digital.sample.data.firebase
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
