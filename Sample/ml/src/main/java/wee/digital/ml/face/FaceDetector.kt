@@ -15,10 +15,10 @@ import wee.digital.ml.base.ScopedExecutor
 class FaceDetector {
 
     data class Info(
-            val numRuns: Int,
-            val frameLatency: Long,
-            val detectorLatency: Long,
-            val framesPerSecond: Int,
+        val numRuns: Int,
+        val frameLatency: Long,
+        val detectorLatency: Long,
+        val framesPerSecond: Int,
     )
 
     interface Interface {
@@ -57,31 +57,32 @@ class FaceDetector {
             val bitmap = BitmapUtils.getBitmap(image)
 
             @SuppressLint("UnsafeExperimentalUsageError")
-            val inputImage = InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
+            val inputImage =
+                InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees)
 
             val detectorStartTime = now
 
             detector.process(inputImage)
-                    .addOnSuccessListener(executor) { results: List<Face> ->
-                        FaceLogger.processInfo(frameStartTime, detectorStartTime)
-                        graphicOverlay?.clear()
-                        if (bitmap != null) {
-                            //graphicOverlay.add(CameraImageGraphic(graphicOverlay, bitmap))
-                        }
-                        results.firstOrNull()?.also {
-                            //graphicOverlay.add(FaceGraphic(graphicOverlay, it))
-                            int?.onProcessSuccess(it)
-                        }
-                        //graphicOverlay.postInvalidate()
+                .addOnSuccessListener(executor) { results: List<Face> ->
+                    FaceLogger.processInfo(frameStartTime, detectorStartTime)
+                    graphicOverlay?.clear()
+                    if (bitmap != null) {
+                        //graphicOverlay.add(CameraImageGraphic(graphicOverlay, bitmap))
                     }
-                    .addOnFailureListener(executor) { e: Exception ->
-                        //graphicOverlay.clear()
-                        //graphicOverlay.postInvalidate()
-                        int?.onProcessFailure(e)
+                    results.firstOrNull()?.also {
+                        //graphicOverlay.add(FaceGraphic(graphicOverlay, it))
+                        int?.onProcessSuccess(it)
                     }
-                    .addOnCompleteListener {
-                        image.close()
-                    }
+                    //graphicOverlay.postInvalidate()
+                }
+                .addOnFailureListener(executor) { e: Exception ->
+                    //graphicOverlay.clear()
+                    //graphicOverlay.postInvalidate()
+                    int?.onProcessFailure(e)
+                }
+                .addOnCompleteListener {
+                    image.close()
+                }
 
 
         } catch (e: Exception) {

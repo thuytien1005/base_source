@@ -1,76 +1,84 @@
 package wee.digital.library.extension
 
-import android.app.Activity
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
+import wee.digital.library.app
 
+fun isGranted(vararg permissions: String): Boolean {
+    permissions.iterator().forEach {
+        if (ContextCompat.checkSelfPermission(app, it) != PackageManager.PERMISSION_GRANTED) {
+            return false
+        }
+    }
+    return true
+}
 
 /**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy QV 2018/09/30
- * @Description: ...
- * None Right Reserved
- * -------------------------------------------------------------------------------------------------
+ *
  */
-fun Activity.onGranted(@RequiresPermission vararg permissions: String, onGranted: () -> Unit) {
-    val list = mutableListOf<String>()
-    permissions.forEach {
-        if (ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED) {
-            list.add(it)
+fun LifecycleOwner.onGrantedPermission(
+    vararg permissions: String,
+    onGranted: () -> Unit,
+    onDenied: (List<String>) -> Unit
+) {
+    val deniedPermissions = mutableListOf<String>()
+    val notGrantedPermissions = mutableListOf<String>()
+    val activity = requireActivity() ?: return
+    for (permission in permissions) {
+        when {
+            isGranted(permission) -> {
+                continue
+            }
+            ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) -> {
+                deniedPermissions.add(permission)
+            }
+            else -> {
+                notGrantedPermissions.add(permission)
+            }
         }
     }
-    if (list.isNullOrEmpty()) {
-        onGranted()
+    if (notGrantedPermissions.isNotEmpty()) {
+        lifecycle.addObserver(object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun onResume() {
+                lifecycle.removeObserver(this)
+                if (isGranted(*permissions)) {
+                    onGranted.invoke()
+                }
+            }
+        })
+        ActivityCompat.requestPermissions(activity, notGrantedPermissions.toTypedArray(), 101)
         return
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        requestPermissions(permissions, 1)
-    } else {
-        ActivityCompat.requestPermissions(this, permissions, 1)
-    }
-
-}
-
-fun Activity.isGranted(@RequiresPermission vararg permission: String): Boolean {
-    val list = mutableListOf<String>()
-    permission.forEach {
-        if (ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED) {
-            list.add(it)
-        }
-    }
-    return list.isNullOrEmpty()
-}
-
-fun Fragment.onGranted(@RequiresPermission vararg permissions: String, onGranted: () -> Unit) {
-    val list = mutableListOf<String>()
-    permissions.forEach {
-        if (ContextCompat.checkSelfPermission(context!!, it) != PackageManager.PERMISSION_GRANTED) {
-            list.add(it)
-        }
-    }
-    if (list.isNullOrEmpty()) {
-        onGranted()
+    if (deniedPermissions.isNotEmpty()) {
+        onDenied(deniedPermissions.toList())
         return
     }
-    requestPermissions(permissions, 1)
+    onGranted.invoke()
 }
 
-fun Fragment.isGranted(@RequiresPermission vararg permission: String): Boolean {
-    val list = mutableListOf<String>()
-    permission.forEach {
-        if (ContextCompat.checkSelfPermission(context!!, it) != PackageManager.PERMISSION_GRANTED) {
-            list.add(it)
+fun LifecycleOwner.observerPermission(
+    vararg permissions: String,
+    onGranted: () -> Unit,
+    onDenied: (List<String>) -> Unit
+) {
+    lifecycle.addObserver(object : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        fun onResume() {
+            if (isGranted(*permissions)) {
+                onGranted.invoke()
+            }
         }
+    })
+    if (!isGranted(*permissions)) {
+        onGrantedPermission(permissions = permissions, onGranted = { }, onDenied = onDenied)
     }
-    return list.isNullOrEmpty()
 }
-
-
 
 
 

@@ -1,0 +1,52 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "kotlin-kapt"
+}
+
+android {
+    compileSdkVersion builds.compile_sdk
+    defaultConfig {
+        minSdkVersion builds.min_sdk
+        targetSdkVersion builds.target_sdk
+        versionCode builds.version_code
+        versionName builds.version_name
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+
+    // concurrency pattern
+    implementation deps.kotlin.coroutines_core
+    implementation deps.kotlin.coroutines_android
+
+    implementation deps.android.corektx
+    implementation deps.android.activity
+    implementation deps.android.appcompat
+    implementation deps.android.constraintlayout
+    implementation deps.android.cardview
+
+    implementation deps.lifecycle.viewmodel
+    implementation deps.lifecycle.livedata
+    kapt deps.lifecycle.compiler
+
+    implementation "com.google.mlkit:face-detection:16.1.2"
+    implementation "com.google.mlkit:camera:16.0.0-beta1"
+}

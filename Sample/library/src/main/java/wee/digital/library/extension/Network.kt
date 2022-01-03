@@ -17,19 +17,25 @@ val connectionInfo: String?
     get() {
         val cm = connectivityManager
         when {
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.O -> cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                return when {
-                    hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "wifi"
-                    hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "cellular"
-                    hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "ethernet"
-                    else -> null
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.O -> {
+                val capabilities = cm.getNetworkCapabilities(cm.activeNetwork) ?: return null
+                capabilities.run {
+                    return when {
+                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "wifi"
+                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "cellular"
+                        hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "ethernet"
+                        else -> null
+                    }
                 }
             }
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.M -> @Suppress("DEPRECATION") cm.activeNetworkInfo?.run {
-                return when (type) {
-                    ConnectivityManager.TYPE_WIFI -> "wifi"
-                    ConnectivityManager.TYPE_MOBILE -> "mobile"
-                    else -> null
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.M -> @Suppress("DEPRECATION") {
+                val networkInfo = cm.activeNetworkInfo ?: return null
+                networkInfo.run {
+                    return when (type) {
+                        ConnectivityManager.TYPE_WIFI -> "wifi"
+                        ConnectivityManager.TYPE_MOBILE -> "mobile"
+                        else -> null
+                    }
                 }
             }
             else -> @Suppress("DEPRECATION") {
@@ -50,35 +56,43 @@ val networkDisconnected: Boolean
 val connectivityManager: ConnectivityManager
     get() = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-val networkLiveData: SingleLiveData<Boolean> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-    SingleLiveData<Boolean>()
-}.apply {
-    registerNetworkCallback()
-}
+val networkLiveData: SingleLiveData<Boolean> = SingleLiveData(networkConnected)
 
-@SuppressLint("MissingPermission")
-private fun registerNetworkCallback() {
+val networkAvailableLiveData: SingleLiveData<Boolean> = SingleLiveData(networkConnected)
 
-    val networkCallback = object : ConnectivityManager.NetworkCallback() {
+fun registerNetworkCallback() {
+    registerNetworkCallback(object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             networkLiveData.postValue(true)
+            networkAvailableLiveData.postValue(true)
         }
 
         override fun onLost(network: Network) {
             networkLiveData.postValue(false)
         }
-    }
+    })
+}
+
+fun registerNetworkCallback(callback: ConnectivityManager.NetworkCallback) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        connectivityManager.registerDefaultNetworkCallback(callback)
     } else {
         val request: NetworkRequest = NetworkRequest.Builder()
-                .addTransportType(NetworkCapabilities.TRANSPORT_VPN)
-                .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
-                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-                .build()
-        connectivityManager.registerNetworkCallback(request, networkCallback)
+            .addTransportType(NetworkCapabilities.TRANSPORT_VPN)
+            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+        connectivityManager.registerNetworkCallback(request, callback)
+    }
+}
+
+abstract class SimpleNetworkCallback : ConnectivityManager.NetworkCallback() {
+    override fun onAvailable(network: Network) {
+    }
+
+    override fun onLost(network: Network) {
     }
 }
 

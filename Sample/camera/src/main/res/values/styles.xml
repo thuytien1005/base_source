@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="FaceScanText">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:text">0141</item>
+        <item name="android:textColor">@color/colorScanWidget</item>
+        <item name="android:textSize">4sp</item>
+    </style>
+
+</resources>

@@ -3,17 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/homeFragment">
 
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="wee.digital.sample.ui.fragment.plash.SplashFragment"
-        android:label="SplashFragment"
-        tools:layout="@layout/splash" />
-
+    <dialog
+        android:id="@+id/selectableFragment"
+        android:name="wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment"
+        android:label="SelectableFragment"
+        tools:layout="@layout/selectable" />
     <action
-        android:id="@+id/action_global_splashFragment"
-        app:destination="@id/splashFragment" />
+        android:id="@+id/action_global_selectableFragment"
+        app:destination="@id/selectableFragment" />
+
+    <dialog
+        android:id="@+id/alertFragment"
+        android:name="wee.digital.sample.ui.fragment.dialog.alert.AlertFragment"
+        android:label="AlertFragment"
+        tools:layout="@layout/alert" />
+    <action
+        android:id="@+id/action_global_alertFragment"
+        app:destination="@id/alertFragment" />
+
+    <dialog
+        android:id="@+id/webFragment"
+        android:name="wee.digital.sample.ui.fragment.dialog.web.WebFragment"
+        android:label="WebFragment"
+        tools:layout="@layout/web" />
+    <action
+        android:id="@+id/action_global_webFragment"
+        app:destination="@id/webFragment" />
+
+    <dialog
+        android:id="@+id/tipFragment"
+        android:name="wee.digital.sample.ui.fragment.dialog.tip.TipFragment"
+        android:label="TipFragment"
+        tools:layout="@layout/tip" />
+    <action
+        android:id="@+id/action_global_tipFragment"
+        app:destination="@id/tipFragment" />
 
     <fragment
         android:id="@+id/homeFragment"
@@ -23,78 +49,5 @@
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
-
-    <dialog
-        android:id="@+id/alertFragment"
-        android:name="wee.digital.sample.ui.fragment.alert.AlertFragment"
-        android:label="AlertFragment"
-        tools:layout="@layout/alert" />
-    <action
-        android:id="@+id/action_global_alertFragment"
-        app:destination="@id/alertFragment" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="wee.digital.sample.ui.fragment.sign_in.SignInFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/sign_in" />
-    <action
-        android:id="@+id/action_global_loginFragment"
-        app:destination="@id/loginFragment" />
-
-    <dialog
-        android:id="@+id/selectableFragment"
-        android:name="wee.digital.sample.ui.fragment.selectable.SelectableFragment"
-        android:label="SelectableFragment"
-        tools:layout="@layout/selectable" />
-    <action
-        android:id="@+id/action_global_selectableFragment"
-        app:destination="@id/selectableFragment" />
-
-    <fragment
-        android:id="@+id/registerFragment"
-        android:name="wee.digital.sample.ui.fragment.register.RegisterFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/register" />
-    <action
-        android:id="@+id/action_global_registerFragment"
-        app:destination="@id/registerFragment" />
-
-    <fragment
-        android:id="@+id/contactFragment"
-        android:name="wee.digital.sample.ui.fragment.contact.ContactFragment"
-        android:label="contact"
-        tools:layout="@layout/contact" />
-    <action
-        android:id="@+id/action_global_contactFragment"
-        app:destination="@id/contactFragment" />
-
-    <fragment
-        android:id="@+id/chatFragment"
-        android:name="wee.digital.sample.ui.fragment.chat.ChatFragment"
-        android:label="ChatFragment"
-        tools:layout="@layout/chat"/>
-    <action
-        android:id="@+id/action_global_chatFragment"
-        app:destination="@id/chatFragment" />
-
-    <dialog
-        android:id="@+id/conversationFragment"
-        android:name="wee.digital.sample.ui.fragment.conversation.ConversationFragment"
-        android:label="ConversationFragment"
-        tools:layout="@layout/conversation" />
-    <action
-        android:id="@+id/action_global_conversationFragment"
-        app:destination="@id/conversationFragment" />
-
-    <dialog
-        android:id="@+id/profileFragment"
-        android:name="wee.digital.sample.ui.fragment.profile.ProfileFragment"
-        android:label="ProfileFragment"
-        tools:layout="@layout/profile" />
-
-    <action
-        android:id="@+id/action_global_profileFragment"
-        app:destination="@id/profileFragment" />
-
 
 </navigation>

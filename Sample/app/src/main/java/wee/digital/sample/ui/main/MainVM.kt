@@ -1,13 +1,10 @@
 package wee.digital.sample.ui.main
 
-import wee.digital.sample.ui.model.StoreChat
-import wee.digital.sample.ui.model.StoreUser
-import wee.digital.sample.ui.vm.BaseVM
+import androidx.lifecycle.MutableLiveData
+import wee.digital.sample.ui.base.BaseVM
+import wee.digital.sample.ui.model.AppBarArg
 
 class MainVM : BaseVM() {
 
-    var contactAdapterSelected = StoreUser()
-
-    var chatAdapterSelected :StoreChat? = null
-
+    val appBarArgLiveData = MutableLiveData<AppBarArg?>()
 }

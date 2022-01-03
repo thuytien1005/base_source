@@ -13,49 +13,54 @@ class Logger {
         this.tag = if (string.length > 23) string.substring(0, 22) else string
     }
 
-    constructor(cls: KClass<*>) : this(cls.simpleName ?: "")
+    constructor(cls: KClass<*>) {
+        val s = cls.java.simpleName
+        this.tag = if (s.length > 23) s.substring(0, 22) else s
+    }
 
-    constructor() : this("")
-
-    fun d(s: JsonObject) {
+    fun d(s: JsonObject?) {
+        if (s == null) {
+            d("null")
+            return
+        }
         val json = s.toString()
         d(JSONObject(json).toString(2))
     }
 
-    fun d(any: Any?) {
-        if (enable) Log.d(tag, any.toString())
+    fun d(any: String?) {
+        if (enable) Log.d(tag, any ?: "null")
     }
 
     fun d(throwable: Throwable?) {
         d(throwable?.message)
     }
 
-    fun i(any: Any?) {
-        if (enable) Log.i(tag, any.toString())
+    fun i(any: String?) {
+        if (enable) Log.i(tag, any ?: "null")
     }
 
     fun i(throwable: Throwable?) {
         i(throwable?.message)
     }
 
-    fun e(any: Any?) {
-        if (enable) Log.e(tag, any.toString())
+    fun e(any: String?) {
+        if (enable) Log.e(tag, any ?: "null")
     }
 
     fun e(throwable: Throwable?) {
         e(throwable?.message)
     }
 
-    fun w(any: Any?) {
-        if (enable) Log.w(tag, any.toString())
+    fun w(any: String?) {
+        if (enable) Log.w(tag, any ?: "null")
     }
 
     fun w(throwable: Throwable?) {
         w(throwable?.message)
     }
 
-    fun wtf(any: Any?) {
-        if (enable) Log.wtf(tag, any.toString())
+    fun wtf(any: String?) {
+        if (enable) Log.wtf(tag, any ?: "null")
     }
 
     fun wtf(throwable: Throwable?) {
@@ -75,7 +80,6 @@ class Logger {
         fun crash() {
             throw RuntimeException("crash")
         }
-
     }
 
 }

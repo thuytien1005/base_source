@@ -1,12 +1,15 @@
 package wee.digital.library.extension
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import wee.digital.library.app
 import java.net.NetworkInterface
+import java.text.SimpleDateFormat
 import java.util.*
+
 
 val macAddress: String
     get() {
@@ -34,22 +37,20 @@ val androidId: String
         return Settings.Secure.getString(app.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
-val deviceModel: String
+val deviceCode: String
     get() {
-        return if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
-            Build.MODEL.capitalize()
-        } else {
-            Build.MODEL
-        }
+        return "${Build.VERSION.RELEASE}"
     }
 
-val deviceName: String
+val nowInUTC: String
+    @SuppressLint("SimpleDateFormat")
     get() {
-        return if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
-            Build.MODEL.capitalize()
-        } else {
-            Build.MANUFACTURER.capitalize() + " " + Build.MODEL
-        }
+        val time = Build.TIME
+        val cal = Calendar.getInstance()
+        cal.timeZone = TimeZone.getTimeZone("UTC")
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        sdf.timeZone = cal.timeZone
+        return sdf.format(Date(time))
     }
 
 const val deviceOs = "android"

@@ -1,44 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/selectableView"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:clickable="true"
-    tools:background="@color/colorWhite">
+    android:id="@+id/layoutItem"
+    style="@style/MatchWidth"
+    android:layout_marginBottom="@dimen/contentMargin12"
+    android:clickable="true">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/selectableTextViewItem"
-        style="@style/TextView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/drw_underline"
+    <wee.digital.widget.custom.TextVerticalView
+        android:id="@+id/selectableTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowSize"
+        android:layout_marginStart="@dimen/contentMargin24"
+        android:layout_marginEnd="@dimen/contentMargin24"
+        android:checkable="false"
         android:clickable="false"
-        android:gravity="center_vertical"
-        android:maxLines="4"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/selectableImageView"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Item text goes here" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/selectableImageView"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:clickable="false"
-        android:padding="6dp"
-        android:src="@drawable/ic_placeholder"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,2:3"
+        android:drawableStart="@drawable/ic_placeholder"
+        android:drawableTint="@color/colorWhite"
+        android:tint="@color/colorPrimary"
+        android:title="Item title"
+        app:backgroundColor="@color/colorHint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/colorPrimary"
-        tools:visibility="visible" />
+        app:strokeLineColor="@color/colorLight"
+        app:strokeLineWidth="1dp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewCheck"
+        style="@style/Button.CheckBox"
+        android:layout_margin="@dimen/contentMargin24"
+        android:clickable="false"
+        android:src="@drawable/ic_checkbox_uncheck2"
+        app:layout_constraintBottom_toBottomOf="@+id/selectableTextView"
+        app:layout_constraintEnd_toEndOf="@+id/selectableTextView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

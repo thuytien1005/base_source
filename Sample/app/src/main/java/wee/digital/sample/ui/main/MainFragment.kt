@@ -1,22 +1,89 @@
 package wee.digital.sample.ui.main
 
+import android.graphics.Color
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
+import androidx.transition.Transition
 import androidx.viewbinding.ViewBinding
-import wee.digital.library.util.Logger
+import com.google.android.material.transition.MaterialContainerTransform
+import wee.digital.library.extension.windowSafeArea
+import wee.digital.sample.R
+import wee.digital.sample.data.api.httpErrorLiveData
+import wee.digital.sample.data.api.networkErrorLiveData
+import wee.digital.sample.data.api.progressLiveData
 import wee.digital.sample.ui.base.BaseFragment
-import wee.digital.sample.ui.vm.DialogVM
-import wee.digital.sample.ui.vm.UserVM
+import wee.digital.sample.ui.fragment.dialog.DialogVM
+import wee.digital.sample.ui.model.AppBarArg
+import wee.digital.widget.extension.SimpleTransitionListener
 
-abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainView {
+abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainFragmentView {
 
-    protected val log by lazy { Logger(this::class) }
+    override val mainActivity get() = requireActivity() as? MainActivity
+    override val mainVM by lazyActivityVM(MainVM::class)
+    override val dialogVM by lazyActivityVM(DialogVM::class)
 
-    protected val mainActivity get() = requireActivity() as? MainActivity
+    open fun backgroundColor(): Int = Color.WHITE
 
-    protected val mainVM by lazyActivityVM(MainVM::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        progressLiveData.value = false
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            duration = resources.getInteger(R.integer.fragment_enter_duration).toLong()
+            addListener(object : SimpleTransitionListener {
+                override fun onTransitionStart(transition: Transition) {
+                    onEnterTransitionStarted()
+                }
+            })
+        }
+        sharedElementReturnTransition = MaterialContainerTransform().apply {
+            duration = resources.getInteger(R.integer.fragment_enter_duration).toLong()
+        }
+    }
 
-    protected val dialogVM by lazyActivityVM(DialogVM::class)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val v = super<BaseFragment>.onCreateView(inflater, container, savedInstanceState)
+        return v
+    }
 
-    protected val userVM by lazyActivityVM(UserVM::class)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAppBar()
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+        networkErrorLiveData.observe {
+            showNetworkError(it)
+        }
+        httpErrorLiveData.observe {
+            showHttpError(it)
+        }
+        progressLiveData.observe {
+            if (it == true) showProgress() else hideProgress()
+        }
+    }
 
+    private fun initAppBar() {
+        windowSafeArea()
+        val arg = AppBarArg(
+            appBarColor = backgroundColor(),
+            mainBackgroundColor = backgroundColor(),
+            statusBarColor = backgroundColor(),
+            leftButton1 = R.drawable.ic_close,
+            leftButton1onClick = { onBackPressed() }
+        )
+        onAppBarConfig(arg)
+        mainVM.appBarArgLiveData.value = arg
+    }
 
+    open fun onAppBarConfig(it: AppBarArg) {
+        inputModeAdjustNothing()
+    }
+
+    open fun onEnterTransitionStarted() = Unit
 }

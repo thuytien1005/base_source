@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdkVersion builds.min_sdk
         targetSdkVersion builds.target_sdk
-        versionCode builds.version_code
-        versionName builds.version_name
         consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {
@@ -50,6 +48,7 @@ dependencies {
 
     // android
     implementation deps.android.appcompat
+    implementation deps.android.activity
     implementation deps.android.corektx
     implementation deps.android.constraintlayout
     implementation deps.android.recyclerview
@@ -57,6 +56,9 @@ dependencies {
     implementation deps.android.material
     implementation deps.android.browser
     implementation deps.android.vectordrawable
+
+    // paging recycler view adapter
+    implementation deps.paging.runtime
 
     // dimension resources
     implementation deps.dimens.sdp
@@ -66,7 +68,13 @@ dependencies {
     implementation deps.glide.glide
     kapt deps.glide.compiler
 
+    // date picker support before Jan 1,1970
+    implementation('com.wdullaer:materialdatetimepicker:4.2.3') {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'androidx.recyclerview'
+    }
+
     // custom view
     implementation deps.rounded_image_view
-    
+
 }

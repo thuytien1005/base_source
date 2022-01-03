@@ -1,29 +1,49 @@
 package wee.digital.sample.ui.base
 
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import wee.digital.library.extension.hideKeyboard
-import wee.digital.library.extension.hideSystemUI
+import kotlinx.coroutines.Job
+import wee.digital.library.extension.*
+import wee.digital.library.util.Logger
 import wee.digital.sample.R
+import wee.digital.widget.base.DialogLayout
+import wee.digital.widget.extension.ViewClickListener
 
-abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
-        FragmentView {
 
-    protected val bind: B by viewBinding(inflating())
+abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(),
+    FragmentView {
 
-    abstract fun inflating(): (LayoutInflater) -> B
+    protected val log: Logger by lazy { Logger(this::class) }
+
+    protected val vb: VB by viewBinding(inflating())
+
+    protected var dismissWhenTouchOutside: Boolean = false
+
+    protected var clickedView: View? = null
+
+    abstract fun inflating(): (LayoutInflater) -> ViewBinding
 
     /**
      * [DialogFragment] implements
      */
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+    }
+
+    override fun getTheme(): Int {
+        return R.style.App_Dialog_FullScreen_Transparent
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = object : Dialog(requireActivity(), dialogStyle()) {
+        val dialog = object : Dialog(requireActivity(), theme) {
             override fun onBackPressed() {
                 this@BaseDialogFragment.onBackPressed()
             }
@@ -31,6 +51,8 @@ abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
         dialog.window?.also {
             it.decorView.setBackgroundColor(Color.TRANSPARENT)
             it.attributes.windowAnimations = R.style.App_DialogAnim
+            it.statusBarColorRes(R.color.colorDialogBackground)
+            it.lightSystemWidgets()
             onWindowConfig(it)
         }
         dialog.setOnDismissListener {
@@ -39,24 +61,35 @@ abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
         return dialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = bind.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        state: Bundle?
+    ): View? {
+        val view = vb.root
         view.setOnTouchListener { _, _ ->
-            dismiss()
-            true
+            if (dismissWhenTouchOutside) {
+                dismiss()
+            }
+            return@setOnTouchListener dismissWhenTouchOutside
         }
+        onCreateView()
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.also {
+            it.statusBarColorRes(R.color.colorDialogBackground)
+            it.lightSystemWidgets()
+        }
         onViewCreated()
         onLiveDataObserve()
     }
 
     override fun onStart() {
         super.onStart()
-        when (dialogStyle()) {
+        when (theme) {
             R.style.App_Dialog_FullScreen,
             R.style.App_Dialog_FullScreen_Transparent,
             -> dialog?.window?.apply {
@@ -65,29 +98,64 @@ abstract class BaseDialogFragment<B : ViewBinding> : DialogFragment(),
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        uiJobList.forEach { it.cancel(null) }
+    }
+
+    override fun dismissAllowingStateLoss() {
+        if (view is DialogLayout) {
+            (view as DialogLayout).animateDismiss {
+                super.dismissAllowingStateLoss()
+            }
+        } else {
+            super.dismissAllowingStateLoss()
+        }
+    }
+
+    override fun dismiss() {
+        if (view is DialogLayout) {
+            (view as DialogLayout).animateDismiss {
+                super.dismiss()
+            }
+        } else {
+            super.dismiss()
+        }
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         hideKeyboard()
-        post(200) {
-            super.onDismiss(dialog)
+        super.onDismiss(dialog)
+    }
+
+    override fun addClickListener(vararg views: View?) {
+        val listener = object : ViewClickListener() {
+            override fun onClicks(v: View) {
+                clickedView = v
+                onViewClick(v)
+            }
         }
+        views.forEach { it?.setOnClickListener(listener) }
     }
 
     /**
      * [FragmentView] implements
      */
-    override val fragment: Fragment get() = this
+    final override val uiJobList: MutableList<Job> = mutableListOf()
+
+    final override val backPressedCallback: OnBackPressedCallback by lazy { getBackPressCallBack() }
+
+    override fun onBackPressed() {
+        backPressedCallback.remove()
+        dismiss()
+    }
 
     /**
      * [BaseDialogFragment] properties
      */
-    protected open fun dialogStyle(): Int {
-        return R.style.App_Dialog_FullScreen
+    protected open fun onWindowConfig(window: Window) {
+        window.statusBarColorRes(R.color.colorDialogBackground)
+        window.lightSystemWidgets()
     }
-
-    protected open fun onBackPressed() {
-        dismissAllowingStateLoss()
-    }
-
-    protected open fun onWindowConfig(window: Window) = Unit
 
 }

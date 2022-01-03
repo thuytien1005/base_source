@@ -2,33 +2,36 @@ package wee.digital.widget.extension
 
 import android.view.View
 import android.widget.EditText
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-private var lastClickTime: Long = 0
+private var lastClickViewId: Int = 0
 
-private var lastClickViewId: Int = -1
+abstract class ViewClickListener(private val delayedInterval: Long = 300) : View.OnClickListener {
 
-abstract class ViewClickListener(private val delayedInterval: Long = 400) : View.OnClickListener {
+    @Volatile
+    var onTrigger: Boolean = true
 
-    abstract fun onClicks(v: View?)
-
-    private val View?.isAcceptClick: Boolean get() = this?.id != lastClickViewId && delayedInterval == 0L
+    private var lastClickTime: Long = System.currentTimeMillis()
 
     private val isDelayed: Boolean get() = System.currentTimeMillis() - lastClickTime > delayedInterval
 
-    private var hasDelayed: Boolean = false
+    private val View.isAcceptClick: Boolean get() = id != lastClickViewId
+
+    abstract fun onClicks(v: View)
 
     final override fun onClick(v: View?) {
-        val b1 = isDelayed
-        val b2 = v.isAcceptClick
-        if (b1 || b2) {
-            lastClickViewId = v?.id ?: -1
-            lastClickTime = 0
-            hasDelayed = false
-            onClicks(v)
-        }
-        if (!hasDelayed) {
-            hasDelayed = true
+        v ?: return
+        if ((isDelayed || v.isAcceptClick) && onTrigger) {
+            lastClickViewId = v.id
             lastClickTime = System.currentTimeMillis()
+            onTrigger = false
+            onClicks(v)
+            GlobalScope.launch {
+                delay(delayedInterval)
+                onTrigger = true
+            }
         }
     }
 
@@ -45,7 +48,7 @@ fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit
         return
     }
     setOnClickListener(object : ViewClickListener(delayedInterval) {
-        override fun onClicks(v: View?) {
+        override fun onClicks(v: View) {
             listener(v)
         }
     })
@@ -61,7 +64,7 @@ fun View?.addViewClickListener(listener: ((View?) -> Unit)? = null) {
 
 fun addClickListeners(vararg views: View?, block: (View?) -> Unit) {
     val listener = object : ViewClickListener() {
-        override fun onClicks(v: View?) {
+        override fun onClicks(v: View) {
             block(v)
         }
     }
@@ -96,7 +99,6 @@ abstract class FastClickListener(private val clickCount: Int) : View.OnClickList
             onViewClick(v)
         }
     }
-
 }
 
 fun View?.addFastClickListener(clickCount: Int, block: () -> Unit) {

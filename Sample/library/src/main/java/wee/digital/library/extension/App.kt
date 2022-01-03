@@ -1,23 +1,14 @@
 package wee.digital.library.extension
 
 import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.content.res.Resources
-import android.database.Cursor
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Base64
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import wee.digital.library.app
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-
 
 private val memoryInfo = ActivityManager.MemoryInfo()
 
@@ -37,36 +28,14 @@ val appVersion: String
         }
     }
 
-fun isServiceRunning(serviceClass: Class<*>): Boolean {
-    val manager = app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-    @Suppress("DEPRECATION")
-    for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
-        if (serviceClass.name == service.service.className) {
-            return true
-        }
-    }
-    return false
-}
-
 val packageName: String get() = app.applicationContext.packageName
 
 val packageUrl: String get() = "package:$packageName"
 
-val statusBarHeight: Int
+val isTablet: Boolean
     get() {
-        var result = 0
-        val resourceId = app.resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) result = app.resources.getDimensionPixelSize(resourceId)
-        return result
-    }
-
-val navigationBarHeight: Int
-    get() {
-        val resources: Resources = app.resources
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else 0
+        return app.resources.configuration.screenLayout and
+                Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
     }
 
 var currentToast: Toast? = null
@@ -90,40 +59,7 @@ fun toast(@StringRes res: Int?, vararg arguments: Any) {
 }
 
 fun restartApp() {
-
     val intent = app.packageManager.getLaunchIntentForPackage(packageName)
     intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     app.startActivity(intent)
-}
-
-fun keyHash() {
-
-    try {
-        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            app.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo.signingCertificateHistory
-        } else {
-            @Suppress("DEPRECATION")
-            app.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
-        }
-        for (signature in signatures) {
-            val md = MessageDigest.getInstance("SHA")
-            md.update(signature.toByteArray())
-            Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-        }
-
-    } catch (ignore: PackageManager.NameNotFoundException) {
-    } catch (ignore: NoSuchAlgorithmException) {
-    }
-
-}
-
-fun realPathFromURI(uri: Uri): String? {
-    val projection = arrayOf(MediaStore.Images.Media._ID)
-    val cursor: Cursor = app.contentResolver.query(uri, projection, null, null, null)
-            ?: return uri.path
-    cursor.use {
-        val columnIndex = it.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
-        it.moveToFirst()
-        return it.getString(columnIndex)
-    }
 }

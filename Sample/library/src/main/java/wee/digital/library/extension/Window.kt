@@ -2,37 +2,28 @@ package wee.digital.library.extension
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Insets
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.*
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.LifecycleOwner
+import wee.digital.library.app
 
-/**
- * -------------------------------------------------------------------------------------------------
- * @Project: Kotlin
- * @Created: Huy 2021/04/15
- * @Organize: Wee Digital
- * @Description: ...
- * All Right Reserved
- * -------------------------------------------------------------------------------------------------
- */
-
-/**
- * [Activity] extensions
- */
 val Activity.screenWidth: Int
     get() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics: WindowMetrics = this.windowManager.currentWindowMetrics
             val insets: Insets = windowMetrics.windowInsets
-                    .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
             windowMetrics.bounds.width() - insets.left - insets.right
         } else {
             val displayMetrics = DisplayMetrics()
@@ -47,13 +38,13 @@ val Activity.screenHeight: Int
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics: WindowMetrics = this.windowManager.currentWindowMetrics
             val insets: Insets = windowMetrics.windowInsets
-                    .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+                .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
             windowMetrics.bounds.height() - insets.top - insets.bottom
         } else {
             val displayMetrics = DisplayMetrics()
             @Suppress("DEPRECATION")
             this.windowManager.defaultDisplay.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
+            displayMetrics.heightPixels
         }
     }
 
@@ -62,31 +53,9 @@ val Activity.screenRatio: Float
         return screenHeight.toFloat() / screenWidth
     }
 
-fun Window.setGravity(gravity: Int = Gravity.CENTER) {
-    val wlp = this.attributes ?: return
-    @Suppress("DEPRECATION")
-    wlp.flags = wlp.flags
-    wlp.gravity = Gravity.BOTTOM
-    this.attributes = wlp
-}
-
-fun Window.setFullScreen() {
-    when {
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R -> {
-            this.decorView?.windowInsetsController?.hide(
-                    WindowInsets.Type.statusBars()
-                            or WindowInsets.Type.navigationBars()
-            )
-        }
-        else -> {
-            val wlp = this.attributes ?: return
-            @Suppress("DEPRECATION")
-            wlp.flags = wlp.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN.inv()
-            this.attributes = wlp
-        }
-    }
-    setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-}
+/**
+ * Status bar
+ */
 
 fun Window.statusBarColor(@ColorInt color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -95,52 +64,45 @@ fun Window.statusBarColor(@ColorInt color: Int) {
     }
 }
 
-fun Window.navBarColor(@ColorInt color: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        navigationBarColor = color
-    }
+fun LifecycleOwner.statusBarColor(@ColorInt color: Int) {
+    requireWindow()?.statusBarColor(color)
+}
+
+fun Window.statusBarColorRes(@ColorRes res: Int) {
+    statusBarColor(ContextCompat.getColor(app, res))
+}
+
+fun LifecycleOwner.statusBarColorRes(@ColorRes res: Int) {
+    statusBarColor(ContextCompat.getColor(app, res))
 }
 
 fun Window.lightStatusBarWidgets() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+        insetsController?.setSystemBarsAppearance(
+            0,
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
         return
     }
     @Suppress("DEPRECATION")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val flags = decorView.systemUiVisibility
-        decorView.systemUiVisibility = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        var flags = decorView.systemUiVisibility
+        decorView.systemUiVisibility = flags xor
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR xor
+                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
     }
 }
 
-fun Window.lightNavBarWidgets() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        return
-    }
-    @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val flags = decorView.systemUiVisibility
-        decorView.systemUiVisibility = flags and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-    }
-}
-
-fun Window.darkNavBarWidgets() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        return
-    }
-    @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val flags = decorView.systemUiVisibility
-        decorView.systemUiVisibility = flags or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-    }
+fun LifecycleOwner.lightStatusBarWidgets() {
+    requireWindow()?.lightStatusBarWidgets()
 }
 
 fun Window.darkStatusBarWidgets() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        insetsController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+        insetsController?.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
         return
     }
     @Suppress("DEPRECATION")
@@ -150,6 +112,153 @@ fun Window.darkStatusBarWidgets() {
     }
 }
 
+fun LifecycleOwner.darkStatusBarWidgets() {
+    requireWindow()?.darkStatusBarWidgets()
+}
+
+
+/**
+ * Navigation bar
+ */
+fun Window.navBarColor(@ColorInt color: Int) {
+    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    navigationBarColor = color
+}
+
+fun LifecycleOwner.navBarColor(@ColorInt color: Int) {
+    requireWindow()?.navBarColor(color)
+}
+
+fun LifecycleOwner.navBarColorRes(@ColorRes res: Int) {
+    requireWindow()?.navBarColor(ContextCompat.getColor(app, res))
+}
+
+
+fun Window.lightNavBarWidgets() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            0,
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+        )
+        return
+    }
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val flags = decorView.systemUiVisibility
+        decorView.systemUiVisibility = flags and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+    }
+}
+
+fun LifecycleOwner.lightNavBarWidgets() {
+    requireWindow()?.lightNavBarWidgets()
+}
+
+fun Window.darkNavBarWidgets() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+        )
+        return
+    }
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val flags = decorView.systemUiVisibility
+        decorView.systemUiVisibility = flags or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    }
+}
+
+fun LifecycleOwner.darkNavBarWidgets() {
+    requireWindow()?.darkNavBarWidgets()
+}
+
+/**
+ *
+ */
+fun Window.lightSystemWidgets() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            0,
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
+        insetsController?.setSystemBarsAppearance(
+            0,
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+        )
+    }
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        var flags = decorView.systemUiVisibility
+        decorView.systemUiVisibility = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
+
+
+}
+
+fun LifecycleOwner.lightSystemWidgets() {
+    requireWindow()?.lightSystemWidgets()
+}
+
+fun Window.darkSystemWidgets() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insetsController?.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
+        insetsController?.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+            WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+        )
+    }
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val flags = decorView.systemUiVisibility
+        decorView.systemUiVisibility = flags or
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+    }
+}
+
+fun LifecycleOwner.darkSystemWidgets() {
+    requireWindow()?.darkSystemWidgets()
+}
+
+/**
+ * Fullscreen
+ */
+fun Window.windowFullScreen() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        setDecorFitsSystemWindows(false)
+    } else {
+        setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+}
+
+fun LifecycleOwner.windowFullScreen() {
+    requireWindow()?.windowFullScreen()
+}
+
+fun Window.windowSafeArea() {
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        setDecorFitsSystemWindows(true)
+    } else {
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        clearFlags(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        setFlags(0, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
+}
+
+fun LifecycleOwner.windowSafeArea() {
+    requireWindow()?.windowSafeArea()
+}
+
+/**
+ * system ui visible
+ */
 fun Window.hideSystemUI(hasFocus: Boolean = true) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasFocus) {
         insetsController?.hide(WindowInsets.Type.statusBars())
@@ -173,225 +282,88 @@ fun Window.hideSystemUI(hasFocus: Boolean = true) {
                 decorView.systemUiVisibility = flags
             }
         }
-    }
-    @Suppress("DEPRECATION")
-    setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-    )
-}
-
-fun Window.windowFullScreen() {
-    setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-    )
-}
-
-/**
- * Set status bar color
- */
-fun Activity.statusBarColor(@ColorInt color: Int) {
-    window.statusBarColor(color)
-}
-
-fun Fragment.statusBarColor(@ColorInt color: Int) {
-    activity?.statusBarColor(color)
-}
-
-fun DialogFragment.statusBarColor(@ColorInt color: Int) {
-    dialog?.window?.statusBarColor(color)
-}
-
-/**
- * Set navigation bar color
- */
-fun Activity.navBarColor(@ColorInt color: Int) {
-    window.navBarColor(color)
-}
-
-fun Fragment.navBarColor(@ColorInt color: Int) {
-    activity?.navBarColor(color)
-}
-
-fun DialogFragment.navBarColor(@ColorInt color: Int) {
-    dialog?.window?.navBarColor(color)
-}
-
-/**
- * Set light status bar widgets
- */
-fun Activity.lightStatusBarWidgets() {
-    window.lightStatusBarWidgets()
-}
-
-fun Fragment.lightStatusBarWidgets() {
-    activity?.lightStatusBarWidgets()
-}
-
-fun DialogFragment.lightStatusBarWidgets() {
-    dialog?.window?.lightStatusBarWidgets()
-}
-
-/**
- * Set dark status bar widgets
- */
-fun Activity.darkStatusBarWidgets() {
-    window.darkStatusBarWidgets()
-}
-
-fun Fragment.darkStatusBarWidgets() {
-    activity?.darkStatusBarWidgets()
-}
-
-fun DialogFragment.darkStatusBarWidgets() {
-    dialog?.window?.darkStatusBarWidgets()
-}
-
-/**
- * Set light navigation bar widgets
- */
-fun Activity.lightNavBarWidgets() {
-    window.lightNavBarWidgets()
-}
-
-fun Fragment.lightNavBarWidgets() {
-    activity?.lightNavBarWidgets()
-}
-
-fun DialogFragment.lightNavBarWidgets() {
-    dialog?.window?.lightNavBarWidgets()
-}
-
-/**
- * Set dark navigation bar widgets
- */
-fun Activity.darkNavBarWidgets() {
-    window?.darkNavBarWidgets()
-}
-
-fun Fragment.darkNavBarWidgets() {
-    activity?.darkNavBarWidgets()
-}
-
-fun DialogFragment.darkNavBarWidgets() {
-    dialog?.window?.darkNavBarWidgets()
-}
-
-/**
- *  override fun onWindowFocusChanged(hasFocus: Boolean) {
- *      super.onWindowFocusChanged(hasFocus)
- *  }
- */
-fun Activity.hideSystemUI(hasFocus: Boolean = true) {
-    window.hideSystemUI(hasFocus)
-}
-
-fun AlertDialog.hideSystemUI(hasFocus: Boolean = true) {
-    window?.hideSystemUI(hasFocus)
-}
-
-fun Activity.windowFullScreen() {
-    window.windowFullScreen()
-}
-
-fun AlertDialog.windowFullScreen() {
-    window?.windowFullScreen()
-}
-
-fun Activity.windowSafeArea() {
-    window.setFlags(
-            0,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-    )
-}
-
-/**
- * [Fragment] extensions
- */
-fun Fragment.windowFullScreen() {
-    activity?.windowFullScreen()
-}
-
-fun Fragment.windowSafeArea() {
-    activity?.windowSafeArea()
-}
-
-/**
- * Orientation
- */
-fun Activity.lockLandscape() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-}
-
-fun Activity.lockPortrait() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-}
-
-fun Activity.unlockOrientation() {
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-}
-
-/**
- * Status bar
- */
-fun Activity?.hideStatusBar() {
-    this ?: return
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        window.insetsController?.hide(WindowInsets.Type.statusBars())
-    } else {
-        @Suppress("DEPRECATION")
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-    }
-}
-
-fun Activity?.statusBarHeight(): Int {
-    this ?: return 0
-    var result = 0
-    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-    if (resourceId > 0)
-        result = resources.getDimensionPixelSize(resourceId)
-    return result
-}
-
-fun Activity?.contentUnderStatusBar(view: View) {
-    view.setPadding(0, statusBarHeight(), 0, 0)
-}
-
-/**
- * Navigation bar
- */
-fun Activity?.navigationBarDrawable(drawable: Drawable?) {
-    this ?: return
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
-    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    if (drawable is ColorDrawable) {
-        window.navigationBarColor = drawable.color
-    } else {
-        window.navigationBarColor = Color.TRANSPARENT
-        window.setBackgroundDrawable(drawable)
-    }
-}
-
-fun Activity?.hideNavigationBar(hasFocus: Boolean = true) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasFocus) this?.window?.apply {
-        setDecorFitsSystemWindows(false)
         return
     }
     @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && hasFocus) {
-        val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        val decorView = this?.window?.decorView ?: return
+    setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
+}
+
+fun LifecycleOwner.hideSystemUI(hasFocus: Boolean = true) {
+    requireWindow()?.hideSystemUI(hasFocus)
+}
+
+/**
+ * Activity orientation
+ */
+fun LifecycleOwner.lockLandscape() {
+    requireActivity()?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+}
+
+fun LifecycleOwner.lockPortrait() {
+    requireActivity()?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+}
+
+fun LifecycleOwner.unlockOrientation() {
+    requireActivity()?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+}
+
+/**
+ * Window drawable
+ */
+fun Window.windowDrawable(drawable: Drawable?) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
+    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    setBackgroundDrawable(drawable)
+}
+
+fun LifecycleOwner.windowDrawable(drawable: Drawable?) {
+    requireWindow()?.windowDrawable(drawable)
+}
+
+/**
+ * set Ui fullscreen and make status bar transparent
+ */
+
+fun Window.makeStatusBarTransparent() {
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        setDecorFitsSystemWindows(false)
+    } else {
+        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        val flags = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         decorView.systemUiVisibility = flags
-        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                decorView.systemUiVisibility = flags
-            }
-        }
+        statusBarColor = Color.TRANSPARENT
     }
+}
+
+fun LifecycleOwner.makeStatusBarTransparent() {
+    requireWindow()?.makeStatusBarTransparent()
+}
+
+
+/**
+ * Check system navigation bar visible
+ */
+
+fun Window.navIsShow(): Boolean {
+    @Suppress("DEPRECATION")
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        decorView.rootWindowInsets.isVisible(WindowInsets.Type.navigationBars())
+    } else {
+        var isVisible = false
+        decorView.setOnSystemUiVisibilityChangeListener {
+            isVisible = it == View.VISIBLE
+        }
+        isVisible
+    }
+}
+
+fun LifecycleOwner.navIsShow(): Boolean? {
+    return requireWindow()?.navIsShow()
 }

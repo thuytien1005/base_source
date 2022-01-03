@@ -9,33 +9,42 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.StringReader
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.reflect.KClass
+
+class JsonFieldNullException(key: String) : NullPointerException("json parse $key is null")
 
 /**
  * Parse [JsonObject]/[JsonArray]/[String] to Kotlin Object/List<Object>
  */
-private val convertFactory: Gson by lazy {
+val convertFactory: Gson by lazy {
     Gson()
 }
 
-fun readJsonFromAssets(fileName : String): JsonObject?{
-    val s = readAsset(fileName)
+fun readJsonFromAssets(fileName: String): JsonObject? {
+    val s = readStringFromAssets(fileName)
     return s.parse(JsonObject::class)
 }
 
-fun <T> JsonObject?.parse(cls: Class<T>): T? {
+fun readArrayFromAssets(fileName: String): JsonArray? {
+    val s = readStringFromAssets(fileName)
+    return s.parse(JsonArray::class)
+}
+
+fun <T> JsonElement?.parse(cls: Class<T>): T? {
     return this?.toString()?.parse(cls)
 }
 
-fun <T> JsonArray?.parse(cls: Class<Array<T>>): List<T>? {
+fun <T> JsonElement?.parse(cls: Class<Array<T>>): List<T>? {
     return this?.toString()?.parse(cls)
 }
 
-fun <T : Any> JsonObject?.parse(cls: KClass<T>): T? {
+fun <T : Any> JsonElement?.parse(cls: KClass<T>): T? {
     return this?.toString()?.parse(cls)
 }
 
-fun <T : Any> JsonArray?.parse(cls: KClass<Array<T>>): List<T>? {
+fun <T : Any> JsonElement?.parse(cls: KClass<Array<T>>): List<T>? {
     return this?.toString()?.parse(cls)
 }
 
@@ -51,11 +60,16 @@ fun <T> String?.parse(cls: Class<T>): T? {
     }
 }
 
+fun <T : Any> JsonElement?.parseOrThrow(cls: KClass<T>): T {
+    val s = this?.toString()
+    return convertFactory.fromJson(this, cls.java)
+}
+
 fun JsonElement?.toMap(): Map<String, Any?>? {
     try {
         this ?: return null
         return convertFactory.fromJson(this, object : TypeToken<HashMap<String?, Any?>?>() {}.type)
-    } catch (e: Exception) {
+    } catch (ignore: Exception) {
         return null
     }
 }
@@ -82,6 +96,9 @@ fun <T : Any> String?.parse(cls: KClass<Array<T>>): List<T>? {
 
 fun <T> T.toJsonObject(): JsonObject? {
     return try {
+        if (this is String){
+            return parse(JsonObject::class.java)
+        }
         val element = convertFactory.toJsonTree(this, object : TypeToken<T>() {}.type)
         return element.asJsonObject
     } catch (ignore: Exception) {
@@ -112,30 +129,28 @@ fun <T> Collection<T?>?.toJsonArray(): JsonArray? {
     return jsonArray
 }
 
-
 /**
  * [String] to [JsonObject]/[JsonArray]
  */
-fun String?.toObject(): JsonObject? {
+fun String?.toJsonObject(): JsonObject? {
     return parse(JsonObject::class.java)
 }
 
-fun String?.toArray(): JsonArray? {
+fun String?.toJsonArray(): JsonArray? {
     return parse(JsonArray::class.java)
 }
-
 
 /**
  * [JsonElement] to [JsonObject]/[JsonArray]
  */
-fun JsonElement?.toObject(): JsonObject? {
+fun JsonElement?.toJsonObject(): JsonObject? {
     this ?: return null
     if (this.isJsonNull) return null
     if (!this.isJsonObject) return null
     return this.asJsonObject
 }
 
-fun JsonElement?.toArray(): JsonArray? {
+fun JsonElement?.toJsonArray(): JsonArray? {
     this ?: return null
     if (isJsonNull) return null
     if (!isJsonArray) return null
@@ -143,7 +158,6 @@ fun JsonElement?.toArray(): JsonArray? {
     if (arr.size() == 0) return null
     return arr
 }
-
 
 /**
  * [JsonArray]
@@ -195,7 +209,6 @@ fun JsonArray?.notEmpty(): Boolean {
     return this.size() != 0
 }
 
-
 /**
  * [JsonObject] properties setter
  */
@@ -219,11 +232,17 @@ fun JsonObject.put(key: String, value: JsonElement?): JsonObject {
     return this
 }
 
-fun <T> JsonObject.put(key: String, value: List<T?>?): JsonObject {
-    if (null != value) add(key, value.toJsonArray())
+fun JsonObject.put(key: String, block: JsonObject.() -> Unit): JsonObject {
+    val value = JsonObject()
+    value.block()
+    add(key, value)
     return this
 }
 
+fun <T> JsonObject.put(key: String, value: List<T?>?): JsonObject {
+    add(key, value.toJsonArray() ?: JsonArray())
+    return this
+}
 
 /**
  * [JsonObject] properties getter
@@ -245,48 +264,6 @@ fun JsonObject?.array(key: String): JsonArray? {
     return arr
 }
 
-fun JsonObject?.str(key: String, default: String? = null): String? {
-    this ?: return default
-    if (!has(key)) return default
-    if (get(key).isJsonNull) return default
-    val s = get(key)?.asString
-    return s ?: default
-}
-
-fun JsonObject?.int(key: String, default: Int = -1): Int {
-    try {
-        this ?: return default
-        if (!has(key)) return default
-        if (get(key).isJsonNull) return default
-        return get(key)?.asInt ?: get(key)?.asString?.toIntOrNull()!!
-    } catch (e: Exception) {
-        return this!!.get(key)?.asString?.toDoubleOrNull()?.toInt() ?: 0
-    }
-}
-
-fun JsonObject?.long(key: String, default: Long = -1): Long {
-    try {
-        this ?: return default
-        if (!has(key)) return default
-        if (get(key).isJsonNull) return default
-        return get(key)?.asLong ?: get(key)?.asString?.toLongOrNull()!!
-    } catch (e: Exception) {
-        return this!!.get(key)?.asString?.toDoubleOrNull()?.toLong() ?: 0
-    }
-}
-
-fun JsonObject?.decimal(key: String, default: BigDecimal = BigDecimal.ZERO): BigDecimal {
-    try {
-        this ?: return default
-        if (!has(key)) return default
-        if (get(key).isJsonNull) return default
-        return get(key)?.asBigDecimal ?: get(key)?.asString?.toBigDecimalOrNull()
-        ?: 0.toBigDecimal()
-    } catch (e: Exception) {
-        return 0.toBigDecimal()
-    }
-}
-
 fun JsonObject?.bool(key: String, default: Boolean = false): Boolean {
     this ?: return default
     if (!has(key)) return default
@@ -294,32 +271,155 @@ fun JsonObject?.bool(key: String, default: Boolean = false): Boolean {
     return get(key)?.asBoolean ?: default
 }
 
-fun JsonObject?.float(key: String, default: Float = 0f): Float {
+fun JsonObject?.strOrThrow(key: String): String {
     try {
-        this ?: return default
-        if (!has(key)) return default
-        if (get(key).isJsonNull) return default
-        return get(key)?.asFloat ?: get(key)?.asString?.toFloatOrNull() ?: 0f
-    } catch (e: Exception) {
-        return 0f
+        val s = this!!.get(key)?.asString
+        if (s.isNullOrEmpty()) throw JsonFieldNullException(key)
+        return s
+    } catch (ignore: Exception) {
+        throw JsonFieldNullException(key)
     }
 }
 
-fun JsonObject?.double(key: String, default: Double = 0.0): Double {
+fun JsonObject?.str(key: String, default: String? = null): String? {
+    this ?: return default
+    if (!has(key)) return default
+    if (get(key).isJsonNull) return default
+    val s = get(key)?.asString
+    if (s.isNullOrEmpty()) return null
+    return s
+}
+
+fun JsonObject?.intOrNull(key: String): Int? {
     try {
-        this ?: return default
-        if (!has(key)) return default
-        if (get(key).isJsonNull) return default
-        return get(key)?.asDouble ?: get(key)?.asString?.toDoubleOrNull() ?: 0.0
-    } catch (e: Exception) {
-        return 0.0
+        this ?: return null
+        if (!has(key)) return null
+        if (get(key).isJsonNull) return null
+        return get(key)?.asInt ?: get(key)?.asString?.toIntOrNull()
+    } catch (ignore: Exception) {
+        return this!!.get(key)?.asString?.toDoubleOrNull()?.toInt()
     }
+}
+
+fun JsonObject?.intOrThrow(key: String): Int {
+    return intOrNull(key) ?: throw JsonFieldNullException(key)
+}
+
+fun JsonObject?.int(key: String, default: Int = 0): Int {
+    return intOrNull(key) ?: default
+}
+
+fun JsonObject?.longOrNull(key: String): Long? {
+    try {
+        this ?: return null
+        if (!has(key)) return null
+        if (get(key).isJsonNull) return null
+        return get(key)?.asLong ?: get(key)?.asString?.toLongOrNull()
+    } catch (ignore: Exception) {
+        return this!!.get(key)?.asString?.toDoubleOrNull()?.toLong()
+    } catch (ignore: Exception) {
+        return null
+    }
+}
+
+fun JsonObject?.longOrThrow(key: String): Long {
+    return longOrNull(key) ?: throw JsonFieldNullException(key)
+}
+
+fun JsonObject?.long(key: String, default: Long = 0L): Long {
+    return longOrNull(key) ?: default
+}
+
+fun JsonObject?.decimalOrNull(key: String): BigDecimal? {
+    try {
+        this ?: return null
+        if (!has(key)) return null
+        if (get(key).isJsonNull) return null
+        return get(key)?.asBigDecimal ?: get(key)?.asString?.toBigDecimalOrNull()
+        ?: null
+    } catch (ignore: Exception) {
+        return null
+    }
+}
+
+fun JsonObject?.decimalOrThrow(key: String): BigDecimal {
+    return decimalOrNull(key) ?: throw JsonFieldNullException(key)
+}
+
+val BIG_DECIMAL_MAX: BigDecimal get() = BigDecimal(999999999999)
+
+fun JsonObject?.decimal(key: String, default: BigDecimal = BigDecimal.ZERO): BigDecimal {
+    return decimalOrNull(key) ?: default
+}
+
+fun JsonObject?.floatOrNull(key: String): Float? {
+    try {
+        this ?: return null
+        if (!has(key)) return null
+        if (get(key).isJsonNull) return null
+        return get(key)?.asFloat ?: get(key)?.asString?.toFloatOrNull() ?: null
+    } catch (ignore: Exception) {
+        return null
+    }
+}
+
+fun JsonObject?.floatOrThrow(key: String): Float {
+    return floatOrNull(key) ?: throw JsonFieldNullException(key)
+}
+
+fun JsonObject?.float(key: String, default: Float = 0f): Float {
+    return floatOrNull(key) ?: default
+}
+
+fun JsonObject?.doubleOrNull(key: String): Double? {
+    try {
+        this ?: return null
+        if (!has(key)) return null
+        if (get(key).isJsonNull) return null
+        return get(key)?.asDouble ?: get(key)?.asString?.toDoubleOrNull() ?: null
+    } catch (ignore: Exception) {
+        return null
+    }
+}
+
+fun JsonObject?.doubleOrThrow(key: String): Double {
+    return doubleOrNull(key) ?: throw JsonFieldNullException(key)
+}
+
+fun JsonObject?.double(key: String, default: Double = 0.0): Double {
+    return doubleOrNull(key) ?: default
+}
+
+fun JsonObject?.dateOrNull(key: String, fmt: SimpleDateFormat): Date? {
+    val s = this.str(key) ?: return null
+    return try {
+        fmt.parse(s)
+    } catch (ignore: Exception) {
+        return null
+    }
+}
+
+fun JsonObject?.date(key: String, fmt: SimpleDateFormat): Date {
+    return dateOrNull(key, fmt) ?: Date()
+}
+
+fun JsonObject?.dateOrThrow(key: String, fmt: SimpleDateFormat): Date {
+    return dateOrNull(key, fmt) ?: throw JsonFieldNullException(key)
 }
 
 fun JsonObject?.list(key: String): List<JsonObject>? {
     val s = array(key).toString()
     return try {
         return convertFactory.fromJson(StringReader(s), Array<JsonObject>::class.java).toList()
+    } catch (ignore: Exception) {
+        null
+    }
+}
+
+fun <T : Any> JsonObject?.list(key: String, cls: KClass<Array<T>>): List<T>? {
+    val s = array(key).toString()
+    return try {
+        return convertFactory.fromJson(StringReader(s), cls.java).toList()
     } catch (ignore: Exception) {
         null
     }
@@ -334,6 +434,14 @@ fun JsonObject?.listString(key: String): List<String>? {
     }
 }
 
+fun JsonObject?.listInt(key: String): List<Int>? {
+    val s = array(key).toString()
+    return try {
+        return convertFactory.fromJson(StringReader(s), Array<Int>::class.java).toList()
+    } catch (ignore: Exception) {
+        null
+    }
+}
 
 /**
  * Beauty json
@@ -355,6 +463,8 @@ fun JsonObject?.stringyJson(): String {
         "null"
     }
 }
+
+
 
 
 

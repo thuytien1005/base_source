@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<wee.digital.widget.base.AppConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MatchWidth">
+    android:id="@+id/textContentLayout"
+    style="@style/MatchWidth"
+    android:clickable="false"
+    android:paddingTop="@dimen/contentMargin16"
+    android:paddingBottom="@dimen/contentMargin16"
+    app:radius="@dimen/rowRadius">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageViewIcon"
-        android:layout_width="28dp"
-        android:layout_height="0dp"
+        android:id="@+id/imageViewDrawableStart"
+        android:layout_width="@dimen/rowSize"
+        android:layout_height="@dimen/rowSize"
+        android:layout_marginStart="@dimen/contentMargin16"
+        android:background="@drawable/drw_oval"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:clickable="false"
+        android:padding="10dp"
         android:src="@drawable/ic_placeholder"
-        app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,26 +26,65 @@
         android:id="@+id/textViewTitle"
         style="@style/TextView"
         android:layout_width="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginStart="@dimen/contentMargin16"
+        android:clickable="false"
+        android:ellipsize="end"
+        android:textColor="@color/colorTextDefault"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Title goes here" />
+        app:layout_constraintBottom_toTopOf="@+id/textViewPlaceHolder"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewDrawableEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageViewDrawableStart"
+        app:layout_constraintTop_toTopOf="@+id/imageViewDrawableStart"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewPlaceHolder"
+        style="@style/TextView"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewDrawableStart"
+        app:layout_constraintStart_toStartOf="@id/textViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        tools:text="     " />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewProperty"
         style="@style/TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:ellipsize="end"
-        android:gravity="start"
-        android:maxLines="2"
-        android:minHeight="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textViewTitle"
+        android:clickable="false"
+        android:paddingEnd="@dimen/contentMargin12"
+        android:textColor="@color/colorHint"
+        android:textSize="@dimen/textSize12"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewDrawableEnd"
+        app:layout_constraintStart_toStartOf="@+id/textViewPlaceHolder"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        tools:text="Property text goes here\nmax lines is 2" />
+        tools:maxLines="2"
+        tools:text="@tools:sample/lorem/random" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewDrawableEnd"
+        android:layout_width="@dimen/rowSizeD2"
+        android:layout_height="0dp"
+        android:background="@color/colorTransparent"
+        android:clickable="true"
+        android:paddingEnd="@dimen/contentMargin12"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewDrawableStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageViewDrawableStart" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/contentMargin12"
+        android:thumb="@drawable/switch_thumb"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewDrawableStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:track="@drawable/switch_track"
+        tools:visibility="visible" />
+
+</wee.digital.widget.base.AppConstraintLayout>

@@ -2,42 +2,33 @@ package wee.digital.sample.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.Job
 
-abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
-        BaseView {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
+    BaseView {
 
-    protected val bind: B by viewBinding(inflating())
+    protected val vb: VB by viewBinding(inflating())
 
-    abstract fun inflating(): (LayoutInflater) -> B
+    abstract fun inflating(): (LayoutInflater) -> ViewBinding
 
     /**
      * [AppCompatActivity] implements
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(bind.root)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        setContentView(vb.root)
         onViewCreated()
         onLiveDataObserve()
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        /*if (event.action == MotionEvent.ACTION_DOWN) {
-            val v = currentFocus
-            if (v is EditText) {
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.windowToken, 0)
-                }
-            }
-        }*/
-        return super.dispatchTouchEvent(event)
+    override fun onPause() {
+        super.onPause()
+        uiJobList.forEach { it.cancel(null) }
     }
 
     /**
@@ -47,6 +38,8 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
 
     final override val lifecycleOwner: LifecycleOwner get() = this
 
+    override val uiJobList: MutableList<Job> = mutableListOf()
+
     /**
      * [BaseActivity] properties
      */
@@ -54,8 +47,11 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity(),
         throw NullPointerException("fragmentContainerId no has implement")
     }
 
-    protected fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> T): Lazy<T> {
-        return lazy { block.invoke(layoutInflater) }
+    protected fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> ViewBinding): Lazy<T> {
+        return lazy {
+            @Suppress("UNCHECKED_CAST")
+            block.invoke(layoutInflater) as T
+        }
     }
 
 }

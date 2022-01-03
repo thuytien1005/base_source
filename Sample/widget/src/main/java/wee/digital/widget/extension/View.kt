@@ -2,83 +2,50 @@ package wee.digital.widget.extension
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
+import android.content.ContextWrapper
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.fragment.app.FragmentActivity
-import wee.digital.widget.app
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-
-fun Float.dpToPx(): Float {
-    val resources = app.resources
-    val scale = resources.displayMetrics.density
-    return (this * scale + 0.5f)
+fun View.requireActivity(): Activity? {
+    val lifecycleOwner = this.findViewTreeLifecycleOwner()
+    if (lifecycleOwner is Activity) return lifecycleOwner
+    if (lifecycleOwner is Fragment) return lifecycleOwner.requireActivity()
+    var context = context
+    while (context is ContextWrapper) {
+        if (context is Activity) {
+            return context
+        }
+        context = context.baseContext
+    }
+    return null
 }
 
-fun Float.spToPx(): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics).roundToInt().toFloat()
+fun View.dpToPx(value: Float): Float {
+    val scale = context.resources.displayMetrics.density
+    return (value * scale + 0.5f)
 }
-
-fun Float.dpToSp(): Int {
-    return (this.dpToPx() / this.spToPx().toFloat()).roundToInt()
-}
-
-fun Float.pxToDp(): Float {
-    return this / (app.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-}
-
-fun Float.dipToPx(): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, app.resources.displayMetrics)
-}
-
-fun Int.pxToDp(): Int {
-    return (this / Resources.getSystem().displayMetrics.density).roundToInt()
-}
-
-fun Int.pxToSp(): Int {
-    return (this / Resources.getSystem().displayMetrics.density).roundToInt()
-}
-
-fun Int.isDarkColor(): Boolean {
-    val darkness = 1 - (0.299 * Color.red(this) + 0.587 * Color.green(this) + 0.114 * Color.blue(this)) / 255
-    return darkness >= 0.5
-}
-
-fun Int.isLightColor(): Boolean {
-    return !isDarkColor()
-}
-
-fun Int.isDarkColorRes(): Boolean {
-    return color(this).isDarkColor()
-}
-
-fun Int.isLightColorRes(): Boolean {
-    return color(this).isLightColor()
-}
-
-/**
- * View
- */
-val WRAP = -2
-
-val MATCH = -1
 
 fun show(vararg views: View) {
     for (v in views) v.show()
@@ -94,21 +61,29 @@ fun gone(vararg views: View) {
 
 val View.activity: Activity? get() = context as? Activity
 
-val View.fragmentActivity: FragmentActivity? get() = context as? FragmentActivity
-
-val View?.backgroundColor: Int
-    get() {
-        this ?: return Color.WHITE
-        this.background ?: return Color.WHITE
-        var color = Color.TRANSPARENT
-        val background: Drawable = this.background
-        if (background is ColorDrawable) color = background.color
-        return color
-    }
+fun View.color(@ColorRes res: Int): Int {
+    return ContextCompat.getColor(context, res)
+}
 
 /**
  * [View] visible state
  */
+val View?.lifecycleScope: LifecycleCoroutineScope?
+    get() = this?.findViewTreeLifecycleOwner()?.lifecycleScope
+
+fun View?.launch(block: () -> Unit) {
+    lifecycleScope?.launch(Dispatchers.Main) {
+        block()
+    }
+}
+
+fun View?.launch(delayInterval: Long, block: () -> Unit) {
+    lifecycleScope?.launch(Dispatchers.Main) {
+        withContext(Dispatchers.IO) { delay(delayInterval) }
+        block()
+    }
+}
+
 fun View.show() {
     if (visibility != View.VISIBLE) visibility = View.VISIBLE
 }
@@ -146,14 +121,33 @@ fun View?.post(delayed: Long, runnable: Runnable) {
  *      <item name="android:windowEnterAnimation">@anim/anim1</item>
  * </style>
  */
-fun View.showPopup(@LayoutRes layoutRes: Int, @StyleRes animationStyle: Int, block: (View, PopupWindow) -> Unit) {
+fun View.showPopup(
+    @LayoutRes layoutRes: Int,
+    @StyleRes animationStyle: Int,
+    block: (View, PopupWindow) -> Unit
+) {
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val v = inflater.inflate(layoutRes, null)
-    val popup = PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true)
+    val popup = PopupWindow(
+        v,
+        LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT,
+        true
+    )
     popup.animationStyle = animationStyle
     popup.showAsDropDown(this)
     block(v, popup)
 }
+
+val View?.backgroundColor: Int
+    get() {
+        this ?: return Color.WHITE
+        this.background ?: return Color.WHITE
+        var color = Color.TRANSPARENT
+        val background: Drawable = this.background
+        if (background is ColorDrawable) color = background.color
+        return color
+    }
 
 fun View.backgroundTint(@ColorInt color: Int) {
     post {
@@ -170,73 +164,99 @@ fun View.backgroundTintRes(@ColorRes colorRes: Int) {
     backgroundTint(color(colorRes))
 }
 
-fun View.getBitmap(w: Int = width, h: Int = height, block: (Bitmap?) -> Unit) {
-    addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-        override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
-            this@getBitmap.removeOnLayoutChangeListener(this)
-            v.post {
-                val bitmap = getBitmap(w, h)
-                block(bitmap)
-            }
-        }
-    })
+fun View.getBitmap(): Bitmap {
+    val lp = this.layoutParams
+    val b = Bitmap.createBitmap(lp.width, lp.height, Bitmap.Config.ARGB_8888)
+    val c = Canvas(b)
+    this.layout(this.left, this.top, this.right, this.bottom)
+    this.draw(c)
+    return b
 }
 
-fun View.getBitmap(w: Int = width, h: Int = height): Bitmap? {
+fun View.getBitmapColor(defaultColor: Int = -1): Bitmap? {
+    var bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    if (defaultColor > 0) canvas.drawColor(defaultColor)
+    this.draw(canvas)
+    return bitmap
+}
+
+fun View?.getLocation(): Point {
     return try {
-        if (w > 0 && h > 0) {
-            this.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY),
-                    View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY))
-        }
-        this.layout(0, 0, this.measuredWidth, this.measuredHeight)
-        val bitmap = Bitmap.createBitmap(this.measuredWidth, this.measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        this.background?.draw(canvas)
-        this.draw(canvas)
-        bitmap
-    } catch (ignore: Exception) {
-        null
+        val ints = IntArray(2)
+        this?.getLocationOnScreen(ints)
+        Point(ints.first(), ints.last())
+    } catch (e: Exception) {
+        Point(0, 0)
     }
 }
 
-fun View.setRatio(width: Int, height: Int) {
-    ConstraintSet().also {
-        it.clone(parent as ConstraintLayout)
-        val ratio = if (layoutParams.width == 0) "w,$width:$height"
-        else "w,$height:$width"
-        it.setDimensionRatio(this.id, ratio)
-        it.applyTo(parent as ConstraintLayout)
+fun View?.hideKeyboard() {
+    this?.post {
+        clearFocus()
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(windowToken, 0)
     }
 }
 
-fun View.getSize(block: (Int /*width*/, Int/*height*/) -> Unit) {
-    viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-        override fun onGlobalLayout() {
-            viewTreeObserver.removeOnGlobalLayoutListener(this)
-            block(width, height)
-        }
-    })
+fun View?.showKeyboard() {
+    this?.post {
+        requestFocus()
+        val imm: InputMethodManager? =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
 }
 
-/**
- * Inflate
- */
+fun clearBackground(vararg views: View) {
+    views.forEach { it.background = null }
+}
+
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
 
-fun ViewGroup.enableChildren(enabled: Boolean) {
+fun ViewGroup.isEnableChildren(enabled: Boolean) {
     val childCount = this.childCount
     for (i in 0 until childCount) {
         val view = this.getChildAt(i)
         view.isEnabled = enabled
         if (view is ViewGroup) {
-            view.enableChildren(enabled)
+            view.isEnableChildren(enabled)
         }
     }
 }
 
-fun inflater(@LayoutRes layoutRes: Int): View {
-    val inflater = app.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    return inflater.inflate(layoutRes, null)
+fun ViewGroup.enableChildren() {
+    isEnableChildren(true)
+}
+
+fun ViewGroup.disableChildren() {
+    isEnableChildren(false)
+}
+
+@ColorInt
+fun Int.darker(factor: Float): Int {
+    val a = Color.alpha(this)
+    val r = (Color.red(this) * factor).toDouble().roundToInt()
+    val g = (Color.green(this) * factor).toDouble().roundToInt()
+    val b = (Color.blue(this) * factor).toDouble().roundToInt()
+    return Color.argb(
+        a,
+        r.coerceAtMost(255),
+        g.coerceAtMost(255),
+        b.coerceAtMost(255)
+    )
+}
+
+fun View.setMarginTop(marginTop: Int) {
+    val menuLayoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    menuLayoutParams.setMargins(0, marginTop, 0, 0)
+    this.layoutParams = menuLayoutParams
+}
+
+fun View.setMarginBottom(marginBottom: Int) {
+    val menuLayoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    menuLayoutParams.setMargins(0, 0, 0, marginBottom)
+    this.layoutParams = menuLayoutParams
 }

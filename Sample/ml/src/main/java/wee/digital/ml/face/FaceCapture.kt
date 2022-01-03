@@ -17,7 +17,7 @@ import wee.digital.ml.camera.cameraOptions
 import wee.digital.ml.camera.hasCameraPermission
 
 class FaceCapture(private val view: ViewInterface) :
-        LifecycleObserver {
+    LifecycleObserver {
 
     interface ViewInterface {
         val lifecycleOwner: LifecycleOwner
@@ -81,22 +81,30 @@ class FaceCapture(private val view: ViewInterface) :
     fun bindImageAnalysis() {
         view.cameraProvider.unbind(imageAnalysis)
         imageAnalysis.setAnalyzer(
-                ContextCompat.getMainExecutor(ML.app),
-                { imageProxy: ImageProxy ->
-                    if (needUpdateGraphicOverlayImageSourceInfo) {
-                        when (imageProxy.imageInfo.rotationDegrees) {
-                            0, 180 -> view.graphicOverlay.setImageSourceInfo(imageProxy.width, imageProxy.height, cameraOptions.isImageFlipped)
-                            else -> view.graphicOverlay.setImageSourceInfo(imageProxy.height, imageProxy.width, cameraOptions.isImageFlipped)
-                        }
-                        needUpdateGraphicOverlayImageSourceInfo = false
+            ContextCompat.getMainExecutor(ML.app),
+            { imageProxy: ImageProxy ->
+                if (needUpdateGraphicOverlayImageSourceInfo) {
+                    when (imageProxy.imageInfo.rotationDegrees) {
+                        0, 180 -> view.graphicOverlay.setImageSourceInfo(
+                            imageProxy.width,
+                            imageProxy.height,
+                            cameraOptions.isImageFlipped
+                        )
+                        else -> view.graphicOverlay.setImageSourceInfo(
+                            imageProxy.height,
+                            imageProxy.width,
+                            cameraOptions.isImageFlipped
+                        )
                     }
-                    faceDetectorProcessor.process(imageProxy, view.graphicOverlay)
+                    needUpdateGraphicOverlayImageSourceInfo = false
                 }
+                faceDetectorProcessor.process(imageProxy, view.graphicOverlay)
+            }
         )
         view.cameraProvider.bindToLifecycle(
-                view.lifecycleOwner,
-                cameraOptions.selector,
-                imageAnalysis
+            view.lifecycleOwner,
+            cameraOptions.selector,
+            imageAnalysis
         )
     }
 

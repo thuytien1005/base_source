@@ -17,18 +17,55 @@ val MONTH: Long get() = 31 * DAY
 
 val YEAR: Long get() = 365 * DAY
 
-val nowInMillis: Long get() = System.currentTimeMillis()
+val calendar: Calendar get() = Calendar.getInstance(TimeZone.getDefault())
 
-val calendar: Calendar get() = Calendar.getInstance()
+val nowInMillis: Long get() = calendar.timeInMillis
 
-val nowInSecond: Long get() = System.currentTimeMillis() / SECOND
+val nowInSecond: Long get() = nowInMillis / SECOND
 
-fun nowFormat(format: String): String {
+val defaultTimeFormat by lazy { SimpleDateFormat("dd/MM/yyyy-HH:mm:ss") }
+
+val defaultDateFormat by lazy { SimpleDateFormat("dd/MM/yyyy") }
+
+val simpleDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd") }
+
+val responseDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'") }
+
+
+fun nowText(strFormat: String): String {
+    return nowInMillis.timeFormat(strFormat)
+}
+
+fun nowText(format: SimpleDateFormat): String {
     return nowInMillis.timeFormat(format)
 }
 
-fun nowFormat(sdf: SimpleDateFormat): String {
-    return nowInMillis.timeFormat(sdf)
+val nowText: String get() = nowText(defaultTimeFormat)
+
+val todayText: String get() = nowText(defaultDateFormat)
+
+fun addDays(days: Int?): Date {
+    val cal = calendar
+    cal.add(Calendar.DATE, days ?: 0)
+    return cal.time
+}
+
+fun addYears(years: Int): Date {
+    val cal = calendar
+    cal.add(Calendar.YEAR, years)
+    return cal.time
+}
+
+fun Date.addDays(days: Int): Date {
+    val cal = calendar.also { it.time = this }
+    cal.add(Calendar.DATE, days)
+    return cal.time
+}
+
+fun Date.addYears(years: Int): Date {
+    val cal = calendar.also { it.time = this }
+    cal.add(Calendar.YEAR, years)
+    return cal.time
 }
 
 // if give up time in second convert to time in millis
@@ -36,9 +73,9 @@ fun Long.correctTime(): Long {
     return if (this < 1000000000000L) this * 1000 else this
 }
 
-fun Long.timeFormat(formatter: SimpleDateFormat): String {
+fun Long.timeFormat(format: SimpleDateFormat): String {
     return try {
-        formatter.format(Date(this.correctTime()))
+        format.format(Date(this.correctTime()))
     } catch (e: ParseException) {
         ""
     } catch (e: InvocationTargetException) {
@@ -46,60 +83,71 @@ fun Long.timeFormat(formatter: SimpleDateFormat): String {
     }
 }
 
-fun Long.timeFormat(formatter: String): String {
-    return timeFormat(SimpleDateFormat(formatter))
+fun Long.timeFormat(strFormat: String): String {
+    return timeFormat(SimpleDateFormat(strFormat))
+}
+
+fun Long.secondsFormat(): String {
+    return "%s:%02d".format(this / 60, this % 60)
 }
 
 /**
  * [String] time convert
  */
-fun String?.timeFormat(formatter: String): Long? {
-    return timeFormat(SimpleDateFormat(formatter))
-}
-
-fun String?.timeFormat(formatter1: SimpleDateFormat, formatter2: SimpleDateFormat): String? {
-    this ?: return null
-    return try {
-        val date = this.dateFormat(formatter1)
-        formatter2.format(date)
+fun String?.calculatorAge(format: SimpleDateFormat): Int {
+    val inputDate = calendar
+    try {
+        inputDate.time = format.parse(this)
     } catch (e: ParseException) {
-        null
-    } catch (e: InvocationTargetException) {
-        null
+        print(e.message)
     }
+    var age = calendar.year - inputDate.year
+    when {
+        calendar.month - inputDate.month == 0 -> {
+            if (calendar.day - inputDate.day < 0) {
+                age -= 1
+            }
+        }
+        calendar.month - inputDate.month < 0 -> age -= 1
+    }
+    return age
 }
 
-fun String?.timeFormat(formatter: SimpleDateFormat): Long? {
-    this ?: return null
-    return try {
-        formatter.parse(this)?.time ?: 0
-    } catch (e: ParseException) {
-        null
-    } catch (e: InvocationTargetException) {
-        null
-    }
-}
-
-fun String?.dateFormat(formatter: SimpleDateFormat): Date {
+fun String?.toDate(format: SimpleDateFormat): Date {
     this ?: return Date()
     return try {
-        formatter.parse(this) ?: Date()
-    } catch (e: ParseException) {
-        return Date()
-    } catch (e: InvocationTargetException) {
+        format.parse(this)
+    } catch (e: Exception) {
         return Date()
     }
 }
 
-fun Date?.dateFormat(formatter: SimpleDateFormat): String? {
+fun String?.toDateOrNull(format: SimpleDateFormat): Date? {
     this ?: return null
     return try {
-        formatter.format(this)
-    } catch (e: ParseException) {
-        return null
-    } catch (e: InvocationTargetException) {
+        format.parse(this)
+    } catch (e: Exception) {
         return null
     }
+}
+
+fun Date?.toString(format: SimpleDateFormat): String? {
+    this ?: return null
+    return try {
+        format.format(this)
+    } catch (e: Exception) {
+        return null
+    }
+}
+
+fun Date?.toString(strFormat: String): String? {
+    return toString(SimpleDateFormat(strFormat))
+}
+
+fun Date.inTimes(minDate: Date?, maxDate: Date?): Boolean {
+    minDate ?: return false
+    maxDate ?: return false
+    return this.after(minDate.addDays(-1)) && this.before(maxDate.addDays(1))
 }
 
 val Long.secondText: String
@@ -116,38 +164,6 @@ val Long.toSecond: Long
 /**
  * [Calendar] time convert
  */
-fun Calendar.timeFormat(formatter: SimpleDateFormat): String {
-    return try {
-        formatter.format(this.time)
-    } catch (e: ParseException) {
-        ""
-    } catch (e: InvocationTargetException) {
-        ""
-    }
-}
-
-fun Calendar.timeFormat(formatter: String): String {
-    return timeFormat(SimpleDateFormat(formatter))
-}
-
-fun Calendar.isCurrentDay(momentCal: Calendar = calendar): Boolean {
-    if (this.get(Calendar.YEAR) != momentCal.get(Calendar.YEAR)) return false
-    if (this.get(Calendar.MONTH) + 1 != momentCal.get(Calendar.MONTH) + 1) return false
-    return this.get(Calendar.DAY_OF_MONTH) == momentCal.get(Calendar.DAY_OF_MONTH)
-}
-
-fun Calendar.isYesterday(momentCal: Calendar = calendar): Boolean {
-    if (this.get(Calendar.YEAR) != momentCal.get(Calendar.YEAR)) return false
-    if (this.get(Calendar.MONTH) + 1 != momentCal.get(Calendar.MONTH) + 1) return false
-    return this.get(Calendar.DAY_OF_MONTH) - momentCal.get(Calendar.DAY_OF_MONTH) == -1
-}
-
-fun Calendar.isTomorrow(momentCal: Calendar = calendar): Boolean {
-    if (this.get(Calendar.YEAR) != momentCal.get(Calendar.YEAR)) return false
-    if (this.get(Calendar.MONTH) != momentCal.get(Calendar.MONTH)) return false
-    return this.get(Calendar.DAY_OF_MONTH) - momentCal.get(Calendar.DAY_OF_MONTH) == 1
-}
-
 val Calendar.year: Int get() = this.get(Calendar.YEAR)
 
 val Calendar.month: Int get() = this.get(Calendar.MONTH) + 1
@@ -156,6 +172,7 @@ val Calendar.day: Int get() = this.get(Calendar.DAY_OF_MONTH)
 
 val Calendar.maxDayOfMonth: Int get() = this.getActualMaximum(Calendar.DAY_OF_MONTH)
 
+val Calendar.dayOfYear: Int get() = this.getActualMaximum(Calendar.DAY_OF_YEAR)
 
 
 

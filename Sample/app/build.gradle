@@ -14,7 +14,6 @@ android {
         versionCode builds.version_code
         versionName builds.version_name
         flavorDimensions "default"
-        consumerProguardFiles "consumer-rules.pro"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {
@@ -68,11 +67,11 @@ android {
             jniLibs.srcDirs = ["libs"]
         }
     }
-    aaptOptions {
-        noCompress "tflite"
-    }
     buildFeatures {
         viewBinding = true
+    }
+    androidResources {
+        noCompress 'tflite'
     }
 }
 
@@ -85,6 +84,9 @@ dependencies {
 
     // widgets lib
     implementation project(":widget")
+
+    // widgets lib
+    implementation project(":camera")
 
     // kotlin
     implementation deps.kotlin.stdlib
@@ -109,6 +111,7 @@ dependencies {
     implementation deps.android.annotation
     implementation deps.android.vectordrawable
     implementation deps.android.security
+    implementation deps.android.legacy_v4
 
     // fragment navigation
     implementation deps.navigation.fragment
@@ -120,7 +123,6 @@ dependencies {
     // android lifecycle aware
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.lifecycle.compiler
 
     // sq-lite database orm
@@ -133,29 +135,20 @@ dependencies {
 
     // firebase sdk
     implementation platform(deps.firebase.bom)
+    implementation deps.firebase.analytics
     implementation deps.firebase.auth
     implementation deps.firebase.firestore
     implementation deps.firebase.storage
-    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta02'
+    implementation deps.firebase.messaging
+
+    // restful client
+    implementation deps.square.retrofit
+    implementation deps.square.okhttp
+    implementation deps.square.okhttp_log
+    implementation deps.square.gson
 
     // custom view
-    implementation deps.bottom_navigation
-    implementation deps.image_cropper
     implementation deps.rounded_image_view
-
-    //unit test
-    testImplementation deps.kotlin.test
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "org.mockito:mockito-core:3.11.2"
-    testImplementation "org.mockito:mockito-inline:3.11.2"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
-    androidTestImplementation "androidx.test:runner:1.4.0"
-    androidTestImplementation deps.navigation.test
-    androidTestImplementation "androidx.test:core:1.4.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.3"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
-    debugImplementation "androidx.fragment:fragment-testing:1.3.5"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0"
 }
 
 apply plugin: "com.google.gms.google-services"

@@ -16,19 +16,19 @@ object FaceLogger {
     private var framesPerSecond = 0
 
     private val landMarkTypes = intArrayOf(
-            FaceLandmark.MOUTH_BOTTOM, FaceLandmark.MOUTH_RIGHT, FaceLandmark.MOUTH_LEFT,
-            FaceLandmark.RIGHT_EYE, FaceLandmark.LEFT_EYE,
-            FaceLandmark.RIGHT_EAR, FaceLandmark.LEFT_EAR,
-            FaceLandmark.RIGHT_CHEEK, FaceLandmark.LEFT_CHEEK,
-            FaceLandmark.NOSE_BASE
+        FaceLandmark.MOUTH_BOTTOM, FaceLandmark.MOUTH_RIGHT, FaceLandmark.MOUTH_LEFT,
+        FaceLandmark.RIGHT_EYE, FaceLandmark.LEFT_EYE,
+        FaceLandmark.RIGHT_EAR, FaceLandmark.LEFT_EAR,
+        FaceLandmark.RIGHT_CHEEK, FaceLandmark.LEFT_CHEEK,
+        FaceLandmark.NOSE_BASE
     )
 
     private val landMarkText = arrayOf(
-            "mouth bottom", "mouth right", "mouth left",
-            "right eye", "left eye",
-            "right ear", "left ear",
-            "right cheek", "left cheek",
-            "nose base"
+        "mouth bottom", "mouth right", "mouth left",
+        "right eye", "left eye",
+        "right ear", "left ear",
+        "right cheek", "left cheek",
+        "nose base"
     )
 
     private val fpsTimer = Timer().also {
@@ -61,20 +61,27 @@ object FaceLogger {
         // Only log inference info once per second. When frameProcessedInOneSecondInterval is
         // equal to 1, it means this is the first frame processed during the current second.
         if (frameProcessedInOneSecondInterval == 1) {
-            return FaceDetector.Info(numRuns, currentFrameLatencyMs, currentDetectorLatencyMs, framesPerSecond)
+            return FaceDetector.Info(
+                numRuns,
+                currentFrameLatencyMs,
+                currentDetectorLatencyMs,
+                framesPerSecond
+            )
         }
         return null
     }
 
     fun faceText(face: Face): String {
         val sb = StringBuilder()
-        sb.append("""
+        sb.append(
+            """
         Face:
         Bounding box: ${face.boundingBox.flattenToString()}
         Euler Angle X: ${face.headEulerAngleX}
                     Y: ${face.headEulerAngleY}
                     Z: ${face.headEulerAngleZ}
-    """.trimIndent())
+    """.trimIndent()
+        )
         for (i in landMarkTypes.indices) {
             val position = face.getLandmark(landMarkTypes[i])?.position ?: continue
             sb.append("\n%s: x: %f , y: %f".format(landMarkText[i], position.x, position.y))

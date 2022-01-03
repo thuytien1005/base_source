@@ -14,73 +14,85 @@
 
     <ConstraintSet android:id="@+id/unfocused">
         <Constraint
-            android:id="@id/editText"
+            android:id="@id/inputEditText"
             android:layout_width="0dp"
-            android:layout_height="@dimen/rowHeight"
-            android:layout_marginTop="14dp"
-            android:textSize="10sp"
-            motion:layout_constrainedWidth="true"
+            android:layout_height="@dimen/rowSize"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="@dimen/contentMargin12"
+            android:layout_marginEnd="1dp"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias="0.0"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintWidth_default="percent">
-            <CustomAttribute
-                motion:attributeName="textColor"
-                motion:customColorValue="#00000000" />
-        </Constraint>
+            motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
-            android:id="@id/textViewTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/contentMarginX2"
-            android:scaleX="1"
-            android:scaleY="1"
-            motion:layout_constraintBottom_toBottomOf="@+id/editText"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="@+id/editText" />
+            android:id="@id/inputImageViewIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="14dp"
+            android:scaleX="1.0"
+            android:scaleY="1.0"
+            motion:layout_constraintBottom_toBottomOf="@+id/inputEditText"
+            motion:layout_constraintStart_toStartOf="@id/inputEditText"
+            motion:layout_constraintTop_toTopOf="@+id/inputEditText" />
         <Constraint
-            android:id="@id/textViewError"
+            android:id="@id/inputTextViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="2dp"
-            motion:layout_constraintStart_toStartOf="@id/editText"
-            motion:layout_constraintTop_toBottomOf="@id/editText" />
+            android:scaleX="1"
+            android:scaleY="1"
+            motion:layout_constraintBottom_toBottomOf="@+id/inputEditText"
+            motion:layout_constraintStart_toEndOf="@+id/inputImageViewIcon"
+            motion:layout_constraintTop_toTopOf="@+id/inputEditText" />
+        <Constraint
+            android:id="@id/inputTextViewError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/inputEditText"
+            motion:visibilityMode="ignore" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/focused">
         <Constraint
-            android:id="@id/editText"
+            android:id="@id/inputEditText"
             android:layout_width="0dp"
-            android:layout_height="@dimen/rowHeight"
-            android:layout_marginTop="14dp"
-            motion:layout_constrainedWidth="true"
+            android:layout_height="@dimen/rowSize"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="@dimen/contentMargin12"
+            android:layout_marginEnd="1dp"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintWidth_default="percent">
-            <CustomAttribute
-                motion:attributeName="textColor"
-                motion:customColorValue="#000000" />
-        </Constraint>
+            motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
-            android:id="@id/textViewTitle"
-            android:layout_width="wrap_content"
+            android:id="@id/inputImageViewIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="14dp"
+            android:scaleX="1.0"
+            android:scaleY="1.0"
+            motion:layout_constraintBottom_toBottomOf="@+id/inputEditText"
+            motion:layout_constraintStart_toStartOf="@id/inputEditText"
+            motion:layout_constraintTop_toTopOf="@+id/inputEditText" />
+        <Constraint
+            android:id="@id/inputTextViewTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:scaleX=".8"
-            android:scaleY=".8"
-            motion:layout_constraintBottom_toTopOf="@+id/editText"
+            android:layout_marginStart="11dp"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            motion:layout_constraintBottom_toTopOf="@+id/inputEditText"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="@+id/editText" />
+            motion:layout_constraintTop_toTopOf="@+id/inputEditText" />
         <Constraint
-            android:id="@id/textViewError"
-            android:layout_width="wrap_content"
+            android:id="@id/inputTextViewError"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="2dp"
-            motion:layout_constraintStart_toStartOf="@id/editText"
-            motion:layout_constraintTop_toBottomOf="@id/editText" />
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/inputEditText"
+            motion:visibilityMode="ignore" />
     </ConstraintSet>
 
 </MotionScene>

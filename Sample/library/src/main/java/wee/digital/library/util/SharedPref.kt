@@ -7,17 +7,18 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import wee.digital.library.app
 
-class SharedPref(private val fileName : String) {
+class SharedPref(private val fileName: String) {
 
     private val pref: SharedPreferences by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
             EncryptedSharedPreferences.create(
-                    fileName,
-                    masterKey,
-                    app,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
+                fileName,
+                masterKey,
+                app,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
         } else {
             app.getSharedPreferences(fileName, Context.MODE_PRIVATE)
         }
@@ -27,6 +28,7 @@ class SharedPref(private val fileName : String) {
         val edit = pref.edit()
         edit.block()
         edit.apply()
+        edit.commit()
     }
 
     fun str(key: String, default: String? = null): String? = pref.getString(key, default)
@@ -36,5 +38,27 @@ class SharedPref(private val fileName : String) {
     fun int(key: String, default: Int = -1): Int = pref.getInt(key, default)
 
     fun bool(key: String, default: Boolean = false): Boolean = pref.getBoolean(key, default)
+
+    fun float(key: String, default: Float = -1F): Float = pref.getFloat(key, default)
+
+    fun putStr(key: String, value: String?) {
+        edit { putString(key, value) }
+    }
+
+    fun putLong(key: String, value: Long) {
+        edit { putLong(key, value) }
+    }
+
+    fun putInt(key: String, value: Int) {
+        edit { putInt(key, value) }
+    }
+
+    fun putBool(key: String, value: Boolean) {
+        edit { putBoolean(key, value) }
+    }
+
+    fun putFloat(key: String, value: Float) {
+        edit { putFloat(key, value) }
+    }
 
 }

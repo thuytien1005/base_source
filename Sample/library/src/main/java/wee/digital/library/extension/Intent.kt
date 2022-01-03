@@ -2,28 +2,13 @@ package wee.digital.library.extension
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.provider.MediaStore
 import android.provider.Settings
-import android.speech.RecognizerIntent
 import androidx.fragment.app.Fragment
+import wee.digital.library.app
 import kotlin.reflect.KClass
-
-const val VOICE_REQUEST_CODE = 1005
-
-val voiceRecordIntent: Intent
-    get() {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech")
-        return intent
-    }
-
-val emailIntent: Intent
-    get() {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
-        return intent
-    }
 
 
 fun <T : Activity> Fragment.start(cls: KClass<T>) {
@@ -34,34 +19,85 @@ fun <T : Activity> Activity.start(cls: KClass<T>) {
     startActivity(Intent(this, cls.java))
 }
 
-fun Activity.navigateEmail() {
-    startActivity(emailIntent)
+fun navigateSettings(intentString: String?) {
+    val intent = Intent(intentString)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    app.startActivity(intent)
 }
 
-fun Activity.startVoiceRecord(code: Int = VOICE_REQUEST_CODE) {
-    startActivityForResult(voiceRecordIntent, code)
+fun navigateSettings() {
+    navigateSettings(Settings.ACTION_SETTINGS)
 }
 
-fun Activity.navigateSettings(code: Int = 0) {
-    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    val uri = Uri.fromParts("package", packageName, null)
-    intent.data = uri
-    startActivityForResult(intent, code)
+fun navigateLocationSettings() {
+    navigateSettings(Settings.ACTION_LOCALE_SETTINGS)
 }
 
-fun Activity.navigateCHPlay() {
+fun navigateSecuritySettings() {
+    navigateSettings(Settings.ACTION_SECURITY_SETTINGS)
+}
 
+fun navigateWifiSettings() {
+    navigateSettings(Settings.ACTION_WIFI_SETTINGS)
+}
+
+fun navigateBluetoothSettings() {
+    navigateSettings(Settings.ACTION_BLUETOOTH_SETTINGS)
+}
+
+fun navigateEmail() {
+    app.startActivity(Intent(Intent.ACTION_MAIN).also {
+        it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        it.addCategory(Intent.CATEGORY_APP_EMAIL)
+    })
+}
+
+fun navigateCHPlay() {
     try {
-        val s = "market://details?id=${applicationContext.packageName}"
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
+        app.startActivity(Intent(Intent.ACTION_VIEW).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            it.data = Uri.parse("market://details?id=${app.packageName}")
+        })
     } catch (ex: android.content.ActivityNotFoundException) {
-        val s = "https://play.google.com/store/apps/details?id=${applicationContext.packageName}"
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
+        app.startActivity(Intent(Intent.ACTION_VIEW).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            it.data = Uri.parse("https://play.google.com/store/apps/details?id=${app.packageName}")
+        })
     }
 }
 
-fun Activity.navigateBrowser(url: String) {
-    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+fun navigateBrowser(url: String) {
+    app.startActivity(Intent(Intent.ACTION_VIEW).also {
+        it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        it.data = Uri.parse(url)
+    })
+}
+
+fun navigateCall(phone: String) {
+    app.startActivity(Intent(Intent.ACTION_DIAL).also {
+        it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        it.data = Uri.parse("tel:$phone")
+    })
+}
+
+fun navigateDateSettings() {
+    navigateSettings(Settings.ACTION_DATE_SETTINGS)
+}
+
+fun navigateAppSettings() {
+    app.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also {
+        it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        it.data = Uri.fromParts("package", app.packageName, null)
+    })
+}
+
+fun realPathFromURI(uri: Uri): String? {
+    val projection = arrayOf(MediaStore.Images.Media._ID)
+    val cursor: Cursor = app.contentResolver.query(uri, projection, null, null, null)
+        ?: return uri.path
+    val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
+    cursor.moveToFirst()
+    return cursor.getString(columnIndex)
 }
 
 

@@ -3,9 +3,6 @@ package wee.digital.sample.ui.vm
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.FirebaseApp
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ListenerRegistration
@@ -15,7 +12,7 @@ import wee.digital.library.extension.MapValueNullException
 import wee.digital.library.extension.toast
 import wee.digital.sample.data.firebase.auth
 import wee.digital.sample.data.firebase.selfUserRef
-import wee.digital.sample.ui.model.StoreUser
+import wee.digital.sample.ui.base.BaseVM
 
 class UserVM : BaseVM() {
 
@@ -28,7 +25,7 @@ class UserVM : BaseVM() {
             userRegistration?.remove()
             val user = it.currentUser
             firebaseUserLiveData.value = user
-            if(null != user) {
+            if (null != user) {
                 syncUser()
             } else {
                 userRegistration?.remove()
@@ -37,8 +34,6 @@ class UserVM : BaseVM() {
         auth.addIdTokenListener(FirebaseAuth.IdTokenListener {
         })
     }
-
-    val storeUserLiveData = MutableLiveData<StoreUser>()
 
     private var userRegistration: ListenerRegistration? = null
 
@@ -54,9 +49,8 @@ class UserVM : BaseVM() {
     private fun syncUser(map: Map<String, Any>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val user = StoreUser.fromMap(map)
-                storeUserLiveData.postValue(user)
-            } catch(e: MapValueNullException) {
+
+            } catch (e: MapValueNullException) {
                 toast(e.message)
             }
         }

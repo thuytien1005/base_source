@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FaceScanLayout">
+        <attr name="faceScan_radius" format="dimension" />
+        <attr name="faceScan_strokeLineColor" format="color" />
+        <attr name="faceScan_strokeLineWidth" format="dimension" />
+        <attr name="faceScan_backgroundColor" format="color" />
+    </declare-styleable>
+
+</resources>

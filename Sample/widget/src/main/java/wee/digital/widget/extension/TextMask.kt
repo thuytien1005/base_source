@@ -3,8 +3,9 @@ package wee.digital.widget.extension
 import android.os.Build
 import android.text.Html
 import org.json.JSONObject
+import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.text.NumberFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 
 /**
@@ -22,50 +23,37 @@ fun String?.toHiddenCreditNum(): String {
     return "•••• •••• •••• ${substring(lastIndex - 4, lastIndex)}"
 }
 
-private val decimalFormat = NumberFormat.getInstance(Locale.US) as DecimalFormat
+private val decimalFormat = DecimalFormat("#,###,###,###,###", DecimalFormatSymbols(Locale.US))
 
-fun Long?.moneyFormat(currency: String? = "VND"): String? {
-    return this?.toString()?.moneyFormat(currency)
+const val cashUnit = "đ"
+
+fun Long.moneyFormat(prefix: String = cashUnit): String {
+    return this.toString().moneyFormat(prefix)
 }
 
-fun String?.moneyFormat(currency: String? = "VND"): String {
+fun BigDecimal.moneyFormat(prefix: String = cashUnit): String {
+    return this.toString().moneyFormat(prefix)
+}
+
+fun String?.moneyFormat(prefix: String = cashUnit): String {
     this ?: return ""
     return try {
-        if (currency != null && currency != "VND") {
-
-            if (last().toString() == ".") return this
-
-            val lgt = length
-            if (lgt > 1 && substring(lgt - 2, lgt) == ".0") return this
-            if (lgt > 2 && substring(lgt - 3, lgt) == ".00") return this
-
-            val docId = indexOf(".")
-            if (docId != -1 && substring(docId, length).length > 3) return substring(0, docId + 3)
-
+        var originalString = this.replace(".", "")
+        if (originalString.contains(".")) {
+            originalString = originalString.replace(".".toRegex(), "")
         }
-        var originalString = when (currency) {
-            null, "VND" -> this.replace(".", "")
-            else -> this
-        }
-        if (originalString.contains(",")) {
-            originalString = originalString.replace(",".toRegex(), "")
-        }
-        when (currency) {
-            null, "VND" -> {
-                val value = originalString.toLong()
-                decimalFormat.applyPattern("#,###,###,###")
-                decimalFormat.format(value)
-            }
-            else -> {
-                val value = originalString.toDouble()
-                decimalFormat.applyPattern("#,###,###,###.##")
-                decimalFormat.format(value)
-            }
-        }
-
+        val value = originalString.toLong()
+        "${decimalFormat.format(value)}$prefix".replace(",", ".")
     } catch (nfe: Exception) {
         ""
     }
+}
+
+fun String?.moneyValue(): BigDecimal {
+    if (this.isNullOrEmpty()) return BigDecimal.ZERO
+    return replace(".", "")
+        .replace(cashUnit, "")
+        .toBigDecimalOrNull() ?: BigDecimal.ZERO
 }
 
 fun String?.unHyper(): String? {
@@ -117,31 +105,19 @@ fun Long.cashToText(): String {
     }
 
     text = text.replace("  ", " ")
-            .trim()
-            .replace("tỷ triệu nghìn đồng", "tỷ đồng")
-            .replace("triệu nghìn đồng", "triệu đồng")
+        .trim()
+        .replace("tỷ triệu nghìn đồng", "tỷ đồng")
+        .replace("triệu nghìn đồng", "triệu đồng")
 
-    return text.substring(0, 1).toUpperCase() + text.substring(1, text.length)
+    return text.substring(0, 1).uppercase() + text.substring(1, text.length)
 }
 
-/**
- * us -> 🇺🇸
- */
-fun String?.flagIcon(): String {
+fun String?.hideText(replacement: String, visibleCount: Int): String {
     this ?: return ""
-    if (length != 2) return ""
-    val s = toUpperCase()
-    val char1st = Character.codePointAt(s, 0) - 0x41 + 0x1F1E6
-    val char2st = Character.codePointAt(s, 1) - 0x41 + 0x1F1E6
-    return String(Character.toChars(char1st)) + String(Character.toChars(char2st))
-}
-
-fun String?.hideText(replacement: String, visibleCount: Int): String? {
-    this ?: return null
-    if (length < visibleCount) return this
+    if (length < visibleCount) return ""
     val showText = substring(length - visibleCount)
     val hiddenText = substring(0, length - visibleCount).replace("[^.]".toRegex(), replacement)
-    return "$hiddenText$showText"
+    return "$hiddenText $showText"
 }
 
 private fun cashText(numText: String): String {

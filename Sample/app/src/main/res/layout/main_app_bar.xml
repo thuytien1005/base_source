@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorTransparent"
+    android:fitsSystemWindows="false"
+    android:minHeight="0dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:elevation="0dp">
+
+    <wee.digital.widget.custom.StatusBarView
+        android:id="@+id/statusBarHolderView"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/colorPrimary"
+        tools:expanded="true" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/collapsibleToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/appBarSize"
+        android:minHeight="0dp">
+
+        <View
+            android:id="@+id/viewBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewLeftButton1"
+            android:layout_width="@dimen/rowSize"
+            android:layout_height="@dimen/rowSize"
+            android:layout_marginStart="@dimen/contentMargin24"
+            android:elevation="1dp"
+            android:transformPivotX="@dimen/rowSizeD2"
+            android:transformPivotY="@dimen/rowSize"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_close"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewRightButton2"
+            android:layout_width="@dimen/rowSize"
+            android:layout_height="@dimen/rowSize"
+            android:layout_marginEnd="@dimen/rowSize2D3"
+            android:background="@null"
+            android:tint="@color/colorHint"
+            android:transformPivotX="@dimen/rowSizeD2"
+            android:transformPivotY="@dimen/rowSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/viewRightButton1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_close" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/viewRightButton1"
+            android:layout_width="@dimen/rowSize"
+            android:layout_height="@dimen/rowSize"
+            android:layout_marginEnd="@dimen/contentMargin6"
+            android:background="@null"
+            android:tint="@color/colorHint"
+            android:transformPivotX="@dimen/rowSizeD2"
+            android:transformPivotY="@dimen/rowSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_close" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewAppBarTitle"
+            style="@style/TextView"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/contentMargin24"
+            android:layout_marginEnd="@dimen/contentMargin24"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/viewRightButton2"
+            app:layout_constraintStart_toEndOf="@+id/viewLeftButton1"
+            app:layout_constraintTop_toTopOf="@+id/viewBackground"
+            tools:text="@string/app_name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageViewLogo"
+            style="@style/App.Logo"
+            android:layout_marginStart="@dimen/contentMargin24"
+            android:scaleType="fitStart"
+            android:transformPivotX="40dp"
+            android:transformPivotY="50dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewLeftButton1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appBarSize"
+            android:paddingStart="@dimen/contentMargin24"
+            android:paddingEnd="@dimen/contentMargin24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <wee.digital.widget.base.AppConstraintLayout
+                android:id="@+id/progressBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/backButtonBottom"
+                android:layout_marginEnd="@dimen/backButtonBottom"
+                android:visibility="invisible"
+                app:radius="100dp"
+                tools:visibility="visible">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:max="100"
+                    android:secondaryProgressTint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:progress="66" />
+
+            </wee.digital.widget.base.AppConstraintLayout>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -22,9 +21,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.viewbinding.ViewBinding
 import wee.digital.widget.R
-import wee.digital.widget.extension.inflate
 
-abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
+abstract class AppCustomView<VB : ViewBinding> : ConstraintLayout {
 
     protected abstract fun onInitialize(context: Context, types: TypedArray)
 
@@ -32,22 +30,35 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
         return R.styleable.AppCustomView
     }
 
-    protected lateinit var bind: B
+    protected lateinit var vb: VB
 
-    abstract fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> B
+    abstract fun inflating(): (LayoutInflater, ViewGroup?, Boolean) -> ViewBinding
 
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         onViewInit(context, attrs)
     }
 
     private fun onViewInit(context: Context, attrs: AttributeSet?) {
-        bind = inflating().invoke(LayoutInflater.from(context), this, true)
+        @Suppress("UNCHECKED_CAST")
+        vb = inflating().invoke(LayoutInflater.from(context), this, true) as VB
         val types = context.theme.obtainStyledAttributes(attrs, styleResource(), 0, 0)
         try {
             onInitialize(context, types)
         } finally {
             types.recycle()
         }
+    }
+
+    fun TypedArray.clickable(default: Boolean): Boolean {
+        return getBoolean(R.styleable.AppCustomView_android_clickable, default)
+    }
+
+    fun TypedArray.enabled(default: Boolean): Boolean {
+        return getBoolean(R.styleable.AppCustomView_android_enabled, default)
     }
 
     /**
@@ -77,61 +88,56 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
     /**
      * Color
      */
-    val TypedArray.tint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_tint, Color.BLACK)
-        }
+    fun TypedArray.textColor(@ColorInt default: Int): Int {
+        return getColor(R.styleable.AppCustomView_android_textColor, default)
+    }
 
-    /*val TypedArray.drawableTint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_drawableTint, Color.BLACK)
-        }*/
+    fun TypedArray.textColorHint(@ColorInt default: Int): Int {
+        return getColor(R.styleable.AppCustomView_android_textColorHint, default)
+    }
 
-    val TypedArray.backgroundTint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_backgroundTint, Color.WHITE)
-        }
+    fun TypedArray.tint(@ColorInt default: Int): Int {
+        return getColor(R.styleable.AppCustomView_android_tint, default)
+    }
 
-    val TypedArray.textColor: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_textColor, Color.BLACK)
-        }
+    fun TypedArray.backgroundTint(@ColorInt default: Int): Int {
+        return getColor(R.styleable.AppCustomView_android_backgroundTint, default)
+    }
 
-    val TypedArray.textColorHint: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_textColorHint, Color.BLACK)
-        }
-
-    val TypedArray.hintColor: Int
-        get() {
-            return getColor(R.styleable.AppCustomView_android_textColor, Color.DKGRAY)
-        }
+    fun TypedArray.drawableTint(@ColorInt default: Int): Int {
+        return getColor(R.styleable.AppCustomView_android_drawableTint, default)
+    }
 
     /**
      * Drawable
      */
+    val TypedArray.src: Drawable?
+        get() {
+            return getDrawable(R.styleable.AppCustomView_android_src)
+                ?.constantState?.newDrawable()?.mutate()
+        }
+
+    val TypedArray.background: Drawable?
+        get() {
+            return getDrawable(R.styleable.AppCustomView_android_background)
+        }
+
     val TypedArray.drawableStart: Drawable?
         get() {
             return getDrawable(R.styleable.AppCustomView_android_drawableStart)
-                    ?.constantState?.newDrawable()?.mutate()
+                ?.constantState?.newDrawable()?.mutate()
         }
 
     val TypedArray.drawableEnd: Drawable?
         get() {
             return getDrawable(R.styleable.AppCustomView_android_drawableEnd)
-                    ?.constantState?.newDrawable()?.mutate()
+                ?.constantState?.newDrawable()?.mutate()
         }
 
     val TypedArray.drawable: Drawable?
         get() {
             return getDrawable(R.styleable.AppCustomView_android_drawable)
-                    ?.constantState?.newDrawable()?.mutate()
-        }
-
-    val TypedArray.src: Drawable?
-        get() {
-            return getDrawable(R.styleable.AppCustomView_android_src)
-                    ?.constantState?.newDrawable()?.mutate()
+                ?.constantState?.newDrawable()?.mutate()
         }
 
     val TypedArray.srcRes: Int
@@ -139,10 +145,6 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
             return getResourceId(R.styleable.AppCustomView_android_src, 0)
         }
 
-    val TypedArray.background: Int
-        get() {
-            return getResourceId(R.styleable.AppCustomView_android_background, 0)
-        }
 
     /**
      * Checkable
@@ -168,8 +170,8 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
     val TypedArray.paddingBottom: Int
         get() = getDimensionPixelSize(R.styleable.AppCustomView_android_paddingBottom, 0)
 
-    fun TypedArray.pixels(@StyleableRes id: Int) {
-        getDimensionPixelSize(id, 0).toFloat()
+    fun TypedArray.pixels(@StyleableRes id: Int, default: Int): Float {
+        return getDimensionPixelSize(id, default).toFloat()
     }
 
     /**
@@ -189,17 +191,6 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
 
     fun createDrawable(@DrawableRes res: Int): Drawable? {
         return drawable(res).constantState?.newDrawable()?.mutate()
-    }
-
-    fun Drawable?.tint(@ColorInt color: Int): Drawable? {
-        this ?: return null
-        DrawableCompat.setTint(this, color)
-        DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-        return this
-    }
-
-    fun Drawable?.tintRes(@ColorRes color: Int): Drawable? {
-        return tint(ContextCompat.getColor(context, color))
     }
 
     fun pixels(@DimenRes res: Int): Float {
@@ -222,44 +213,67 @@ abstract class AppCustomView<B : ViewBinding> : ConstraintLayout {
         }
     }
 
+    fun Drawable?.tint(@ColorInt color: Int): Drawable? {
+        this ?: return null
+        DrawableCompat.setTint(this, color)
+        DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+        return this
+    }
+
+    fun Drawable?.tintRes(@ColorRes color: Int): Drawable? {
+        return tint(color(color))
+    }
+
     fun View.backgroundTint(@ColorInt color: Int) {
-        post {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                background?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
-            } else {
-                @Suppress("DEPRECATION")
-                background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            background?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        } else {
+            @Suppress("DEPRECATION")
+            background?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         }
     }
 
-    fun View.backgroundTintRes(@ColorRes colorRes: Int) {
-        backgroundTint(color(colorRes))
+    fun View.backgroundTintRes(@ColorRes res: Int) {
+        backgroundTint(color(res))
     }
 
-    fun ImageView.tint(@ColorInt color: Int) {
-        post {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
-            } else {
-                @Suppress("DEPRECATION")
-                setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-            }
+    fun View.postBackgroundTint(@ColorInt color: Int) {
+        post { backgroundTint(color) }
+    }
+
+    fun View.postBackgroundTintRes(@ColorRes res: Int) {
+        postBackgroundTint(color(res))
+    }
+
+    fun ImageView.tint(@ColorInt color: Int?) {
+        if (color == null) {
+            clearColorFilter()
+            colorFilter = null
+            return
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        } else {
+            @Suppress("DEPRECATION")
+            setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         }
     }
 
     fun ImageView.tintRes(@ColorRes res: Int) {
-        tint(ContextCompat.getColor(context, res))
+        tint(if (res == 0) null else color(res))
     }
 
-    fun ImageView.postImage(@DrawableRes drawableRes: Int) {
-        post { this.setImageResource(drawableRes) }
+    fun ImageView.postTint(@ColorInt color: Int?) {
+        post { tint(color) }
     }
 
-    fun TextView.textColor(@ColorRes color: Int) {
-        setTextColor(ContextCompat.getColor(context, color))
+    fun ImageView.postTintRes(@ColorRes res: Int) {
+        post { tintRes(res) }
     }
 
+    fun TextView.textColorRes(@ColorRes res: Int) {
+        setTextColor(color(res))
+    }
 
 }
 

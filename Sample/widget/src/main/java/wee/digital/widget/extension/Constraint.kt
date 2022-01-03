@@ -1,12 +1,12 @@
 package wee.digital.widget.extension
 
+import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.ChangeBounds
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
-import wee.digital.widget.extension.SimpleTransitionListener
 
 fun ConstraintLayout.editConstraint(block: ConstraintSet.() -> Unit) {
     ConstraintSet().also {
@@ -16,43 +16,54 @@ fun ConstraintLayout.editConstraint(block: ConstraintSet.() -> Unit) {
     }
 }
 
-fun Transition.beginTransition(layout: ConstraintLayout, block: ConstraintSet.() -> Unit): Transition {
-    TransitionManager.beginDelayedTransition(layout, this)
-    layout.editConstraint(block)
-    return this
+fun ConstraintLayout.beginTransition(
+    transition: Transition,
+    block: ConstraintSet.() -> Unit
+): Transition {
+    val set = ConstraintSet().also {
+        it.clone(this)
+        it.block()
+    }
+    TransitionManager.beginDelayedTransition(this, transition)
+    set.applyTo(this)
+    return transition
 }
 
-fun Transition.beginTransition(layout: ConstraintLayout, block: ConstraintSet.() -> Unit, onEnd: () -> Unit = {}): Transition {
-
-    addListener(object : SimpleTransitionListener {
+fun ConstraintLayout.beginTransition(
+    transition: Transition,
+    block: ConstraintSet.() -> Unit,
+    onEnd: () -> Unit
+): Transition {
+    transition.addListener(object : SimpleTransitionListener {
         override fun onTransitionEnd(transition: Transition) {
             transition.removeListener(this)
             onEnd()
         }
     })
-    TransitionManager.beginDelayedTransition(layout, this)
-    layout.editConstraint(block)
-    return this
+    return beginTransition(transition, block)
 }
 
 fun ConstraintLayout.beginTransition(duration: Long, block: ConstraintSet.() -> Unit) {
-    ChangeBounds().also {
+    val transition = ChangeBounds().also {
         it.duration = duration
-        it.startDelay = 0
-    }.beginTransition(this, block)
+    }
+    beginTransition(transition, block)
 }
 
-fun ConstraintLayout.beginTransition(duration: Long, block: ConstraintSet.() -> Unit, onEnd: () -> Unit = {}) {
-    ChangeBounds().also {
+fun ConstraintLayout.beginTransition(
+    duration: Long,
+    block: ConstraintSet.() -> Unit,
+    onEnd: () -> Unit
+) {
+    val transition = ChangeBounds().also {
         it.duration = duration
-        it.startDelay = 0
-    }.beginTransition(this, block, onEnd)
-
+    }
+    beginTransition(transition, block, onEnd)
 }
 
 fun MotionLayout.transitionToState(transitionId: Int, onCompleted: () -> Unit) {
     addTransitionListener(object : SimpleMotionTransitionListener {
-        override fun onTransitionCompleted(layout: MotionLayout?, currentId: Int) {
+        override fun onTransitionCompleted(layout: MotionLayout, currentId: Int) {
             removeTransitionListener(this)
             onCompleted()
         }
@@ -82,12 +93,73 @@ class ConstraintBuilder(private val constraintLayout: ConstraintLayout) {
                 override fun onTransitionEnd(transition: Transition) {
                     transitionList[i].removeListener(this)
                     if (i < transitionList.lastIndex) {
-                        transitionList[i + 1].beginTransition(constraintLayout, constraintSetList[i + 1])
+                        constraintLayout.beginTransition(
+                            transitionList[i + 1],
+                            constraintSetList[i + 1]
+                        )
                     }
                 }
             })
         }
-        transitionList[0].beginTransition(constraintLayout, constraintSetList[0])
+        constraintLayout.beginTransition(transitionList[0], constraintSetList[0])
+    }
+
+}
+
+open class ItemTransitionListener(private val itemView: View, private val position: Int) :
+    SimpleMotionTransitionListener {
+
+    override fun equals(other: Any?): Boolean {
+        return position == (other as? ItemTransitionListener)?.position
+    }
+
+    override fun onTransitionStarted(layout: MotionLayout, startId: Int, endId: Int) {
+        itemView.parent.requestDisallowInterceptTouchEvent(true)
+    }
+
+    override fun onTransitionCompleted(layout: MotionLayout, currentId: Int) {
+        itemView.parent.requestDisallowInterceptTouchEvent(false)
+    }
+}
+
+interface SimpleMotionTransitionListener : MotionLayout.TransitionListener {
+    override fun onTransitionChange(
+        layout: MotionLayout,
+        startId: Int,
+        endId: Int,
+        progress: Float
+    ) {
+    }
+
+    override fun onTransitionStarted(layout: MotionLayout, startId: Int, endId: Int) {
+    }
+
+    override fun onTransitionCompleted(layout: MotionLayout, currentId: Int) {
+    }
+
+    override fun onTransitionTrigger(
+        layout: MotionLayout,
+        triggerId: Int,
+        positive: Boolean,
+        progress: Float
+    ) {
+    }
+}
+
+interface SimpleTransitionListener : Transition.TransitionListener {
+    override fun onTransitionStart(transition: Transition) {
+    }
+
+    override fun onTransitionEnd(transition: Transition) {
+    }
+
+    override fun onTransitionCancel(transition: Transition) {
+    }
+
+    override fun onTransitionPause(transition: Transition) {
+    }
+
+    override fun onTransitionResume(transition: Transition) {
     }
 
 }

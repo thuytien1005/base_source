@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!--CUSTOM VIEW-->
-    <style name="InputView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColorHint">#6E6E6E</item>
-        <item name="android:textSize">@dimen/textSize2</item>
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:minWidth">24dp</item>
-        <item name="android:tint">@color/colorInputUnfocused</item>
-    </style>
-
-
-    <!--TEXT VIEW-->
+    <!--TextView-->
     <style name="TextView" parent="WrapContent">
-        <item name="android:ellipsize">end</item>
-        <item name="android:includeFontPadding">true</item>
-        <item name="android:textSize">@dimen/textSize2</item>
-        <item name="android:lineSpacingExtra">4dp</item>
-        <item name="android:letterSpacing">0.08</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">@dimen/textSize15</item>
+        <item name="android:textColor">@color/colorTextDefault</item>
+        <item name="android:background">@null</item>
     </style>
 
     <style name="TextView.PlaceHolder">
@@ -29,58 +15,105 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="TextView.Error">
-        <item name="android:textSize">9sp</item>
+    <style name="TextView.Error" parent="TextView">
+        <item name="android:textSize">@dimen/textSize12</item>
         <item name="android:textColor">@color/colorError</item>
     </style>
 
     <style name="Button" parent="TextView">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">@dimen/rowHeight</item>
+        <item name="android:layout_height">@dimen/rowSize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@color/colorTransparent</item>
+        <item name="android:clickable">true</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Button.Primary" parent="Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/btn_primary_bg</item>
+        <item name="android:textColor">@drawable/btn_primary_text</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Button.CheckBox" parent="TextView">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:button">@null</item>
+    </style>
+
+
+    <style name="Button.TabItem" parent="Button">
+        <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:background">@color/colorWhite</item>
-    </style>
-
-    <style name="Button.Primary">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@drawable/drw_btn_primary</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@drawable/tab_item_text</item>
     </style>
 
     <style name="EditText" parent="TextView">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">@dimen/rowHeight</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/rowSize</item>
+        <item name="android:textColor">@color/colorTextDefault</item>
         <item name="android:maxLines">1</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:inputType">textEmailAddress|textNoSuggestions</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:includeFontPadding">true</item>
         <item name="android:textIsSelectable">false</item>
+        <item name="android:textCursorDrawable">@drawable/drw_input_cursor</item>
         <item name="android:privateImeOptions">nm</item>
         <item name="android:longClickable">false</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:paddingEnd">0dp</item>
+        <item name="android:paddingStart">@dimen/contentMargin24</item>
+        <item name="android:paddingEnd">@dimen/contentMargin24</item>
         <item name="android:textColorHint">#BEBEBE</item>
         <item name="android:maxLength">256</item>
         <item name="android:background">@null</item>
-        <item name="android:textSize">@dimen/textSize2</item>
-        <item name="android:importantForAutofill"
-            tools:targetApi="o">no</item>
+        <item name="android:textSize">@dimen/textSize15</item>
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
     </style>
 
-    <!--IMAGE VIEW-->
+    <style name="EditText.MultiLines" parent="TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:background">@null</item>-->
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
+        <item name="android:includeFontPadding">true</item>
+        <!-- <item name="android:inputType">textMultiLine|textNoSuggestions</item>-->
+        <item name="android:lineSpacingExtra">0dp</item>
+        <item name="android:longClickable">false</item>
+        <item name="android:minHeight">@dimen/rowSize</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:paddingStart">@dimen/contentMargin24</item>
+        <item name="android:paddingEnd">@dimen/contentMargin24</item>
+        <item name="android:privateImeOptions">nm</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <!--ImageView-->
     <style name="ImageView" />
 
+    <style name="ImageView.Row">
+        <item name="android:layout_width">@dimen/rowSize</item>
+        <item name="android:layout_height">@dimen/rowSize</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
 
-    <style name="ScrollView" parent="MatchParent">
+    <!--ScrollView-->
+    <style name="ScrollView" parent="MatchWidth">
         <item name="android:overScrollMode">never</item>
-        <item name="android:fillViewport">true</item>
+        <item name="android:fillViewport">false</item>
         <item name="android:clipToPadding">false</item>
+        <item name="android:scrollbars">none</item>
     </style>
 
     <style name="RecyclerView" parent="MatchWidth">
@@ -88,14 +121,17 @@
         <item name="android:fillViewport">true</item>
         <item name="android:clipToPadding">false</item>
         <item name="android:scrollbars">none</item>
+        <item name="android:smoothScrollbar">false</item>
+        <item name="android:nestedScrollingEnabled">false</item>
     </style>
 
+    <!--Layout-->
     <style name="MatchParent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="ParentContent" parent="MatchParent">
+    <style name="LayoutContent" parent="MatchParent">
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">false</item>
     </style>
@@ -147,21 +183,65 @@
     <style name="HorizontalSeparator">
         <item name="android:layout_width">0.5px</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:background">#CDCDCD</item>
     </style>
 
     <style name="VerticalSeparator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
-        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:background">#CDCDCD</item>
     </style>
 
-    <style name="ImageButtonChat" parent="Widget.AppCompat.ImageButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="layout_constraintDimensionRatio">h,1:1</item>
-        <item name="android:background">@null</item>
-        <item name="android:padding">20dp</item>
+    <!--Custom view-->
+    <style name="InputView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">#6E6E6E</item>
+        <item name="android:textSize">@dimen/textSize15</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:minWidth">24dp</item>
+        <item name="android:tint">@color/colorInputHint</item>
     </style>
+
+    <style name="PinTextView" parent="EditText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:paddingStart">@dimen/contentMargin24</item>
+        <item name="android:paddingEnd">@dimen/contentMargin24</item>
+        <item name="android:layout_height">@dimen/rowSize</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:hint">●●●●</item>
+        <item name="android:textColorHint">#EEEEF1</item>
+        <item name="android:letterSpacing">1</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:inputType">numberPassword</item>
+    </style>
+
+    <style name="OtpView" />
+
+    <style name="OtpView.Background">
+        <item name="android:layout_width">42dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/drw_otp_inactive_bg</item>
+        <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="OtpView.Char" parent="TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
+    </style>
+
 
 </resources>

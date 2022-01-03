@@ -15,7 +15,7 @@ ext.deps = deps
  * [https://kotlinlang.org/]
  */
 def kotlin = [:]
-kotlin.version = '1.5.20'
+kotlin.version = '1.5.30'
 kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin.version"
 kotlin.gradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin.version"
 kotlin.extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin.version"

@@ -24,8 +24,8 @@ class CameraOptions {
     var flashMode: Int = ImageCapture.FLASH_MODE_AUTO
 
     var selector: CameraSelector = CameraSelector.Builder()
-            .requireLensFacing(lensFacing)
-            .build()
+        .requireLensFacing(lensFacing)
+        .build()
 
     var metrics: DisplayMetrics = DisplayMetrics()
 
@@ -46,21 +46,21 @@ class CameraOptions {
 
     val imageCapture: ImageCapture
         get() = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .setFlashMode(flashMode)
-                .setTargetAspectRatio(aspectRatio)
-                .build()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .setFlashMode(flashMode)
+            .setTargetAspectRatio(aspectRatio)
+            .build()
 
     val preview: Preview
         get() = Preview.Builder()
-                .setTargetAspectRatio(aspectRatio)
-                .build()
+            .setTargetAspectRatio(aspectRatio)
+            .build()
 
 
     fun switchLensFacing(provider: ProcessCameraProvider): Boolean {
         val newCameraSelector = CameraSelector.Builder()
-                .requireLensFacing(cameraOptions.newLensFacing)
-                .build()
+            .requireLensFacing(cameraOptions.newLensFacing)
+            .build()
         try {
             if (provider.hasCamera(newCameraSelector)) {
                 cameraOptions.lensFacing = cameraOptions.newLensFacing

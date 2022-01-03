@@ -24,7 +24,10 @@ import wee.digital.ml.ML
  * -------------------------------------------------------------------------------------------------
  */
 val hasCameraPermission: Boolean
-    get() = ContextCompat.checkSelfPermission(ML.app, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    get() = ContextCompat.checkSelfPermission(
+        ML.app,
+        Manifest.permission.CAMERA
+    ) == PackageManager.PERMISSION_GRANTED
 
 private var cameraPermissionObserver: LifecycleObserver? = null
 
@@ -49,23 +52,26 @@ fun onCameraPermissionGranted(activity: AppCompatActivity, onGranted: () -> Unit
         activity.lifecycle.addObserver(observer)
     }
     when {
-        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA) -> {
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            activity,
+            Manifest.permission.CAMERA
+        ) -> {
             observerPermission()
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), 1)
         }
         else -> {
             observerPermission()
             AlertDialog.Builder(activity)
-                    .setMessage("camera permission require")
-                    .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
-                    .setNegativeButton("Setting") { dialog, _ ->
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", activity.packageName, null)
-                        intent.data = uri
-                        activity.startActivity(intent)
-                        dialog.cancel()
-                    }
-                    .show()
+                .setMessage("camera permission require")
+                .setPositiveButton("Close") { dialog, _ -> dialog.cancel() }
+                .setNegativeButton("Setting") { dialog, _ ->
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity.packageName, null)
+                    intent.data = uri
+                    activity.startActivity(intent)
+                    dialog.cancel()
+                }
+                .show()
         }
     }
 

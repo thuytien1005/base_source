@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.camera.ui.FaceCaptureLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/faceCaptureLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/black">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/viewRatio11"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#009688"
+        app:layout_constraintBottom_toBottomOf="@+id/viewFrame"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMessage">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@+id/viewRatio11"
+            app:layout_constraintDimensionRatio="w,4:3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/img_portrait_11" />
+
+    <include
+        android:id="@+id/includeFaceScanLayout"
+        layout="@layout/face_scan_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/viewRatio11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewFaceBytes"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="fitStart"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="w,2:1"
+        app:layout_constraintStart_toEndOf="@+id/imageViewFrameBytes"
+        app:layout_constraintTop_toTopOf="@+id/imageViewFrameBytes"
+        tools:src="@mipmap/img_portrait_11"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewFrameBytes"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="w,4:3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeFaceScanLayout"
+        tools:src="@mipmap/img_portrait_11"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/textViewResume"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_face_replay"
+        android:tint="#70FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewRatio11"
+        tools:visibility="visible" />
+
+
+</com.example.camera.ui.FaceCaptureLayout>

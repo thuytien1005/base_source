@@ -12,7 +12,7 @@ import wee.digital.ml.base.GraphicOverlay
 import wee.digital.ml.camera.onCameraPermissionGranted
 import wee.digital.ml.face.FaceCapture
 
-class FaceAutoCaptureActivity : AppCompatActivity(){
+class FaceAutoCaptureActivity : AppCompatActivity() {
 
     private var detector: FaceCapture? = null
 
@@ -41,7 +41,6 @@ class FaceAutoCaptureActivity : AppCompatActivity(){
                     override val graphicOverlay: GraphicOverlay
                         get() = this@FaceAutoCaptureActivity.graphicOverlay
                 })
-
 
 
             }, ContextCompat.getMainExecutor(this))
