@@ -17,7 +17,7 @@ import androidx.viewbinding.ViewBinding
 import wee.digital.widget.R
 import wee.digital.widget.base.AppCustomView
 import wee.digital.widget.databinding.TextVerticalBinding
-import wee.digital.widget.extension.addViewClickListener
+import wee.digital.widget.extension.addClickListener
 import wee.digital.widget.extension.dpToPx
 import wee.digital.widget.extension.isGone
 
@@ -127,11 +127,11 @@ class TextVerticalView : AppCustomView<TextVerticalBinding> {
         set(value) {
             field = value
             if (value != null) {
-                vb.imageViewDrawableEnd.addViewClickListener {
+                vb.imageViewDrawableEnd.addClickListener {
                     onNavClick?.invoke()
                 }
             } else {
-                vb.imageViewDrawableEnd.addViewClickListener {
+                vb.imageViewDrawableEnd.addClickListener {
                     this.performClick()
                 }
             }

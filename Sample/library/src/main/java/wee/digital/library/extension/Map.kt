@@ -76,7 +76,10 @@ inline fun <reified T> Map<String, Any>?.listOrThrow(key: String): List<T> {
     return listOrNull(key) ?: throw MapValueNullException(key)
 }
 
-inline fun <reified T> Map<String, Any>?.list(key: String, transformer: (Map<String, Any>) -> T): List<T> {
+inline fun <reified T> Map<String, Any>?.list(
+    key: String,
+    transformer: (Map<String, Any>) -> T
+): List<T> {
     val list = mutableListOf<T>()
     (this?.get(key) as? Array<Map<String, Any>>)?.forEach {
         list.add(transformer(it))

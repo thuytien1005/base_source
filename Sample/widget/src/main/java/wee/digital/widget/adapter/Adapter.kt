@@ -65,62 +65,6 @@ fun RecyclerView.setItemAppearAnimation() {
     layoutAnimation = LayoutAnimationController(set, 0.2F)
 }
 
-private var lastClickTime: Long = 0
-
-private var lastClickViewId: Int = 0
-
-abstract class ItemClickListener(private val delayedInterval: Long = 320) : View.OnClickListener {
-
-    abstract fun onClicks(v: View?)
-
-    private val View?.isAcceptClick: Boolean get() = this?.id != lastClickViewId && delayedInterval == 0L
-
-    private val isDelayed: Boolean get() = System.currentTimeMillis() - lastClickTime > delayedInterval
-
-    private var hasDelayed: Boolean = false
-
-    final override fun onClick(v: View?) {
-        if (isDelayed || v.isAcceptClick) {
-            lastClickViewId = v?.id ?: -1
-            lastClickTime = 0
-            hasDelayed = false
-            onClicks(v)
-        }
-        if (!hasDelayed) {
-            hasDelayed = true
-            lastClickTime = System.currentTimeMillis()
-        }
-    }
-
-}
-
-fun View?.addItemClickListener(delayedInterval: Long, listener: ((View?) -> Unit)? = null) {
-    this ?: return
-    if (listener == null) {
-        setOnClickListener(null)
-        if (this is EditText) {
-            isFocusable = true
-            isCursorVisible = true
-        }
-        return
-    }
-    this.isClickable = true
-    this.isEnabled = true
-    setOnClickListener(object : ItemClickListener(delayedInterval) {
-        override fun onClicks(v: View?) {
-            listener(v)
-        }
-    })
-    if (this is EditText) {
-        isFocusable = false
-        isCursorVisible = false
-    }
-}
-
-fun View?.addItemClickListener(listener: ((View?) -> Unit)? = null) {
-    addItemClickListener(300, listener)
-}
-
 fun RecyclerView.smoothScrollToCenter(position: Int) {
     if (position < 0) return
     post {

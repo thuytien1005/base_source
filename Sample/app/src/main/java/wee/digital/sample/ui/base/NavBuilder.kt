@@ -10,7 +10,7 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import wee.digital.sample.R
 
-class NavigationBuilder(private val navController: NavController) {
+class NavBuilder(private val navController: NavController) {
 
     private val options = NavOptions.Builder()
 

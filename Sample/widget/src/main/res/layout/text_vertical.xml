@@ -15,9 +15,9 @@
         android:layout_height="@dimen/rowSize"
         android:layout_marginStart="@dimen/contentMargin16"
         android:background="@drawable/drw_oval"
-        android:backgroundTint="@color/colorPrimaryLight"
+        android:backgroundTint="#BEE0FF"
         android:clickable="false"
-        android:padding="10dp"
+        android:padding="@dimen/_10sdp"
         android:src="@drawable/ic_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

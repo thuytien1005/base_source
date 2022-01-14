@@ -45,9 +45,9 @@ open class AlertFragment : MainDialogFragment<AlertBinding>() {
      */
     protected open fun onBindArg(it: AlertArg) {
         //vb.viewClose.isShow(it.dismissWhenTouchOutside)
-        vb.viewClose.addViewClickListener { onBackPressed() }
+        vb.viewClose.addClickListener { onBackPressed() }
         if (it.dismissWhenTouchOutside) {
-            vb.layoutContent.addViewClickListener { onBackPressed() }
+            vb.layoutContent.addClickListener { onBackPressed() }
         }
         vb.imageViewIcon.setImageResource(it.icon)
         vb.textViewTitle.text = it.title
@@ -75,7 +75,7 @@ open class AlertFragment : MainDialogFragment<AlertBinding>() {
     fun TextView.onBindButton(label: String?, onClick: (View) -> Unit) {
         isGone(label.isNullOrEmpty())
         text = label
-        addViewClickListener { onClick(this) }
+        addClickListener { onClick(this) }
     }
 
 

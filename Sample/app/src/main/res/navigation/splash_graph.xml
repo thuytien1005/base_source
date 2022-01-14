@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/splash_graph"
+    app:startDestination="@id/widgetsFragment">
+
+    <fragment
+        android:id="@+id/widgetsFragment"
+        android:name="wee.digital.sample.ui.fragment.widgets.WidgetsFragment"
+        android:label="WidgetsFragment" />
+    <action
+        android:id="@+id/action_global_widgetsFragment"
+        app:destination="@id/widgetsFragment" />
+
+    <fragment
+        android:id="@+id/maskFragment"
+        android:name="wee.digital.sample.ui.fragment.mask.MaskFragment"
+        android:label="MaskFragment" />
+    <action
+        android:id="@+id/action_global_maskFragment"
+        app:destination="@id/maskFragment" />
+
+    <fragment
+        android:id="@+id/openGLFragment"
+        android:name="wee.digital.sample.ui.fragment.ogl.OpenGLFragment"
+        android:label="OpenGLFragment" />
+    <action
+        android:id="@+id/action_global_openGLFragment"
+        app:destination="@id/openGLFragment" />
+
+</navigation>

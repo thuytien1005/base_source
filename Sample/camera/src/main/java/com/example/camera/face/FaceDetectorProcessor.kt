@@ -79,6 +79,7 @@ class FaceDetectorProcessor(
 
         val img = imageProxy.image as Image
         val visionImage = InputImage.fromMediaImage(img, imageProxy.imageInfo.rotationDegrees)
+
         val detectResult: List<Face> = Tasks.await(faceDetector.process(visionImage))
         val faceResult = detectResult.maxByOrNull { it.boundingBox.width() }
 

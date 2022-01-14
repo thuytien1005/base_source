@@ -2,17 +2,19 @@ package wee.digital.sample.ui.splash
 
 import android.view.LayoutInflater
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import wee.digital.library.extension.*
+import wee.digital.library.extension.darkSystemWidgets
+import wee.digital.library.extension.networkDisconnected
+import wee.digital.library.extension.start
 import wee.digital.sample.R
 import wee.digital.sample.data.firebase.onFirebaseAppInit
 import wee.digital.sample.databinding.SplashBinding
 import wee.digital.sample.ui.base.BaseActivity
 import wee.digital.sample.ui.fragment.dialog.DialogVM
-import wee.digital.sample.ui.fragment.dialog.alert.AlertArg
-import wee.digital.sample.ui.fragment.dialog.alert.AlertFragment
+import wee.digital.sample.ui.fragment.dialog.alert.alertNetworkError
 import wee.digital.sample.ui.main.MainActivity
 import wee.digital.widget.extension.toastError
 
@@ -32,15 +34,13 @@ class SplashActivity : BaseActivity<SplashBinding>() {
     }
 
     override fun activityNavController(): NavController? {
-        return null
+        return findNavController(R.id.splashContainerView)
     }
 
     override fun onViewCreated() {
-        lightSystemWidgets()
+        darkSystemWidgets()
         hideKeyboard()
-        onFirebaseAppInit {
-            onSplash()
-        }
+        onFirebaseAppInit { onSplash() }
     }
 
     override fun onLiveDataObserve() {
@@ -64,8 +64,9 @@ class SplashActivity : BaseActivity<SplashBinding>() {
      *
      */
     private fun onSplash() {
+        return
         if (networkDisconnected) {
-            showNetworkError()
+            alertNetworkError()
         } else {
             dismissDialogs()
             splashVM.onAuthUser()
@@ -76,19 +77,6 @@ class SplashActivity : BaseActivity<SplashBinding>() {
         dialogVM.alertLiveData.value = null
         dialogVM.webLiveData.value = null
         dialogVM.selectableLiveData.value = null
-    }
-
-    private fun showNetworkError() {
-        val arg = AlertArg().apply {
-            icon = R.drawable.ic_check
-            title = "Không tìm thấy kết nối internet"
-            message = "Vui lòng kiểm tra kết nối của thiết bị"
-            cancelLabel = "Đóng"
-            acceptLabel = "Cài đặt"
-            acceptOnClick = { navigateWifiSettings() }
-        }
-        dialogVM.alertLiveData.value = arg
-        AlertFragment().show(supportFragmentManager, "AlertFragment")
     }
 
     private fun onNavigateNext() {

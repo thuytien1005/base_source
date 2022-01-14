@@ -1,19 +1,20 @@
 package wee.digital.sample.ui.base
 
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.IdRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import wee.digital.library.extension.hideKeyboard
-import wee.digital.library.extension.showKeyboard
-import kotlin.reflect.KClass
+import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermissionDenied
 
 
 interface FragmentView : BaseView {
@@ -33,14 +34,6 @@ interface FragmentView : BaseView {
             @Suppress("UNCHECKED_CAST")
             block.invoke(fragment.layoutInflater) as T
         }
-    }
-
-    fun <T : ViewModel> lazyActivityVM(cls: KClass<T>): Lazy<T> {
-        return lazy { ViewModelProvider(fragment.requireActivity()).get(cls.java) }
-    }
-
-    fun <T : ViewModel> activityVM(cls: KClass<T>): T {
-        return ViewModelProvider(fragment.requireActivity()).get(cls.java)
     }
 
     fun onCreateView() = Unit
@@ -77,7 +70,7 @@ interface FragmentView : BaseView {
     /**
      * Navigation
      */
-    fun childNavigate(@IdRes actionId: Int, block: (NavigationBuilder.() -> Unit)? = null) {
+    fun childNavigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
         fragment.findNavController().navigate(actionId, block)
     }
 
@@ -89,7 +82,7 @@ interface FragmentView : BaseView {
         }
     }
 
-    fun mainNavigate(@IdRes actionId: Int, block: (NavigationBuilder.() -> Unit)? = null) {
+    fun mainNavigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
         activityNavController()?.navigate(actionId, block)
     }
 
@@ -104,17 +97,25 @@ interface FragmentView : BaseView {
     /**
      * Keyboard
      */
-    fun hideKeyboard() {
-        lifecycleScope.launch {
-            delay(200)
-            fragment.requireActivity().hideKeyboard()
+    fun observerCameraPermission(onGranted: () -> Unit) {
+        val request = ActivityResultContracts.RequestPermission()
+        val permissionLauncher = fragment.registerForActivityResult(request) { isGranted: Boolean ->
+            if (isGranted) {
+                onGranted()
+            }
         }
-    }
-
-    fun showKeyboard() {
-        lifecycleScope.launch {
-            delay(200)
-            fragment.requireActivity().showKeyboard()
+        val permission = android.Manifest.permission.CAMERA
+        val selfPms = ContextCompat.checkSelfPermission(fragment.requireContext(), permission)
+        when {
+            selfPms == PackageManager.PERMISSION_GRANTED -> {
+                onGranted()
+            }
+            fragment.shouldShowRequestPermissionRationale(permission) -> {
+                alertCameraPermissionDenied()
+            }
+            else -> {
+                permissionLauncher.launch(permission)
+            }
         }
     }
 }

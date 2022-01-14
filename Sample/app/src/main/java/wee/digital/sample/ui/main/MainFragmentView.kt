@@ -4,16 +4,12 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import wee.digital.library.extension.*
-import wee.digital.sample.R
 import wee.digital.sample.ui.base.FragmentView
 import wee.digital.sample.ui.fragment.dialog.DialogVM
-import wee.digital.sample.ui.fragment.dialog.alert.AlertArg
-import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermission
+import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermissionDenied
 import wee.digital.sample.ui.fragment.dialog.selectable.Selectable
 import wee.digital.sample.ui.fragment.dialog.selectable.SelectableArg
-import wee.digital.sample.ui.fragment.dialog.tip.TipArg
-import wee.digital.sample.ui.fragment.dialog.tip.TipVM
-import wee.digital.sample.ui.fragment.dialog.web.WebArg
+import wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment
 import wee.digital.widget.custom.InputView
 import wee.digital.widget.extension.*
 import java.io.IOException
@@ -48,52 +44,11 @@ interface MainFragmentView : FragmentView {
 
     fun onNotificationData(data: Map<String, String>) = Unit
 
-    fun showAlertMessage(block: AlertArg.() -> Unit) {
-        if (dialogVM.alertLiveData.value != null) return
-        val arg = AlertArg()
-        arg.block()
-        dialogVM.alertLiveData.value = arg
-        mainNavigate(R.id.action_global_alertFragment)
-    }
-
-    fun showWebView(block: WebArg.() -> Unit) {
-        if (dialogVM.webLiveData.value != null) return
-        val arg = WebArg()
-        arg.block()
-        dialogVM.webLiveData.value = arg
-        mainNavigate(R.id.action_global_webFragment)
-    }
-
-    fun showTip(v: View?) {
-        v ?: return
-        dialogVM.tipViewLiveData.value = -1
-        activityVM(TipVM::class).tipArgLiveData.postValue(TipArg.sample(v))
-        mainNavigate(R.id.action_global_tipFragment)
-    }
-
     fun dismissDialogs() {
-        dialogVM.tipViewLiveData.value = -1
+        dialogVM.tipViewLiveData.value = null
         dialogVM.alertLiveData.value = null
         dialogVM.webLiveData.value = null
         dialogVM.selectableLiveData.value = null
-    }
-
-    fun showSelectableList(block: SelectableArg.() -> Unit) {
-        hideKeyboard()
-        val arg = SelectableArg()
-        arg.block()
-        val liveData = MutableLiveData(arg.selectedItem)
-        liveData.observe {
-            it ?: return@observe
-            arg.onItemSelected?.invoke(it)
-        }
-        dialogVM.selectableMap[arg.key] = liveData
-        dialogVM.selectableLiveData.value = arg
-        if (arg.itemList.isNullOrEmpty()) return
-        dialogVM.showDialogJob?.cancel()
-        dialogVM.showDialogJob = launch(300) {
-            mainNavigate(R.id.action_global_selectableFragment)
-        }
     }
 
     val isCameraGranted: Boolean get() = isGranted(android.Manifest.permission.CAMERA)
@@ -104,7 +59,7 @@ interface MainFragmentView : FragmentView {
             onGranted = onGranted,
             onDenied = {
                 onDenied?.invoke()
-                alertCameraPermission()
+                alertCameraPermissionDenied()
             })
     }
 
@@ -114,7 +69,7 @@ interface MainFragmentView : FragmentView {
             onGranted = onGranted,
             onDenied = {
                 launch(1000) {
-                    alertCameraPermission()
+                    alertCameraPermissionDenied()
                 }
             })
     }
@@ -143,7 +98,7 @@ interface MainFragmentView : FragmentView {
         setOnClickListener(object : ViewClickListener() {
             override fun onClicks(v: View) {
                 dialogVM.selectableLiveData.value = arg
-                mainNavigate(R.id.action_global_selectableFragment)
+                show(SelectableFragment())
             }
         })
     }

@@ -1,6 +1,5 @@
 package wee.digital.sample.ui.main
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import wee.digital.sample.databinding.MainAppBarBinding
 import wee.digital.sample.ui.model.AppBarArg
@@ -12,22 +11,16 @@ interface MainView {
 
     fun MainAppBarBinding.init(activity: AppCompatActivity) {
         statusBarHolderView.observer(activity)
-        viewLeftButton1.addViewClickListener { arg?.leftButton1onClick?.invoke(it) }
-        viewRightButton1.addViewClickListener { arg?.rightButton1onClick?.invoke(it) }
-        viewRightButton2.addViewClickListener { arg?.rightButton2onClick?.invoke(it) }
+        viewLeftButton1.addClickListener { arg?.leftButton1onClick?.invoke(it) }
+        viewRightButton1.addClickListener { arg?.rightButton1onClick?.invoke(it) }
     }
 
     fun MainAppBarBinding.bindArg(it: AppBarArg?) {
         arg = it
         it ?: return
-        if (it.isGone) {
-            root.gone()
-            return
-        }
         root.show()
         if (!it.isVisible) {
-            viewBackground.setBackgroundColor(Color.TRANSPARENT)
-            hide(viewLeftButton1, viewRightButton1, viewRightButton2, imageViewLogo)
+            root.gone()
             return
         }
         imageViewLogo.isShow(it.logoVisible)
@@ -45,8 +38,6 @@ interface MainView {
         viewLeftButton1.setImageResource(it.leftButton1)
         viewRightButton1.isHide(it.rightButton1 == 0)
         viewRightButton1.setImageResource(it.rightButton1)
-        viewRightButton2.isHide(it.rightButton2 == 0)
-        viewRightButton2.setImageResource(it.rightButton2)
     }
 
 }

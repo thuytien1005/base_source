@@ -6,7 +6,4 @@
     <uses-sdk tools:overrideLibrary="androidx.camera.camera2,
         androidx.camera.core, androidx.camera.view, androidx.camera.lifecycle" />
 
-    <application>
-        <activity android:name=".ui.WidgetsActivity" />
-    </application>
 </manifest>

@@ -19,8 +19,6 @@ class UserVM : BaseVM() {
     val firebaseUserLiveData = MutableLiveData<FirebaseUser?>()
 
     fun onFirebaseAppInit(app: Application) {
-
-
         auth.addAuthStateListener {
             userRegistration?.remove()
             val user = it.currentUser

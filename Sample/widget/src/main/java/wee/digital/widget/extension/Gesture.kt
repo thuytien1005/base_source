@@ -8,12 +8,18 @@ import kotlinx.coroutines.launch
 
 private var lastClickViewId: Int = 0
 
-abstract class ViewClickListener(private val delayedInterval: Long = 300) : View.OnClickListener {
+private var lastEventId: Int = -2
+
+private var lastClickTime: Long = System.currentTimeMillis()
+
+abstract class ViewClickListener(
+    private val delayedInterval: Long = 300,
+    private val eventId: Int = 1
+) :
+    View.OnClickListener {
 
     @Volatile
-    var onTrigger: Boolean = true
-
-    private var lastClickTime: Long = System.currentTimeMillis()
+    var onTrigger: Boolean = false
 
     private val isDelayed: Boolean get() = System.currentTimeMillis() - lastClickTime > delayedInterval
 
@@ -23,21 +29,29 @@ abstract class ViewClickListener(private val delayedInterval: Long = 300) : View
 
     final override fun onClick(v: View?) {
         v ?: return
-        if ((isDelayed || v.isAcceptClick) && onTrigger) {
+        if (eventId > 0 && eventId == lastEventId) return
+        if (onTrigger) return
+        if (v.isAcceptClick || isDelayed) {
+            onTrigger = true
             lastClickViewId = v.id
             lastClickTime = System.currentTimeMillis()
-            onTrigger = false
+            lastEventId = eventId
             onClicks(v)
             GlobalScope.launch {
                 delay(delayedInterval)
-                onTrigger = true
+                lastEventId = -2
+                onTrigger = false
             }
         }
     }
 
 }
 
-fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit)? = null) {
+fun View?.addClickListener(
+    delayedInterval: Long,
+    eventId: Int,
+    listener: ((View?) -> Unit)? = null
+) {
     this ?: return
     if (listener == null) {
         setOnClickListener(null)
@@ -47,7 +61,7 @@ fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit
         }
         return
     }
-    setOnClickListener(object : ViewClickListener(delayedInterval) {
+    setOnClickListener(object : ViewClickListener(delayedInterval, eventId) {
         override fun onClicks(v: View) {
             listener(v)
         }
@@ -58,8 +72,12 @@ fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit
     }
 }
 
-fun View?.addViewClickListener(listener: ((View?) -> Unit)? = null) {
-    addViewClickListener(0, listener)
+fun View?.addClickListener(delayedInterval: Long, listener: ((View?) -> Unit)? = null) {
+    addClickListener(delayedInterval, 1, listener)
+}
+
+fun View?.addClickListener(listener: ((View?) -> Unit)? = null) {
+    addClickListener(600, 1, listener)
 }
 
 fun addClickListeners(vararg views: View?, block: (View?) -> Unit) {

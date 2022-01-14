@@ -96,7 +96,7 @@ fun <T : Any> String?.parse(cls: KClass<Array<T>>): List<T>? {
 
 fun <T> T.toJsonObject(): JsonObject? {
     return try {
-        if (this is String){
+        if (this is String) {
             return parse(JsonObject::class.java)
         }
         val element = convertFactory.toJsonTree(this, object : TypeToken<T>() {}.type)

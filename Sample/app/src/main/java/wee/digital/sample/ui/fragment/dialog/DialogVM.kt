@@ -6,11 +6,14 @@ import wee.digital.sample.ui.base.BaseVM
 import wee.digital.sample.ui.fragment.dialog.alert.AlertArg
 import wee.digital.sample.ui.fragment.dialog.selectable.Selectable
 import wee.digital.sample.ui.fragment.dialog.selectable.SelectableArg
+import wee.digital.sample.ui.fragment.dialog.tip.TipArg
 import wee.digital.sample.ui.fragment.dialog.web.WebArg
 
 class DialogVM : BaseVM() {
 
-    var tipViewLiveData = MutableLiveData<Int>()
+    var tipEventLiveData = MutableLiveData<Int>()
+
+    var tipViewLiveData = MutableLiveData<TipArg?>()
 
     val alertLiveData = MutableLiveData<AlertArg?>()
 

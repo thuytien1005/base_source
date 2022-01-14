@@ -58,9 +58,9 @@ class WebFragment : MainDialogFragment<WebBinding>() {
     private fun onBindArg(it: WebArg) {
         //showProgress
         vb.viewClose.isShow(it.dismissWhenTouchOutside)
-        vb.viewClose.addViewClickListener { onBackPressed() }
+        vb.viewClose.addClickListener { onBackPressed() }
         if (it.dismissWhenTouchOutside) {
-            vb.layoutContent.addViewClickListener { onBackPressed() }
+            vb.layoutContent.addClickListener { onBackPressed() }
         }
         vb.textViewTitle.text = it.title
         loadUrl(it.url)

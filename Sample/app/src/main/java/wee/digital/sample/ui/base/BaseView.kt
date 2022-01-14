@@ -12,6 +12,8 @@ import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
@@ -41,71 +43,36 @@ interface BaseView {
     }
 
     fun launch(block: suspend CoroutineScope.() -> Unit): Job {
-        val job = lifecycleOwner.lifecycleScope.launch {
+        return lifecycleOwner.lifecycleScope.launch {
             block()
         }
-        uiJobList.add(job)
-        return job
     }
 
-    fun activityNavController(): NavController?
+    fun activityNavController(): NavController? = null
 
     fun onViewCreated()
 
     fun onLiveDataObserve() = Unit
 
-    fun addClickListener(vararg views: View?) {
-        addClickListener(delayedInterval = 400, views = views)
+    fun show(dialog: DialogFragment) {
+        val sfm = (baseActivity as? FragmentActivity)?.supportFragmentManager ?: return
+        dialog.show(sfm, dialog.tag)
     }
 
-    fun addClickListener(delayedInterval: Long, vararg views: View?) {
-        val listener = object : ViewClickListener(delayedInterval) {
-            override fun onClicks(v: View) {
-                onViewClick(v)
-            }
-        }
-        views.forEach {
-            it?.isClickable = true
-            it?.setOnClickListener(listener)
-        }
+    fun addObserve(observer: LifecycleObserver): LifecycleObserver {
+        lifecycleOwner.lifecycle.addObserver(observer)
+        return observer
     }
 
-    fun onViewClick(v: View?) = Unit
-
-    fun NavController?.navigate(
-        @IdRes actionId: Int,
-        block: (NavigationBuilder.() -> Unit)? = null
-    ) {
-        this ?: return
-        NavigationBuilder(this).also {
-            it.setVerticalAnim()
-            block?.invoke(it)
-            it.navigate(actionId)
-        }
+    /**
+     * [ViewModel] utils
+     */
+    fun <T : ViewModel> activityVM(cls: KClass<T>): T {
+        return ViewModelProvider(baseActivity!!).get(cls.java)
     }
 
-    fun navigate(@IdRes actionId: Int, block: (NavigationBuilder.() -> Unit)? = null) {
-        activityNavController().navigate(actionId, block)
-    }
-
-    fun popBackStack(@IdRes fragmentId: Int, inclusive: Boolean = false) {
-        activityNavController()?.popBackStack(fragmentId, inclusive)
-    }
-
-    fun <T> LiveData<T>.singleObserve(block: (T) -> Unit) {
-        removeObservers()
-        observe(lifecycleOwner, Observer {
-            removeObservers()
-            block(it)
-        })
-    }
-
-    fun <T> LiveData<T>.observe(block: (T) -> Unit) {
-        observe(lifecycleOwner, Observer(block))
-    }
-
-    fun <T> LiveData<T>.removeObservers() {
-        removeObservers(lifecycleOwner)
+    fun <T : ViewModel> lazyActivityVM(cls: KClass<T>): Lazy<T> {
+        return lazy { ViewModelProvider(baseActivity!!).get(cls.java) }
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
@@ -116,14 +83,73 @@ interface BaseView {
         return ViewModelProvider(this).get(cls.java)
     }
 
+    /**
+     * [LiveData] utils
+     */
+    fun <T> LiveData<T>.observe(block: (T) -> Unit) {
+        removeObservers(lifecycleOwner)
+        observe(lifecycleOwner, Observer(block))
+    }
+
+    fun <T> LiveData<T>.removeObservers() {
+        removeObservers(lifecycleOwner)
+    }
+
+    fun <T> LiveData<T>.singleObserve(block: (T) -> Unit) {
+        removeObservers()
+        observe(lifecycleOwner, Observer {
+            removeObservers()
+            block(it)
+        })
+    }
+
+    /**
+     * [NavController] utils
+     */
+    fun NavController?.navigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
+        this ?: return
+        NavBuilder(this).also {
+            block?.invoke(it)
+            it.navigate(actionId)
+        }
+    }
+
+    fun navigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
+        activityNavController().navigate(actionId, block)
+    }
+
+    fun popBackStack(@IdRes fragmentId: Int, inclusive: Boolean = false) {
+        activityNavController()?.popBackStack(fragmentId, inclusive)
+    }
+
+    fun <T> navResultLiveData(key: String? = null): MutableLiveData<T>? {
+        return activityNavController()?.currentBackStackEntry?.savedStateHandle?.getLiveData(
+            key
+                ?: ""
+        )
+    }
+
+    fun <T> setNavResult(key: String? = null, result: T) {
+        activityNavController()
+            ?.previousBackStackEntry
+            ?.savedStateHandle?.set(key ?: "", result)
+    }
+
+    fun <T> setNavResult(result: T) {
+        activityNavController()
+            ?.previousBackStackEntry
+            ?.savedStateHandle?.set("", result)
+    }
+
+    /**
+     * [View] utils
+     */
     fun View.toSharedElement(): Pair<View, String> {
         return Pair(this, this.transitionName)
     }
 
     fun View.show() {
-        if (visibility != View.VISIBLE) post {
-            visibility = View.VISIBLE
-        }
+        if (visibility != View.VISIBLE) visibility = View.VISIBLE
     }
 
     fun View.isShow(show: Boolean?) {
@@ -132,9 +158,7 @@ interface BaseView {
     }
 
     fun View.hide() {
-        if (visibility != View.INVISIBLE) post {
-            visibility = View.INVISIBLE
-        }
+        if (visibility != View.INVISIBLE) visibility = View.INVISIBLE
     }
 
     fun View.isHide(hide: Boolean?) {
@@ -143,23 +167,19 @@ interface BaseView {
     }
 
     fun View.gone() {
-        if (visibility != View.GONE) post {
-            visibility = View.GONE
-        }
+        if (visibility != View.GONE) visibility = View.GONE
     }
 
     fun View.isGone(gone: Boolean?) {
-        post {
-            visibility = if (gone == true) View.GONE
-            else View.VISIBLE
-        }
+        visibility = if (gone == true) View.GONE
+        else View.VISIBLE
     }
 
     fun View?.post(delayed: Long, runnable: Runnable) {
         this?.postDelayed(runnable, delayed)
     }
 
-    fun View?.addViewClickListener(delayedInterval: Long, listener: ((View?) -> Unit)? = null) {
+    fun View?.addClickListener(delayedInterval: Long, listener: ((View) -> Unit)? = null) {
         this ?: return
         if (listener == null) {
             setOnClickListener(null)
@@ -170,7 +190,7 @@ interface BaseView {
             return
         }
         this.isClickable = true
-        setOnClickListener(object : ViewClickListener(delayedInterval) {
+        setOnClickListener(object : ViewClickListener(delayedInterval, this.id) {
             override fun onClicks(v: View) {
                 listener(v)
             }
@@ -181,13 +201,48 @@ interface BaseView {
         }
     }
 
-    fun View?.addViewClickListener(listener: ((View?) -> Unit)? = null) {
-        addViewClickListener(0, listener)
+    fun View?.addClickListener(listener: ((View) -> Unit)? = null) {
+        this@addClickListener.addClickListener(0, listener)
+    }
+
+    fun TextView.setHyperText(@StringRes res: Int, vararg args: Any?) {
+        setHyperText(string(res), * args)
+    }
+
+    fun TextView.setHyperText(s: String?, vararg args: Any?) {
+        post {
+            text = try {
+                when {
+                    s.isNullOrEmpty() -> null
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(
+                        s.format(*args),
+                        Html.FROM_HTML_MODE_LEGACY
+                    )
+                    else -> {
+                        @Suppress("DEPRECATION")
+                        Html.fromHtml(s.format(*args))
+                    }
+                }
+            } catch (e: Throwable) {
+                s
+            }
+        }
     }
 
     fun CompoundButton.onCheckedChange(block: ((Boolean) -> Unit)?) {
         this.setOnCheckedChangeListener { _, isChecked -> block?.invoke(isChecked) }
     }
+
+    fun addClickListener(vararg views: View?) {
+        val listener = object : ViewClickListener() {
+            override fun onClicks(v: View) {
+                onViewClick(v)
+            }
+        }
+        views.forEach { it?.setOnClickListener(listener) }
+    }
+
+    fun onViewClick(v: View?) = Unit
 
     fun show(vararg views: View) {
         for (v in views) v.show()
@@ -201,7 +256,11 @@ interface BaseView {
         for (v in views) v.gone()
     }
 
+    /**
+     * Resources utils
+     */
     fun color(@ColorRes res: Int): Int {
+        app.resources
         return ContextCompat.getColor(app, res)
     }
 
@@ -213,6 +272,9 @@ interface BaseView {
         }
     }
 
+    /**
+     * [String] utils
+     */
     fun String.br(): String = "$this<br>"
 
     fun String.color(hexString: String): String {
@@ -236,50 +298,9 @@ interface BaseView {
         return "<b>$this</b>"
     }
 
-    fun TextView.setHyperText(@StringRes res: Int, vararg args: Any) {
-        setHyperText(string(res), * args)
-    }
-
-    fun TextView.setHyperText(s: String?, vararg args: Any) {
-        post {
-            text = try {
-                when {
-                    s.isNullOrEmpty() -> null
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(
-                        s.format(*args),
-                        Html.FROM_HTML_MODE_LEGACY
-                    )
-                    else -> {
-                        @Suppress("DEPRECATION")
-                        Html.fromHtml(s.format(*args))
-                    }
-                }
-            } catch (e: Throwable) {
-                s
-            }
-        }
-    }
-
-    fun TextView.setHyperText(s: String?) {
-        post {
-            text = try {
-                when {
-                    s.isNullOrEmpty() -> null
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(
-                        s,
-                        Html.FROM_HTML_MODE_LEGACY
-                    )
-                    else -> {
-                        @Suppress("DEPRECATION")
-                        Html.fromHtml(s)
-                    }
-                }
-            } catch (e: Throwable) {
-                s
-            }
-        }
-    }
-
+    /**
+     *
+     */
     fun inputModeAdjustResize() {
         baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
@@ -287,4 +308,17 @@ interface BaseView {
     fun inputModeAdjustNothing() {
         baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
+
+    fun hideKeyboard() {
+        launch(200) {
+            baseActivity?.hideKeyboard()
+        }
+    }
+
+    fun showKeyboard() {
+        launch(200) {
+            baseActivity?.showKeyboard()
+        }
+    }
+
 }

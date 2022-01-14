@@ -28,6 +28,8 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
         dialogVM.selectableLiveData.observe {
             if (it != null) {
                 onBindArg(it)
+            } else {
+                dismiss()
             }
         }
     }
@@ -47,9 +49,9 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
      */
     private fun onBindArg(it: SelectableArg) {
         //vb.viewClose.isShow(it.dismissWhenTouchOutside)
-        vb.viewClose.addViewClickListener { onBackPressed() }
+        vb.viewClose.addClickListener { onBackPressed() }
         if (it.dismissWhenTouchOutside) {
-            vb.layoutContent.addViewClickListener { onBackPressed() }
+            vb.layoutContent.addClickListener { onBackPressed() }
         }
         vb.textViewTitle.isGone(it.title.isNullOrEmpty())
         vb.textViewTitle.text = it.title

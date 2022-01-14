@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- BASE THEME. -->
     <style name="App" />
@@ -19,7 +19,7 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="App.Theme.Launch" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -28,7 +28,7 @@
         <item name="android:navigationBarColor">@color/colorWhite</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">false</item>-->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="App.Dialog" parent="Theme.AppCompat.Light.Dialog">

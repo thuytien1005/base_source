@@ -2,7 +2,6 @@ package wee.digital.library.extension
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Insets
 import android.graphics.drawable.Drawable
@@ -11,10 +10,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleOwner
 import wee.digital.library.app
 

@@ -139,17 +139,17 @@ class InputView : AppCustomView<InputBinding>,
         it.setText(types.text)
         it.addTextChangedListener(object : SimpleTextWatcher() {
             override fun onTextChanged(s: String) {
-                if (isSilentText) {
+                if (isTextSilent) {
                     return
                 }
                 if (hasError) {
                     error = null
                 }
                 if (hasCashWatcher) {
-                    isSilentText = true
+                    isTextSilent = true
                     val moneyText = s.moneyFormat("")
                     editText.setTextSilently(moneyText)
-                    isSilentText = false
+                    isTextSilent = false
                     onTextChanged?.invoke(moneyText)
                 } else {
                     onTextChanged?.invoke(s)
@@ -210,7 +210,7 @@ class InputView : AppCustomView<InputBinding>,
             vb.inputImageViewEnd.setImageResource(R.drawable.ic_drop_down)
             disableFocus()
             isClickable = true
-            editText.addViewClickListener {
+            editText.addClickListener {
                 listener.onClick(this)
             }
         }
@@ -259,31 +259,31 @@ class InputView : AppCustomView<InputBinding>,
     private var tempHasText: Boolean? = null
     private var tempHasError: Boolean? = null
     private var tempEnabled: Boolean? = null
-    private var isSilentText: Boolean = false
+    private var isTextSilent: Boolean = false
     val isTextEmpty: Boolean get() = text.isNullOrEmpty()
     val hasError: Boolean get() = !mError.isNullOrEmpty()
     val textLength: Int get() = text?.length ?: 0
 
     var text: String?
         get() {
-            isSilentText = true
+            isTextSilent = true
             val s = editText.text?.toString()?.trimText
-            isSilentText = false
+            isTextSilent = false
             return s
         }
         set(value) {
-            isSilentText = true
+            isTextSilent = true
             editText.setText(value)
             updateUiClearButton()
             onFocusChange(null, hasFocus())
-            isSilentText = false
+            isTextSilent = false
         }
 
     val trimText: String?
         get() {
-            isSilentText = true
+            isTextSilent = true
             val s = editText.trimText
-            isSilentText = false
+            isTextSilent = false
             return s
         }
 
@@ -358,7 +358,7 @@ class InputView : AppCustomView<InputBinding>,
         set(value) {
             updateUiClearButton()
             if (value) {
-                vb.inputImageViewEnd.addViewClickListener {
+                vb.inputImageViewEnd.addClickListener {
                     vb.inputTextViewError.text = null
                     text = null
                 }
@@ -455,10 +455,10 @@ class InputView : AppCustomView<InputBinding>,
     /**
      * Update ui on error, focus, enable, text change
      */
-    var isSilentUi: Boolean = false
+    var isViewSilent: Boolean = false
 
     fun updateUiOnTextChanged(hasFocus: Boolean = editText.hasFocus(), animated: Boolean = true) {
-        if (isSilentUi) return
+        if (isViewSilent) return
         val hasText = !text.isNullOrEmpty()
         val hasError = !error.isNullOrEmpty()
         if (tempHasFocus == hasFocus && tempHasText == hasText && tempHasError == hasError && tempEnabled == isEnabled) {
@@ -588,7 +588,7 @@ class InputView : AppCustomView<InputBinding>,
             error = null
             text = "%02d/%02d/%s".format(dayOfMonth, monthOfYear + 1, year)
         }
-        editText.addViewClickListener {
+        editText.addClickListener {
             val arg = DateArg()
             block?.invoke(arg)
             val activity = context as AppCompatActivity
@@ -613,7 +613,7 @@ class InputView : AppCustomView<InputBinding>,
             dialog.accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             dialog.show(activity.supportFragmentManager, "DatePickerDialog")
         }
-        vb.inputImageViewEnd.addViewClickListener {
+        vb.inputImageViewEnd.addClickListener {
             editText.performClick()
         }
     }

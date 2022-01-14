@@ -37,44 +37,37 @@
             android:id="@+id/viewLeftButton1"
             android:layout_width="@dimen/rowSize"
             android:layout_height="@dimen/rowSize"
-            android:layout_marginStart="@dimen/contentMargin24"
-            android:elevation="1dp"
+            android:background="@drawable/drw_oval"
+            android:backgroundTint="@color/colorHint"
+            android:layout_marginStart="@dimen/contentMargin12"
+            android:padding="@dimen/_8sdp"
+            android:tint="@color/colorTextDefault"
+            android:visibility="invisible"
             android:transformPivotX="@dimen/rowSizeD2"
             android:transformPivotY="@dimen/rowSize"
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_close"
+            tools:src="@drawable/ic_arrow_left"
             tools:visibility="visible" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/viewRightButton2"
-            android:layout_width="@dimen/rowSize"
-            android:layout_height="@dimen/rowSize"
-            android:layout_marginEnd="@dimen/rowSize2D3"
-            android:background="@null"
-            android:tint="@color/colorHint"
-            android:transformPivotX="@dimen/rowSizeD2"
-            android:transformPivotY="@dimen/rowSize"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/viewRightButton1"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_close" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/viewRightButton1"
             android:layout_width="@dimen/rowSize"
             android:layout_height="@dimen/rowSize"
-            android:layout_marginEnd="@dimen/contentMargin6"
-            android:background="@null"
-            android:tint="@color/colorHint"
+            android:background="@drawable/drw_oval"
+            android:backgroundTint="@color/colorHint"
+            android:layout_marginEnd="@dimen/contentMargin12"
+            android:padding="@dimen/_8sdp"
+            android:tint="@color/colorTextDefault"
+            android:visibility="invisible"
             android:transformPivotX="@dimen/rowSizeD2"
             android:transformPivotY="@dimen/rowSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_close" />
+            tools:src="@drawable/ic_close"
+            tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textViewAppBarTitle"
@@ -85,7 +78,7 @@
             android:gravity="center_horizontal"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/viewRightButton2"
+            app:layout_constraintEnd_toEndOf="@+id/viewRightButton1"
             app:layout_constraintStart_toEndOf="@+id/viewLeftButton1"
             app:layout_constraintTop_toTopOf="@+id/viewBackground"
             tools:text="@string/app_name" />

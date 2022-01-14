@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
-import wee.digital.widget.extension.addViewClickListener
+import wee.digital.widget.extension.addClickListener
 
 
 class SessionAdapter<T, VB : ViewBinding> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -51,9 +51,9 @@ class SessionAdapter<T, VB : ViewBinding> : RecyclerView.Adapter<RecyclerView.Vi
         }
         @Suppress("UNCHECKED")
         (viewHolder as? ViewBindingHolder<VB>)?.also {
-            viewHolder.vb.root.addViewClickListener {
+            viewHolder.vb.root.addClickListener {
                 val item = currentList.getOrNull(viewHolder.absoluteAdapterPosition)
-                    ?: return@addViewClickListener
+                    ?: return@addClickListener
                 onItemClick?.invoke(item)
                 onItemViewClick?.invoke(item, viewHolder.vb)
             }

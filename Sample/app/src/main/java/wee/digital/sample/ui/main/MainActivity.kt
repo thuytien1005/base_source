@@ -28,7 +28,7 @@ class MainActivity : BaseActivity<MainBinding>(),
     override var arg: AppBarArg? = null
 
     override fun activityNavController(): NavController? {
-        return findNavController(R.id.mainFragment)
+        return findNavController(R.id.mainContainerView)
     }
 
     override fun inflating(): (LayoutInflater) -> ViewBinding {

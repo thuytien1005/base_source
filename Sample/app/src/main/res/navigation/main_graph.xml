@@ -5,42 +5,6 @@
     android:id="@+id/main"
     app:startDestination="@id/homeFragment">
 
-    <dialog
-        android:id="@+id/selectableFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment"
-        android:label="SelectableFragment"
-        tools:layout="@layout/selectable" />
-    <action
-        android:id="@+id/action_global_selectableFragment"
-        app:destination="@id/selectableFragment" />
-
-    <dialog
-        android:id="@+id/alertFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.alert.AlertFragment"
-        android:label="AlertFragment"
-        tools:layout="@layout/alert" />
-    <action
-        android:id="@+id/action_global_alertFragment"
-        app:destination="@id/alertFragment" />
-
-    <dialog
-        android:id="@+id/webFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.web.WebFragment"
-        android:label="WebFragment"
-        tools:layout="@layout/web" />
-    <action
-        android:id="@+id/action_global_webFragment"
-        app:destination="@id/webFragment" />
-
-    <dialog
-        android:id="@+id/tipFragment"
-        android:name="wee.digital.sample.ui.fragment.dialog.tip.TipFragment"
-        android:label="TipFragment"
-        tools:layout="@layout/tip" />
-    <action
-        android:id="@+id/action_global_tipFragment"
-        app:destination="@id/tipFragment" />
-
     <fragment
         android:id="@+id/homeFragment"
         android:name="wee.digital.sample.ui.fragment.home.HomeFragment"

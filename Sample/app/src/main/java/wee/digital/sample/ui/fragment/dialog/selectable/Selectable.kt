@@ -1,7 +1,10 @@
 package wee.digital.sample.ui.fragment.dialog.selectable
 
 import android.graphics.Color
+import androidx.lifecycle.MutableLiveData
 import wee.digital.sample.R
+import wee.digital.sample.ui.base.BaseView
+import wee.digital.sample.ui.fragment.dialog.DialogVM
 import wee.digital.widget.extension.color
 
 open class Selectable(
@@ -19,5 +22,27 @@ open class Selectable(
 
     override fun toString(): String {
         return text ?: ""
+    }
+}
+
+typealias SelectableBlock = (SelectableArg.() -> Unit)?
+
+fun BaseView.showSelectable(block: SelectableBlock) {
+    val vm = activityVM(DialogVM::class)
+    if (vm.selectableLiveData.value != null) return
+    val arg = SelectableArg()
+    block?.invoke(arg)
+    if (arg.itemList.isNullOrEmpty()) return
+    hideKeyboard()
+    vm.selectableLiveData.value = arg
+    vm.selectableMap[arg.key] = MutableLiveData(arg.selectedItem).also {
+        it.observe { selectable ->
+            selectable ?: return@observe
+            arg.onItemSelected?.invoke(selectable)
+        }
+    }
+    vm.showDialogJob?.cancel()
+    vm.showDialogJob = launch(300) {
+        show(SelectableFragment())
     }
 }

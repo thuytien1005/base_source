@@ -12,8 +12,6 @@ import wee.digital.widget.extension.beginTransition
 
 class TipFragment : MainDialogFragment<TipBinding>() {
 
-    private val vm by lazyActivityVM(TipVM::class)
-
     /**
      * [MainDialogFragment] implements
      */
@@ -30,15 +28,18 @@ class TipFragment : MainDialogFragment<TipBinding>() {
     }
 
     override fun onLiveDataObserve() {
-        vm.tipArgLiveData.observe {
-            bindTipValue(it)
+        dialogVM.tipViewLiveData.observe {
+            if (it != null) {
+                onBindArg(it)
+            } else {
+                dismiss()
+            }
         }
     }
 
-    private fun bindTipValue(it: TipArg) {
+    private fun onBindArg(it: TipArg) {
         vb.title.text = it.title
         vb.content.text = it.content
-
         vb.image.x = it.point.x.toFloat()
         vb.image.y = it.point.y.toFloat()
         vb.image.setImageBitmap(it.image)

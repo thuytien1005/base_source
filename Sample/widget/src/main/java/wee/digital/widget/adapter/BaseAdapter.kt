@@ -2,11 +2,9 @@ package wee.digital.widget.adapter
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
+import wee.digital.widget.extension.addClickListener
 
 interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
@@ -17,6 +15,8 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
     /**
      * Item click
      */
+    fun itemClickDelayed(): Long = 600
+
     var onItemClick: OnItemClick<T>
 
     fun onItemClick(block: OnItemClick<T>): A {
@@ -91,14 +91,14 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     val dataNotEmpty: Boolean get() = listItem().isNotEmpty()
 
+    fun indexOf(item: T): Int {
+        return listItem().indexOf(item)
+    }
+
     fun getItemOrNull(position: Int): T? {
         if (dataIsEmpty) return null
         if (isInfinity()) return listItem().getOrNull(position % size)
         return listItem().getOrNull(position)
-    }
-
-    fun indexOf(item: T): Int {
-        return listItem().indexOf(item)
     }
 
     fun getBaseItemCount(): Int {
@@ -148,7 +148,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
         val model: T = getItemOrNull(position) ?: return
         val options: ItemOptions = modelItemOptions(model, position) ?: return
         val viewBinding: ViewBinding = options.inflaterInvoker(itemView)
-        itemView.addItemClickListener {
+        itemView.addClickListener(itemClickDelayed(),1) {
             onItemViewClick(viewHolder, viewBinding)
         }
         itemView.setOnLongClickListener {
@@ -204,15 +204,15 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
      *
      */
     fun bind(v: RecyclerView, lm: RecyclerView.LayoutManager): A {
+        v.itemAnimator = DefaultItemAnimator()
+        (v.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         v.layoutManager = lm
         v.adapter = this as RecyclerView.Adapter<*>
-        //v.itemAnimator = DefaultItemAnimator()
-        (v.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         return self
     }
 
     fun bind(v: RecyclerView, block: (LinearLayoutManager.() -> Unit)? = null): A {
-        val lm = CachingLinearLayoutManager(v.context)
+        val lm = LinearLayoutManager(v.context)
         block?.invoke(lm)
         return bind(v, lm)
     }

@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="contentMargin3">2.5dp</dimen>
-    <dimen name="contentMargin6">5dp</dimen>
-    <dimen name="contentMarginM10">-15dp</dimen>
+    <dimen name="contentMargin8">@dimen/_6sdp</dimen>
+    <dimen name="contentMargin12">@dimen/_8sdp</dimen>
+    <dimen name="contentMargin16">@dimen/_12sdp</dimen>
+    <dimen name="contentMargin18">@dimen/_14sdp</dimen>
+    <dimen name="contentMargin24">@dimen/_16sdp</dimen>
+    <dimen name="contentMargin28">@dimen/_20sdp</dimen>
+    <dimen name="contentMargin32">@dimen/_24sdp</dimen>
+    <dimen name="contentMargin40">@dimen/_28sdp</dimen>
+    <dimen name="contentMargin48">@dimen/_32sdp</dimen>
+    <dimen name="contentMargin96">@dimen/_64sdp</dimen>
 
-    <dimen name="contentMargin8">7dp</dimen>
-    <dimen name="contentMargin12">10dp</dimen>
-    <dimen name="contentMargin16">13dp</dimen>
-    <dimen name="contentMargin18">15dp</dimen>
-    <dimen name="contentMargin24">20dp</dimen>
-    <dimen name="contentMargin28">25dp</dimen>
-    <dimen name="contentMargin32">30dp</dimen>
-    <dimen name="contentMargin40">35dp</dimen>
-    <dimen name="contentMargin48">40dp</dimen>
-    <dimen name="contentMargin60">50dp</dimen>
-    <dimen name="contentMargin72">60dp</dimen>
-    <dimen name="contentMargin84">70dp</dimen>
-    <dimen name="contentMargin96">80dp</dimen>
-    <dimen name="contentMargin108">90dp</dimen>
-    <dimen name="contentMargin120">100dp</dimen>
+    <dimen name="textSize9">@dimen/_6ssp</dimen>
+    <dimen name="textSize10">@dimen/_8ssp</dimen>
+    <dimen name="textSize12">@dimen/_10ssp</dimen>
+    <dimen name="textSize15">@dimen/_12ssp</dimen>
+    <dimen name="textSize18">@dimen/_15ssp</dimen>
+    <dimen name="textSize24">@dimen/_18ssp</dimen>
+    <dimen name="textSize28">@dimen/_24ssp</dimen>
+    <dimen name="textSize48">@dimen/_32ssp</dimen>
 
-    <dimen name="textSize9">9sp</dimen>
-    <dimen name="textSize10">10sp</dimen>
-    <dimen name="textSize12">12sp</dimen>
-    <dimen name="textSize15">15sp</dimen>
-    <dimen name="textSize18">18sp</dimen>
-    <dimen name="textSize24">24sp</dimen>
-    <dimen name="textSize28">28sp</dimen>
-    <dimen name="textSize48">48sp</dimen>
+    <dimen name="rowRadius">@dimen/_8sdp</dimen>
+    <dimen name="itemRadius">@dimen/_12sdp</dimen>
+    <dimen name="dialogRadius">@dimen/_14sdp</dimen>
+    <dimen name="inputViewMarginTop">@dimen/_14sdp</dimen>
 
-    <dimen name="rowRadius">8dp</dimen>
-    <dimen name="itemRadius">14dp</dimen>
-    <dimen name="dialogRadius">14dp</dimen>
-    <dimen name="orderItemRadius">12dp</dimen>
-    <dimen name="inputViewMarginTop">14dp</dimen>
+    <dimen name="rowSizeD2">@dimen/_23sdp</dimen>
+    <dimen name="rowSize2D3">@dimen/_36sdp</dimen>
+    <dimen name="rowSize">@dimen/_46sdp</dimen>
+    <dimen name="rowSizeX2">@dimen/_92sdp</dimen>
 
-    <dimen name="rowSizeD2">24dp</dimen>
-    <dimen name="rowSize2D3">36dp</dimen>
-    <dimen name="rowSize">48dp</dimen>
-    <dimen name="rowSizeX2">100dp</dimen>
-
-    <dimen name="backButtonBottom">68dp</dimen>
-    <dimen name="appBarSize">64dp</dimen>
-
+    <dimen name="backButtonBottom">@dimen/_54sdp</dimen>
+    <dimen name="appBarSize">@dimen/_48sdp</dimen>
+    <dimen name="appBarSizeD2">@dimen/_24sdp</dimen>
 </resources>

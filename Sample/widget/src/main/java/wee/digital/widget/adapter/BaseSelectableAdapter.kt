@@ -3,6 +3,7 @@ package wee.digital.widget.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import wee.digital.widget.extension.addClickListener
 
 abstract class BaseSelectableAdapter<T, VB : ViewBinding> : BaseRecyclerAdapter<T>() {
 
@@ -31,7 +32,7 @@ abstract class BaseSelectableAdapter<T, VB : ViewBinding> : BaseRecyclerAdapter<
             } else {
                 vb.onBindUnselectedItem(item, position)
             }
-            vb.root.addItemClickListener {
+            vb.root.addClickListener {
                 onItemClick?.invoke(item)
             }
         }

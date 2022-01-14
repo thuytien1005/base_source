@@ -48,15 +48,17 @@ android {
         }
     }
     productFlavors {
-        all {
+        all {flavor ->
+            task("${flavor.name}GoogleServices", type: Copy) {
+                description = 'Switches to google-services.json depending on flavor'
+                from "src/${flavor.name}"
+                include "google-services.json"
+                into "."
+            }
         }
         dev {
             resValue "string", "app_name", "Sample Dev"
             applicationIdSuffix ".dev"
-        }
-        qc {
-            resValue "string", "app_name", "Sample QC"
-            applicationIdSuffix ".qc"
         }
         prod {
             resValue "string", "app_name", "Sample"
@@ -141,14 +143,33 @@ dependencies {
     implementation deps.firebase.storage
     implementation deps.firebase.messaging
 
+    // dimension resources
+    implementation deps.dimens.sdp
+    implementation deps.dimens.ssp
+
     // restful client
     implementation deps.square.retrofit
     implementation deps.square.okhttp
     implementation deps.square.okhttp_log
     implementation deps.square.gson
 
+    implementation "com.google.mlkit:camera:16.0.0-beta2"
+
     // custom view
     implementation deps.rounded_image_view
+
+    // MediaPipe Face Detection Solution.
+    implementation 'com.google.mediapipe:solution-core:latest.release'
+    implementation 'com.google.mediapipe:facedetection:latest.release'
+    implementation 'com.google.mediapipe:facemesh:latest.release'
+}
+
+afterEvaluate {
+    android.productFlavors.all {
+        flavor ->
+            tasks."generate${flavor.name.capitalize()}DebugResources".dependsOn "${flavor.name}GoogleServices"
+            tasks."generate${flavor.name.capitalize()}ReleaseResources".dependsOn "${flavor.name}GoogleServices"
+    }
 }
 
 apply plugin: "com.google.gms.google-services"

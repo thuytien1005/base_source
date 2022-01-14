@@ -20,7 +20,7 @@ fun onUi(interval: Long = 0, block: () -> Unit) {
 
 fun <T : Any> flowResult(block: suspend FlowCollector<Result<T>>.() -> T): Flow<Result<T>> {
     return flow {
-        emit( runCatching { block() })
+        emit(runCatching { block() })
     }.flowOn(Dispatchers.IO)
 }
 

@@ -3,22 +3,23 @@ package wee.digital.sample.ui.fragment.dialog.alert
 import wee.digital.library.extension.navigateAppSettings
 import wee.digital.library.extension.navigateWifiSettings
 import wee.digital.sample.R
-import wee.digital.sample.ui.main.MainFragmentView
+import wee.digital.sample.ui.base.BaseView
+import wee.digital.sample.ui.fragment.dialog.DialogVM
 
+typealias AlertBlock = (AlertArg.() -> Unit)?
 
-fun MainFragmentView.alertCameraPermission() {
-    showAlertMessage {
-        icon = R.drawable.ic_check
-        title = "Camera chưa sẵn sàng"
-        message = "Để tiếp tục, hãy cho phép ứng dụng AllSafe Mobile truy cập Máy ảnh của bạn."
-        acceptLabel = "Cài đặt ứng dụng"
-        acceptOnClick = { navigateAppSettings() }
-        cancelLabel = "Từ chối"
-    }
+fun BaseView.showAlert(block: AlertBlock) {
+    val vm = activityVM(DialogVM::class)
+    if (vm.alertLiveData.value != null) return
+    val arg = AlertArg()
+    block?.invoke(arg)
+    vm.alertLiveData.value = arg
+    show(AlertFragment())
 }
 
-fun MainFragmentView.alertNetworkError() {
-    showAlertMessage {
+fun BaseView.alertNetworkError() {
+    showAlert {
+        dismissWhenTouchOutside = false
         icon = R.drawable.ic_check
         title = "Không tìm thấy kết nối internet"
         message = "Vui lòng kiểm tra kết nối của thiết bị"
@@ -27,3 +28,16 @@ fun MainFragmentView.alertNetworkError() {
         acceptOnClick = { navigateWifiSettings() }
     }
 }
+
+fun BaseView.alertCameraPermissionDenied() {
+    showAlert {
+        icon = R.drawable.ic_check
+        title = "Camera chưa sẵn sàng"
+        message = "Để tiếp tục, hãy cho phép ứng dụng truy cập Máy ảnh của bạn."
+        acceptLabel = "Cài đặt ứng dụng"
+        acceptOnClick = { navigateAppSettings() }
+        cancelLabel = "Từ chối"
+    }
+}
+
+

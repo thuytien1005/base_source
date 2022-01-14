@@ -186,6 +186,10 @@ open class AppExpandableLayout : ConstraintLayout {
         collapse(true)
     }
 
+    fun switch(animate: Boolean = true) {
+        setExpanded(!isExpanded, animate)
+    }
+
     open fun setExpanded(expand: Boolean, animate: Boolean) {
         val targetExpansion = if (expand) 1 else 0
         if (animate) {

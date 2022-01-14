@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/ScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            style="@style/MatchWidth"
+            android:orientation="vertical">
+
+            <!--OpenGL-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/viewOpenGL"
+                style="@style/Widgets.Button"
+                android:text="OpenGL" />
+
+            <!--MediaPipe FaceMesh-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/viewFaceMesh"
+                style="@style/Widgets.Button"
+                android:text="MediaPipe FaceMesh" />
+
+            <!--OtpView-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/viewOtpView"
+                    style="@style/Widgets.Button"
+                    android:text="OtpView" />
+
+                <wee.digital.widget.base.AppExpandableLayout
+                    android:id="@+id/layoutOtpView"
+                    style="@style/MatchWidth"
+                    tools:expanded="true">
+
+                    <wee.digital.widget.custom.OtpView
+                        android:id="@+id/otpView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </wee.digital.widget.base.AppExpandableLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--PinView-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/viewPinView"
+                    style="@style/Widgets.Button"
+                    android:text="PinView" />
+
+                <wee.digital.widget.base.AppExpandableLayout
+                    android:id="@+id/layoutPinView"
+                    style="@style/MatchWidth"
+                    tools:expanded="true">
+
+                    <wee.digital.widget.custom.PinView
+                        android:id="@+id/pinView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </wee.digital.widget.base.AppExpandableLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--InputView-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/viewInputView"
+                    style="@style/Widgets.Button"
+                    android:text="InputView" />
+
+                <wee.digital.widget.base.AppExpandableLayout
+                    android:id="@+id/layoutInputView"
+                    style="@style/MatchWidth"
+                    tools:expanded="true">
+
+
+                </wee.digital.widget.base.AppExpandableLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/viewMain"
+        style="@style/Widgets.Button"
+        android:layout_width="wrap_content"
+        android:gravity="end|center_vertical"
+        android:text="Main"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,5 +10,4 @@ abstract class MainDialogFragment<B : ViewBinding> : BaseDialogFragment<B>(), Ma
     override val mainVM by lazyActivityVM(MainVM::class)
     override val dialogVM by lazyActivityVM(DialogVM::class)
 
-
 }
