@@ -1,5 +1,6 @@
 package wee.digital.sample.ui.fragment.mask
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
@@ -10,6 +11,9 @@ import com.google.mediapipe.solutioncore.SolutionGlSurfaceView
 import com.google.mediapipe.solutions.facemesh.FaceMesh
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult
+import wee.digital.library.extension.lightSystemWidgets
+import wee.digital.library.extension.statusBarColor
+import wee.digital.library.extension.windowFullScreen
 import wee.digital.sample.databinding.MaskBinding
 import wee.digital.sample.ui.main.MainFragment
 
@@ -23,6 +27,8 @@ class MaskFragment : MainFragment<MaskBinding>() {
     }
 
     override fun onViewCreated() {
+        statusBarColor(Color.BLACK)
+        lightSystemWidgets()
         observerCameraPermission {
             stopCurrentPipeline()
             setupStreamingModePipeline()

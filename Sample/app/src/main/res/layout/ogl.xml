@@ -8,9 +8,8 @@
     <FrameLayout
         android:id="@+id/layoutSurfaceView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:background="@color/colorBlack"
-        app:layout_constraintDimensionRatio="w,4:3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
