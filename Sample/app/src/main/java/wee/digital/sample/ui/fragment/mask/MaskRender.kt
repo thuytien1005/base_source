@@ -29,8 +29,8 @@ class MaskRender : ResultGlRenderer<FaceMeshResult> {
           gl_FragColor = uColor;
         }
     """
-    private val drawColor = floatArrayColor(Color.parseColor("#95CDFF"))
-    private val drawThickness = 4
+    private val drawColor = floatArrayColor(Color.parseColor("#FFFFFF"))
+    private val drawThickness = 3
 
     override fun setupRendering() {
         program = GLES20.glCreateProgram()
@@ -48,6 +48,9 @@ class MaskRender : ResultGlRenderer<FaceMeshResult> {
         result ?: return
         GLES20.glUseProgram(program)
         GLES20.glUniformMatrix4fv(projectionMatrixHandle, 1, false, projectionMatrix, 0)
+
+        val numFaces = result.multiFaceLandmarks().size
+
         val normalizedLandmarkList: LandmarkProto.NormalizedLandmarkList =
             result.multiFaceLandmarks()
                 .firstOrNull()
@@ -55,24 +58,29 @@ class MaskRender : ResultGlRenderer<FaceMeshResult> {
 
         val landmarkList: List<LandmarkProto.NormalizedLandmark> =
             normalizedLandmarkList.landmarkList
-        val numFaces = result.multiFaceLandmarks().size
-        // viền mặt
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_FACE_OVAL)
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYE)
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYE)
 
+        // Viền mặt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_FACE_OVAL)
+
+        // 2 mắt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYE)
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYE)
+
+        // Mống mắt
         if (normalizedLandmarkList.landmarkCount == FaceMesh.FACEMESH_NUM_LANDMARKS_WITH_IRISES) {
-            drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
-            drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
+            drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
+            drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
         }
 
-        return
-        // lông mày
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYEBROW)
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYEBROW)
-        //
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_TESSELATION)
-        drawLandmarks(landmarkList, FaceMeshConnections.FACEMESH_LIPS)
+        // Lông mày
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYEBROW)
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYEBROW)
+
+        // Môi
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LIPS)
+
+        // Các điểm trên khuôn mặt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_TESSELATION)
 
     }
 
@@ -80,17 +88,17 @@ class MaskRender : ResultGlRenderer<FaceMeshResult> {
         GLES20.glDeleteProgram(program)
     }
 
-    private fun drawLandmarks(
-        faceLandmarkList: List<LandmarkProto.NormalizedLandmark>,
+    private fun drawLandmarkLines(
+        landmarks: List<LandmarkProto.NormalizedLandmark>,
         connections: ImmutableSet<FaceMeshConnections.Connection>,
-        colorArray: FloatArray = drawColor,
+        color: FloatArray = drawColor,
         thickness: Int = drawThickness
     ) {
-        GLES20.glUniform4fv(colorHandle, 1, colorArray, 0)
+        GLES20.glUniform4fv(colorHandle, 1, color, 0)
         GLES20.glLineWidth(thickness.toFloat())
         for (conn in connections) {
-            val start = faceLandmarkList[conn.start()]
-            val end = faceLandmarkList[conn.end()]
+            val start = landmarks[conn.start()]
+            val end = landmarks[conn.end()]
             val vertex = floatArrayOf(start.x, start.y, end.x, end.y)
             val vertexBuffer = ByteBuffer.allocateDirect(vertex.size * 4)
                 .order(ByteOrder.nativeOrder())
@@ -102,7 +110,6 @@ class MaskRender : ResultGlRenderer<FaceMeshResult> {
             GLES20.glDrawArrays(GLES20.GL_LINES, 0, 2)
         }
     }
-
 
 
 }

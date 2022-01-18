@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
+import wee.digital.library.util.Logger
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
     BaseView {
+
+    protected val log: Logger by lazy { Logger(this::class) }
 
     protected val vb: VB by viewBinding(inflating())
 
