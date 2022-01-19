@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.fragment.ogl
+package wee.digital.sample.ui.fragment.face.mesh
 
 import android.graphics.Color
 import android.opengl.GLES20
@@ -8,12 +8,10 @@ import com.google.mediapipe.solutioncore.ResultGlRenderer
 import com.google.mediapipe.solutions.facemesh.FaceMesh
 import com.google.mediapipe.solutions.facemesh.FaceMeshConnections
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult
-import wee.digital.sample.ui.fragment.mask.floatArrayColor
-import wee.digital.sample.ui.fragment.mask.loadShader
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class OpenGLRender : ResultGlRenderer<FaceMeshResult> {
+class FaceMeshRender : ResultGlRenderer<FaceMeshResult> {
 
     private var program = 0
     private var positionHandle = 0
@@ -31,9 +29,8 @@ class OpenGLRender : ResultGlRenderer<FaceMeshResult> {
           gl_FragColor = uColor;
         }
     """
-    private val drawColor = floatArrayColor(Color.parseColor("#750087FF"))
-    private val drawThickness = 4
-    private val irisColor = floatArrayColor(Color.parseColor("#9C00ACC1"))
+    private val drawColor = floatArrayColor(Color.parseColor("#FFFFFF"))
+    private val drawThickness = 3
 
     override fun setupRendering() {
         program = GLES20.glCreateProgram()
@@ -51,76 +48,68 @@ class OpenGLRender : ResultGlRenderer<FaceMeshResult> {
         result ?: return
         GLES20.glUseProgram(program)
         GLES20.glUniformMatrix4fv(projectionMatrixHandle, 1, false, projectionMatrix, 0)
+
+        val numFaces = result.multiFaceLandmarks().size
+
         val normalizedLandmarkList: LandmarkProto.NormalizedLandmarkList =
             result.multiFaceLandmarks()
                 .firstOrNull()
                 ?: return
+
         val landmarkList: List<LandmarkProto.NormalizedLandmark> =
             normalizedLandmarkList.landmarkList
+
+        // Viền mặt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_FACE_OVAL)
+
+        // 2 mắt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYE)
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYE)
+
+        // Mống mắt
         if (normalizedLandmarkList.landmarkCount == FaceMesh.FACEMESH_NUM_LANDMARKS_WITH_IRISES) {
-            drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
             drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
-            //drawIris(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
-            //drawIris(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
+            drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
         }
+
+        // Lông mày
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_EYEBROW)
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_EYEBROW)
+
+        // Môi
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LIPS)
+
+        // Các điểm trên khuôn mặt
+        drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_TESSELATION)
+
     }
 
     fun release() {
         GLES20.glDeleteProgram(program)
     }
 
-    private fun drawIris(
+    private fun drawLandmarkLines(
         landmarks: List<LandmarkProto.NormalizedLandmark>,
-        connections: ImmutableSet<FaceMeshConnections.Connection>
+        connections: ImmutableSet<FaceMeshConnections.Connection>,
+        color: FloatArray = drawColor,
+        thickness: Int = drawThickness
     ) {
-        GLES20.glUniform4fv(colorHandle, 1, irisColor, 0)
-        GLES20.glLineWidth(drawThickness.toFloat())
-        val circle = getCircle(landmarks, connections) ?: return
+        GLES20.glUniform4fv(colorHandle, 1, color, 0)
+        GLES20.glLineWidth(thickness.toFloat())
         for (conn in connections) {
             val start = landmarks[conn.start()]
             val end = landmarks[conn.end()]
-            val vertex = floatArrayOf(start.x, start.y, end.x, end.y, circle.x, circle.y)
-            val vertexBuffer = ByteBuffer.allocateDirect(vertex.size * 6)
+            val vertex = floatArrayOf(start.x, start.y, end.x, end.y)
+            val vertexBuffer = ByteBuffer.allocateDirect(vertex.size * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer()
                 .put(vertex)
+            vertexBuffer.position(0)
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer)
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 3, 3)
+            GLES20.glDrawArrays(GLES20.GL_LINES, 0, 2)
         }
     }
 
-
-    /**
-     *
-     */
-    private fun drawLandmarkLines(
-        landmarks: List<LandmarkProto.NormalizedLandmark>,
-        connections: ImmutableSet<FaceMeshConnections.Connection>
-    ) {
-        GLES20.glUniform4fv(colorHandle, 1, drawColor, 0)
-        GLES20.glLineWidth(drawThickness.toFloat())
-        val circle = getCenterPoint(landmarks, connections) ?: return
-        for (conn in connections) {
-            val start = landmarks[conn.start()]
-            val end = landmarks[conn.end()]
-            drawLines(start.x, start.y, end.x, end.y)
-            drawLines(start.x, start.y, circle.x, circle.y)
-        }
-
-    }
-
-    private fun drawLines(x1: Float, y1: Float, x2: Float, y2: Float) {
-        val vertex = floatArrayOf(x1, y1, x2, y2)
-        val vertexBuffer = ByteBuffer.allocateDirect(vertex.size * 4)
-            .order(ByteOrder.nativeOrder())
-            .asFloatBuffer()
-            .put(vertex)
-        vertexBuffer.position(0)
-        GLES20.glEnableVertexAttribArray(positionHandle)
-        GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer)
-        GLES20.glDrawArrays(GLES20.GL_LINES, 0, 2)
-    }
 
 }
-

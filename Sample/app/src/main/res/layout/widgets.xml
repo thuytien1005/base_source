@@ -21,9 +21,9 @@
 
             <!--OpenGL-->
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/viewOpenGL"
+                android:id="@+id/viewFaceReg"
                 style="@style/Widgets.Button"
-                android:text="OpenGL" />
+                android:text="Face Reg" />
 
             <!--MediaPipe FaceMesh-->
             <androidx.appcompat.widget.AppCompatTextView

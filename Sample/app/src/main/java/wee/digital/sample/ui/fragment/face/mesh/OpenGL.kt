@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.fragment.mask
+package wee.digital.sample.ui.fragment.face.mesh
 
 import android.graphics.Color
 import android.opengl.GLES20

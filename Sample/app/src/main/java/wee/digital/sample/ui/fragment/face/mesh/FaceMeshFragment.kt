@@ -1,4 +1,4 @@
-package wee.digital.sample.ui.fragment.mask
+package wee.digital.sample.ui.fragment.face.mesh
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -13,17 +13,16 @@ import com.google.mediapipe.solutions.facemesh.FaceMeshOptions
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult
 import wee.digital.library.extension.lightSystemWidgets
 import wee.digital.library.extension.statusBarColor
-import wee.digital.library.extension.windowFullScreen
-import wee.digital.sample.databinding.MaskBinding
+import wee.digital.sample.databinding.FaceMeshBinding
 import wee.digital.sample.ui.main.MainFragment
 
-class MaskFragment : MainFragment<MaskBinding>() {
+class FaceMeshFragment : MainFragment<FaceMeshBinding>() {
 
     /**
      * [MainFragment] implements
      */
     override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return MaskBinding::inflate
+        return FaceMeshBinding::inflate
     }
 
     override fun onViewCreated() {
@@ -77,7 +76,7 @@ class MaskFragment : MainFragment<MaskBinding>() {
         // Initializes a new Gl surface view with a user-defined FaceMeshResultGlRenderer.
         glSurfaceView =
             SolutionGlSurfaceView(requireContext(), faceMesh!!.glContext, faceMesh!!.glMajorVersion)
-        glSurfaceView!!.setSolutionResultRenderer(MaskRender())
+        glSurfaceView!!.setSolutionResultRenderer(FaceMeshRender())
         glSurfaceView!!.setRenderInputImage(true)
 
         // listener FaceMeshResult and start camera

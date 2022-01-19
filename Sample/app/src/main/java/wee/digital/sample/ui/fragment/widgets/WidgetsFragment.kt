@@ -33,11 +33,11 @@ class WidgetsFragment : BaseFragment<WidgetsBinding>() {
      *
      */
     private fun configFragmentView() {
-        vb.viewOpenGL.addClickListener {
-            mainNavigate(R.id.action_global_openGLFragment)
+        vb.viewFaceReg.addClickListener {
+            mainNavigate(R.id.action_global_faceRegFragment)
         }
         vb.viewFaceMesh.addClickListener {
-            mainNavigate(R.id.action_global_maskFragment)
+            mainNavigate(R.id.action_global_faceMeshFragment)
         }
     }
 
