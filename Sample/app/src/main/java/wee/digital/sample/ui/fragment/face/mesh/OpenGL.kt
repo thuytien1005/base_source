@@ -130,7 +130,7 @@ fun getIrisCenter(
     if (a1 == a2) return null
     val x = (b2 - b1) / (a1 - a2)
     val y = a1 * x + b1
-    val radius = sqrt((x - x2).pow(2) + (y - y2).pow(2))
+    val radius = sqrt((x - x1).pow(2) + (y - y1).pow(2))
     val point = FloatPoint(x.toFloat(), y.toFloat(), radius.toFloat())
     point.log()
     return point
