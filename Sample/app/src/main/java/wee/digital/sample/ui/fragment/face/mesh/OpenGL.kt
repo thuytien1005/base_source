@@ -7,6 +7,9 @@ import androidx.annotation.ColorInt
 import com.google.common.collect.ImmutableSet
 import com.google.mediapipe.formats.proto.LandmarkProto
 import com.google.mediapipe.solutions.facemesh.FaceMeshConnections
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.nio.FloatBuffer
 import java.text.DecimalFormat
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -134,4 +137,21 @@ fun getIrisCenter(
     val point = FloatPoint(x.toFloat(), y.toFloat(), radius.toFloat())
     point.log()
     return point
+}
+
+fun makeFloatBuffer(vertices: FloatArray): FloatBuffer {
+    val vertexBuffer = ByteBuffer.allocateDirect(vertices.size * 4)
+        .order(ByteOrder.nativeOrder())
+        .asFloatBuffer()
+        .put(vertices)
+    vertexBuffer.position(0)
+    return vertexBuffer
+}
+
+fun makeTriangleIndexBuffer(): ByteBuffer {
+    val indices = byteArrayOf(0, 1, 2)
+    val indexBuffer = ByteBuffer.allocateDirect(indices.size)
+        .put(indices)
+    indexBuffer.position(0)
+    return indexBuffer
 }
