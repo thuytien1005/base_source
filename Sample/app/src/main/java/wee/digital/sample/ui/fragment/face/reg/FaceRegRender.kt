@@ -68,9 +68,9 @@ class FaceRegRender : ResultGlRenderer<FaceMeshResult> {
         if (normalizedLandmarkList.landmarkCount == FaceMesh.FACEMESH_NUM_LANDMARKS_WITH_IRISES) {
             //drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
             //drawLandmarkLines(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
-            //drawIris(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
-            //drawIris(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
-            drawIris2(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
+            drawIris(landmarkList, FaceMeshConnections.FACEMESH_LEFT_IRIS)
+            drawIris(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
+            //drawIris2(landmarkList, FaceMeshConnections.FACEMESH_RIGHT_IRIS)
         }
     }
 
@@ -79,31 +79,29 @@ class FaceRegRender : ResultGlRenderer<FaceMeshResult> {
         GLES20.glDeleteProgram(program)
     }
 
-    var list = mutableListOf<Float>()
-
     //  [
     //      0.55278486, 0.5208076,
     //      0.5307918, 0.5057411,
     //      0.50829434, 0.520686,
     //      0.53058004, 0.53530246
     //  ]
-    var ratio = 0f
     private fun drawIris2(
         landmarks: List<LandmarkProto.NormalizedLandmark>,
         connections: ImmutableSet<FaceMeshConnections.Connection>,
-        outerVertexCount: Int = 8
+        outerVertexCount: Int = 16
     ) {
-        if (ratio <= 0) return
+
+        if (connections.size < 4) return
         GLES20.glUniform4fv(colorHandle, 1, irisColor, 0)
         GLES20.glLineWidth(drawThickness.toFloat())
         GLES20.glEnable(GLES20.GL_BLEND)
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
         GLES20.glEnableVertexAttribArray(positionHandle)
-        val circle = FloatPoint(0.524F, 0.524F, 0.18F)
+        val circle = getIrisCenter(landmarks, connections) ?: return
         var outerX = 0F
         var outerY = 0F
         for (i in 0..outerVertexCount) {
-            val rad = 2 * Math.PI / outerVertexCount * (i + 1)
+            val rad: Double = 2 * Math.PI / outerVertexCount * (i + 1)
             val radius = circle.radius
             val outerX2 = (circle.x + radius * kotlin.math.cos(rad)).toFloat()
             val outerY2 = (circle.y + radius * kotlin.math.sin(rad)).toFloat()
@@ -120,8 +118,11 @@ class FaceRegRender : ResultGlRenderer<FaceMeshResult> {
             val indexBuffer = makeIndexBuffer()
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, 3, GLES20.GL_UNSIGNED_BYTE, indexBuffer)
         }
-    }
 
+        //read pixel
+        //val buffer = ByteBuffer.allocate(4) // 4 = (1 width) * (1 height) * (4 as per RGBA)
+        //GLES20.glReadPixels(x, y, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer)
+    }
 
     /**
      *
