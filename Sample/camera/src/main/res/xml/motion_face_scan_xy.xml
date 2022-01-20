@@ -14,17 +14,22 @@
         motion:duration="1000" />
 
     <ConstraintSet android:id="@+id/faceScanBegin">
-
         <Constraint
             android:id="@id/viewScanX"
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/faceScanXYWidth"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/faceScanRadius"
+            android:layout_marginBottom="@dimen/faceScanRadius"
+            motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/viewScanY"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="@dimen/faceScanXYWidth"
+            android:layout_marginStart="@dimen/faceScanRadius"
+            android:layout_marginEnd="@dimen/faceScanRadius"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
@@ -32,14 +37,20 @@
     <ConstraintSet android:id="@+id/faceScanStart">
         <Constraint
             android:id="@id/viewScanX"
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/faceScanXYWidth"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/faceScanRadius"
+            android:layout_marginBottom="@dimen/faceScanRadius"
+            motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/viewScanY"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="@dimen/faceScanXYWidth"
+            android:layout_marginStart="@dimen/faceScanRadius"
+            android:layout_marginEnd="@dimen/faceScanRadius"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
@@ -47,14 +58,20 @@
     <ConstraintSet android:id="@+id/faceScanCompleted">
         <Constraint
             android:id="@id/viewScanX"
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/faceScanXYWidth"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/faceScanRadius"
+            android:layout_marginBottom="@dimen/faceScanRadius"
+            motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/viewScanY"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/faceScanXYWidth"
+            android:layout_marginStart="@dimen/faceScanRadius"
+            android:layout_marginEnd="@dimen/faceScanRadius"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="parent" />
     </ConstraintSet>

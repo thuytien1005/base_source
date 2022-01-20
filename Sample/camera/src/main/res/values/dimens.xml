@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="faceScanRadius">16dp</dimen>
+    <dimen name="faceScanXYWidth">2dp</dimen>
+
+</resources>
