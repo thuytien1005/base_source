@@ -66,7 +66,6 @@ class FaceRegRender : BaseRender() {
         /*for (conn in connections) {
             val start = landmarks[conn.start()]
             val end = landmarks[conn.end()]
-
         }*/
     }
 
