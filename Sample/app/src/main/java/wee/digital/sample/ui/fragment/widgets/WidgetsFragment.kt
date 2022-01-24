@@ -5,7 +5,6 @@ import androidx.viewbinding.ViewBinding
 import wee.digital.library.extension.darkSystemWidgets
 import wee.digital.library.extension.start
 import wee.digital.library.extension.toast
-import wee.digital.library.extension.windowSafeArea
 import wee.digital.sample.R
 import wee.digital.sample.databinding.WidgetsBinding
 import wee.digital.sample.ui.base.BaseFragment

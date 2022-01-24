@@ -6,6 +6,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import wee.digital.widget.app
 import java.text.Normalizer
+import java.util.*
 import java.util.regex.Pattern
 
 val String?.trimText: String?
@@ -80,7 +81,11 @@ fun String?.normalizer(): String? {
 
 fun String?.capitalizeWords(): String {
     this ?: return ""
-    return split(" ").joinToString(" ") { it.capitalize() }
+    return split(" ").joinToString(" ") { it.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            Locale.getDefault()
+        ) else it.toString()
+    } }
 }
 
 

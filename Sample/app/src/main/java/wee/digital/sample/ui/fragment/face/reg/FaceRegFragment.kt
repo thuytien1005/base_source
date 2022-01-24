@@ -75,8 +75,9 @@ class FaceRegFragment : MainFragment<FaceRegBinding>() {
         })
 
         // Initializes a new Gl surface view with a user-defined FaceMeshResultGlRenderer.
-        glSurfaceView = FaceRegSurfaceView(requireContext(), faceMesh!!.glContext, faceMesh!!.glMajorVersion)
-        glSurfaceView!!.holder.addCallback(object : SurfaceHolder.Callback{
+        glSurfaceView =
+            FaceRegSurfaceView(requireContext(), faceMesh!!.glContext, faceMesh!!.glMajorVersion)
+        glSurfaceView!!.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
             }
 

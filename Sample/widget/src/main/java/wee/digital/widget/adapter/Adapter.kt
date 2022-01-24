@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
-import android.widget.EditText
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding

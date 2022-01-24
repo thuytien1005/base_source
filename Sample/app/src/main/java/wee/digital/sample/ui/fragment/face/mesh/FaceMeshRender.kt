@@ -57,7 +57,7 @@ class FaceMeshRender : BaseRender() {
         landmarks: List<NormalizedLandmark>,
         connections: ImmutableSet<Connection>,
         outerVertexCount: Int = 16
-    ){
+    ) {
         if (connections.size < 4) return
         GLES20.glUniform4fv(colorHandle, 1, drawColor, 0)
         GLES20.glLineWidth(drawThickness.toFloat())

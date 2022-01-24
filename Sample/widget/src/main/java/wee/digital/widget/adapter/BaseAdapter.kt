@@ -148,7 +148,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
         val model: T = getItemOrNull(position) ?: return
         val options: ItemOptions = modelItemOptions(model, position) ?: return
         val viewBinding: ViewBinding = options.inflaterInvoker(itemView)
-        itemView.addClickListener(itemClickDelayed(),1) {
+        itemView.addClickListener(itemClickDelayed(), 1) {
             onItemViewClick(viewHolder, viewBinding)
         }
         itemView.setOnLongClickListener {

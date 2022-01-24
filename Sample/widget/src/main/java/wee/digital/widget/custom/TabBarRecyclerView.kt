@@ -11,9 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TabBarRecyclerView : RecyclerView {
     var selectedPosition: Int = -1
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
+
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         isSaveEnabled = true
     }
+
     override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
         superState?.let {
@@ -33,9 +39,10 @@ class TabBarRecyclerView : RecyclerView {
             }
         }
     }
+
     override fun setAdapter(adapter: Adapter<*>?) {
         super.setAdapter(adapter)
-        (adapter as? SampleAdapter)?.also { adapter->
+        (adapter as? SampleAdapter)?.also { adapter ->
             if (selectedPosition > 0) {
                 scrollToPosition(adapter.selectedPosition)
             }
@@ -47,8 +54,10 @@ class TabBarRecyclerView : RecyclerView {
     abstract class SampleAdapter : RecyclerView.Adapter<ViewHolder>() {
         var selectedPosition: Int = -1
     }
+
     inner class SaveState : AbsSavedState {
         var selectedPosition: Int = -1
+
         constructor(superState: Parcelable) : super(superState)
 
         @RequiresApi(Build.VERSION_CODES.N)
