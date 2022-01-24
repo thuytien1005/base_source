@@ -11,7 +11,7 @@
     <item
         android:width="100dp"
         android:height="72dp"
-        android:drawable="@drawable/img_logo"
+        android:drawable="@mipmap/img_logo"
         android:gravity="center" />
 
 </layer-list>

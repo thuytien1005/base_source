@@ -92,9 +92,9 @@
     <style name="App.Logo">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">30dp</item>
-        <item name="android:src">@drawable/img_logo_text</item>
+        <item name="android:src">@mipmap/img_logo_text</item>
         <item name="android:scaleType">fitStart</item>
-        <!--        <item name="layout_constraintDimensionRatio">@string/logoRatio</item>-->
+        <!--<item name="layout_constraintDimensionRatio">@string/logoRatio</item>-->
     </style>
 
     <style name="App.ProgressView">
