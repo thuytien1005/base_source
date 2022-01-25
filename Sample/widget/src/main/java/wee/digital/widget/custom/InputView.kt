@@ -34,13 +34,8 @@ class InputView : AppCustomView<InputBinding>,
     OnFocusChangeListener {
 
     private val colorFocused get() = ContextCompat.getColor(context, R.color.colorInputFocused)
-
     private val colorUnFocus get() = ContextCompat.getColor(context, R.color.colorInputUnFocused)
-
-    private val colorDisable get() = ContextCompat.getColor(context, R.color.colorInputDisable)
-
     private val colorError get() = ContextCompat.getColor(context, R.color.colorError)
-
     private val colorHint get() = ContextCompat.getColor(context, R.color.colorInputHint)
 
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)
@@ -472,7 +467,6 @@ class InputView : AppCustomView<InputBinding>,
             !isEnabled -> {
                 vb.inputTextViewTitle.setBackgroundColor(0)
                 vb.inputEditTextBackground.setBackgroundResource(R.drawable.drw_input_bg_disable)
-                vb.inputEditText.backgroundTint(colorDisable)
                 if (hasError) {
                     vb.inputTextViewTitle.setTextColor(colorError)
                     vb.inputImageViewIcon.tint(colorError)
