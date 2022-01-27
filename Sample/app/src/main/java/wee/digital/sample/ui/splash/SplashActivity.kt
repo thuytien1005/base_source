@@ -18,6 +18,7 @@ import wee.digital.sample.ui.fragment.dialog.alert.alertNetworkError
 import wee.digital.sample.ui.main.MainActivity
 import wee.digital.widget.extension.toastError
 
+
 /**
  * Splash
  * @see <a href="">Document</a>

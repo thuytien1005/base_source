@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import wee.digital.library.app
 
+//TODO: KotlinX
 fun isGranted(vararg permissions: String): Boolean {
     permissions.iterator().forEach {
         if (ContextCompat.checkSelfPermission(app, it) != PackageManager.PERMISSION_GRANTED) {
@@ -29,16 +30,16 @@ fun LifecycleOwner.onGrantedPermission(
     val deniedPermissions = mutableListOf<String>()
     val notGrantedPermissions = mutableListOf<String>()
     val activity = requireActivity() ?: return
-    for (permission in permissions) {
+    permissions.forEach {
         when {
-            isGranted(permission) -> {
-                continue
+            isGranted(it) -> {
+                // continue
             }
-            ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) -> {
-                deniedPermissions.add(permission)
+            ActivityCompat.shouldShowRequestPermissionRationale(activity, it) -> {
+                deniedPermissions.add(it)
             }
             else -> {
-                notGrantedPermissions.add(permission)
+                notGrantedPermissions.add(it)
             }
         }
     }
@@ -46,8 +47,8 @@ fun LifecycleOwner.onGrantedPermission(
         lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                lifecycle.removeObserver(this)
                 if (isGranted(*permissions)) {
+                    lifecycle.removeObserver(this)
                     onGranted.invoke()
                 }
             }
