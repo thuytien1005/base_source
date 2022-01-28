@@ -1,4 +1,4 @@
-package wee.digital.sample.api
+package wee.digital.sample.data.api
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -10,9 +10,6 @@ import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import wee.digital.library.extension.flowResult
 import wee.digital.sample.app
-import wee.digital.sample.data.api.httpErrorLiveData
-import wee.digital.sample.data.api.networkErrorLiveData
-import wee.digital.sample.data.api.progressLiveData
 import java.io.IOException
 import java.net.SocketException
 import java.net.SocketTimeoutException

@@ -51,15 +51,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.splash.SplashActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Launch">
+            android:theme="@style/App.Theme.Launch" />
 
-        </activity>
         <activity
             android:name=".ui.main.MainActivity"
+            android:exported="true"
             android:fitsSystemWindows="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -71,13 +73,15 @@
             android:value="face" />
 
         <receiver
-            android:name=".NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver">
+            android:name="wee.digital.widget.extension.WifiReceiver"
+            android:label="NetworkChangeReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

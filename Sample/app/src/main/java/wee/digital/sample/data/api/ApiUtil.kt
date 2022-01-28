@@ -1,96 +1,142 @@
-package wee.digital.sample.api
+package wee.digital.sample.data.api
 
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import android.graphics.Bitmap
+import android.os.Build
+import android.os.Environment
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.Flow
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
+import okio.buffer
+import okio.sink
 import org.json.JSONObject
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import wee.digital.library.extension.SingleLiveData
+import wee.digital.library.extension.flowResult
 import wee.digital.library.util.Logger
+import wee.digital.sample.BuildConfig
+import wee.digital.sample.app
+import java.io.*
+import java.net.URI
+import java.net.URISyntaxException
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
-object ApiUtil {
+val progressLiveData = MutableLiveData<Boolean>()
 
-    fun initClient(block: (OkHttpClient.Builder.() -> Unit)? = null): OkHttpClient {
-        val client = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-        block?.invoke(client)
-        return client.build()
+val networkErrorLiveData = SingleLiveData<IOException>()
+
+val httpErrorLiveData = SingleLiveData<Throwable>()
+
+fun initClient(block: (OkHttpClient.Builder.() -> Unit)? = null): OkHttpClient {
+    val client = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+    block?.invoke(client)
+    return client.build()
+}
+
+fun initRetrofit(baseURL: String, block: (OkHttpClient.Builder.() -> Unit)? = null): Retrofit {
+    return Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(initClient(block))
+        .baseUrl(baseURL)
+        .build()
+}
+
+fun <T : Any> initService(
+    cls: KClass<T>,
+    url: String,
+    block: (OkHttpClient.Builder.() -> Unit)? = null
+): T {
+    return initRetrofit(url, block).create(cls.java)
+}
+
+fun domainName(url: String): String {
+    return try {
+        val uri = URI(url)
+        val domain = uri.host ?: return ""
+        if (domain.startsWith("www.")) domain.substring(4) else domain
+    } catch (e: URISyntaxException) {
+        ""
+    }
+}
+
+val loggingInterceptor: Interceptor
+    get() {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+        else HttpLoggingInterceptor.Level.NONE
+        return interceptor
     }
 
-    fun initRetrofit(baseURL: String, block: (OkHttpClient.Builder.() -> Unit)? = null): Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(initClient(block))
-            .baseUrl(baseURL)
-            .build()
+fun authInterceptor(token: String): Interceptor {
+    return Interceptor { chain: Interceptor.Chain ->
+        val request = chain.request().newBuilder()
+        request.addHeader("Authorization", token)
+        chain.proceed(request.build())
     }
+}
 
-    fun <T : Any> initService(
-        cls: KClass<T>,
-        url: String,
-        block: (OkHttpClient.Builder.() -> Unit)? = null
-    ): T {
-        return initRetrofit(url, block).create(cls.java)
-    }
-
-    fun authInterceptor(key: String, value: String): Interceptor {
-        return Interceptor { chain ->
-            val request = chain.request().newBuilder()
-            request.addHeader(key, value)
-            chain.proceed(request.build())
+fun writeFile(response: Response<ResponseBody>, fileName: String): Flow<Result<File>> {
+    return flowResult {
+        val source = response.body()?.source()
+            ?: throw NullPointerException("download data is empty")
+        val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            File(
+                app.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath,
+                fileName
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            (File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+        fileName
+    ))
         }
-    }
-
-    val log = Logger("api")
-
-    val debugInterceptor: Interceptor
-        get() = object : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-                val request: Request = chain.request()
-
-                try {
-                    val request = request.newBuilder().build()
-                    val response = chain.proceed(request)
-                    response.newBuilder().build().apply {
-                        log.d("==========================================")
-                        val buffer = Buffer()
-                        request.body?.writeTo(buffer)
-                        val requestBody = buffer.readUtf8()
-                        log.d("Request: %s - %s".format(request.method, request.url.toString()))
-                        log.d("Headers:")
-                        request.headers.forEach { log.d("%s: %s".format(it.first, it.second)) }
-                        log.d("Body:\n${requestBody.jsonFormat()}")
-                        log.d("Response: %s - %s".format(code, message))
-                        val source = body?.source()
-                        source?.request(Long.MAX_VALUE)
-                        val responseBody = source?.buffer?.clone()?.readUtf8()
-                        log.d("Body:\n${responseBody.jsonFormat()}")
-                        log.d("==========================================")
-                    }
-                    return response
-
-                } catch (e: Throwable) {
-                    log.d("Throwable:")
-                    log.d(e.message ?: e.localizedMessage ?: e.stackTrace.toString())
-                    throw e
-                }
-            }
-
+        file.sink().buffer().apply {
+            writeAll(source)
+            close()
         }
-
-    private fun String?.jsonFormat(): String? {
-        this ?: return null
-        return try {
-            val obj = JSONObject(this)
-            obj.toString(2)
-        } catch (ignore: Exception) {
-            null
-        }
+        return@flowResult file
     }
+}
 
+private fun convertBitmapToFile(fileName: String, bitmap: Bitmap): File {
+    //create a file to write bitmap data
+    val file = File(app.cacheDir, fileName)
+    file.createNewFile()
+
+    //Convert bitmap to byte array
+    val bos = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+    val bitMapData = bos.toByteArray()
+
+    //write the bytes in file
+    var fos: FileOutputStream? = null
+    try {
+        fos = FileOutputStream(file)
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+    }
+    try {
+        fos?.write(bitMapData)
+        fos?.flush()
+        fos?.close()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return file
+}
+
+fun getMultipartBody(key: String, bitmap: Bitmap): MultipartBody.Part {
+    val file = convertBitmapToFile("img.jpg", bitmap)
+    val reqFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+    return MultipartBody.Part.createFormData(key, file.name, reqFile)
 }

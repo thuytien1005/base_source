@@ -1,4 +1,4 @@
-package wee.digital.sample.api
+package wee.digital.sample.data.api
 
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody

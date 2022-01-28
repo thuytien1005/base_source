@@ -12,7 +12,6 @@ import android.net.NetworkRequest
 import android.os.Build
 import wee.digital.library.app
 
-//TODO: KotlinX
 val connectionInfo: String?
     @SuppressLint("MissingPermission")
     get() {

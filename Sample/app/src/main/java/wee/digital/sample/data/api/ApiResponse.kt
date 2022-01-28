@@ -1,4 +1,4 @@
-package wee.digital.sample.api
+package wee.digital.sample.data.api
 
 import androidx.annotation.Nullable
 import com.google.gson.annotations.Expose

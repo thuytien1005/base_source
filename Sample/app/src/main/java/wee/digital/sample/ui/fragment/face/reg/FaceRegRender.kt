@@ -24,8 +24,6 @@ class FaceRegRender : BaseRender() {
         normalizedLandmarkList: LandmarkProto.NormalizedLandmarkList,
         landmarks: List<NormalizedLandmark>
     ) {
-        val landmarks: List<NormalizedLandmark> = normalizedLandmarkList.landmarkList
-
         drawLandmarkLines(landmarks, FaceMeshConnections.FACEMESH_FACE_OVAL)
         drawLandmarkLines(landmarks, FaceMeshConnections.FACEMESH_LEFT_EYE)
         drawLandmarkLines(landmarks, FaceMeshConnections.FACEMESH_RIGHT_EYE)

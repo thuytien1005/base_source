@@ -14,6 +14,7 @@ android {
         versionCode builds.version_code
         versionName builds.version_name
         flavorDimensions "default"
+        vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     testOptions {
@@ -104,7 +105,6 @@ dependencies {
     implementation deps.android.activity
     implementation deps.android.fragment
     implementation deps.android.constraintlayout
-    implementation deps.android.material
     implementation deps.android.viewpager
     implementation deps.android.recyclerview
     implementation deps.android.cardview
@@ -114,6 +114,7 @@ dependencies {
     implementation deps.android.vectordrawable
     implementation deps.android.security
     implementation deps.android.legacy_v4
+    implementation deps.google.material
 
     // fragment navigation
     implementation deps.navigation.fragment

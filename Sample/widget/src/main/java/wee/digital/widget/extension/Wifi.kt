@@ -1,4 +1,4 @@
-package wee.digital.sample.utils
+package wee.digital.widget.extension
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
@@ -16,6 +16,7 @@ import android.os.Handler
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -41,9 +42,9 @@ AndroidManifest.xml:
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 */
-val Context.connectivityManager get() = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+val Context.connectivityManager get() = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-val Context.wifiManager get() = getSystemService(Context.WIFI_SERVICE) as WifiManager
+val Context.wifiManager get() = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
 val Context.isWifiEnabled: Boolean get() = wifiManager.isWifiEnabled
 
@@ -84,7 +85,6 @@ val wifiPermission = arrayOf(
     permission.ACCESS_WIFI_STATE,
     permission.ACCESS_FINE_LOCATION,
     permission.ACCESS_COARSE_LOCATION,
-
     )
 
 private fun Context.isGranted(permission: String): Boolean {
@@ -138,6 +138,17 @@ fun AppCompatActivity.onGrantedWifiPermission(
     onGranted.invoke()
 }
 
+/**
+ * <receiver
+ *      android:name="wee.digital.widget.extension.WifiReceiver"
+ *      android:label="NetworkChangeReceiver"
+ *      android:exported="true">
+ *      <intent-filter>
+ *      <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+ *      <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+ *      </intent-filter>
+ * </receiver>
+ */
 class WifiHandler {
 
     var defaultSSID: String = ""
@@ -152,6 +163,7 @@ class WifiHandler {
      */
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun listen(activity: AppCompatActivity, onAvailable: () -> Unit, onLost: () -> Unit) {
         if (networkCallback != null) return
         val callback = object : ConnectivityManager.NetworkCallback() {
@@ -167,6 +179,7 @@ class WifiHandler {
                     onAvailable()
                 }
             }
+
 
             override fun onLost(network: Network) {
                 val cm = activity.connectivityManager
@@ -203,10 +216,8 @@ class WifiHandler {
     /**
      *
      */
-    private val wifiReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent ?: return
-            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+    private val wifiReceiver = object : WifiReceiver() {
+        override fun onReceived(context: Context, isSuccess: Boolean) {
             val activity = context as? AppCompatActivity ?: return
             activity.wifiManager.scanResults.forEach {
                 if (it.SSID == defaultSSID) {
@@ -215,7 +226,6 @@ class WifiHandler {
                 }
             }
         }
-
     }
 
     private var scanJob: Job? = null
@@ -265,8 +275,8 @@ class WifiHandler {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresPermission(permission.CHANGE_WIFI_STATE)
     fun wifiConnectAndroidQ(activity: AppCompatActivity, result: ScanResult, password: String) {
         val networkSuggestion = WifiNetworkSuggestion.Builder()
             .setSsid(result.SSID)
@@ -398,6 +408,7 @@ class WifiHandler {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresPermission(permission.CHANGE_WIFI_STATE)
     fun turnOnHotspot(activity: AppCompatActivity) {
         val permission = ActivityCompat.checkSelfPermission(
             activity,
@@ -429,5 +440,15 @@ class WifiHandler {
             }
         }, Handler())
     }
+}
+
+abstract class WifiReceiver : BroadcastReceiver(){
+    final override fun onReceive(context: Context?, intent: Intent?) {
+        context ?: return
+        intent ?: return
+        val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+        onReceived(context, success)
+    }
+    abstract fun onReceived(context: Context, isSuccess: Boolean)
 }
 

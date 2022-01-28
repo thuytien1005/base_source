@@ -1,12 +1,13 @@
-package wee.digital.sample.utils
+package wee.digital.sample.shared
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import wee.digital.library.extension.MapValueNullException
 import wee.digital.library.extension.isEmpty
 import wee.digital.library.extension.put
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 fun DocumentSnapshot.documentToJsObject(): JsonObject? {
     val obj = JsonObject()
@@ -59,26 +60,4 @@ fun ArrayList<*>?.arrayToJsArray(): JsonArray? {
     return array
 }
 
-fun Map<String, Any>?.timestampOrNull(key: String): Timestamp? {
-    return this?.get(key) as? Timestamp ?: throw MapValueNullException(key)
-}
 
-fun Map<String, Any>?.timestamp(key: String): Timestamp {
-    return this?.get(key) as? Timestamp ?: Timestamp.now()
-}
-
-fun Map<String, Any>?.timestampOrThrow(key: String): Timestamp {
-    return timestampOrNull(key) ?: throw MapValueNullException(key)
-}
-
-fun JsonObject?.timestampOrNull(key: String): Timestamp? {
-    return this?.get(key) as? Timestamp ?: throw MapValueNullException(key)
-}
-
-fun JsonObject?.timestamp(key: String): Timestamp {
-    return this?.get(key) as? Timestamp ?: Timestamp.now()
-}
-
-fun JsonObject?.timestampOrThrow(key: String): Timestamp {
-    return timestampOrNull(key) ?: throw MapValueNullException(key)
-}

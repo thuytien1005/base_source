@@ -1,7 +1,10 @@
 package wee.digital.sample.ui.base
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LifecycleOwner
@@ -55,6 +58,26 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
             @Suppress("UNCHECKED_CAST")
             block.invoke(layoutInflater) as T
         }
+    }
+
+    /**
+     * SoftInputMode
+     */
+    fun inputModeAdjustResize() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            vb.root.setOnApplyWindowInsetsListener { _, windowInsets ->
+                val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
+                vb.root.setPadding(0, 0, 0, imeHeight)
+                windowInsets
+            }
+        }else{
+            @Suppress("DEPRECATION")
+            baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+    }
+
+    fun inputModeAdjustNothing() {
+        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 
 }

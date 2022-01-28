@@ -301,14 +301,6 @@ interface BaseView {
     /**
      *
      */
-    fun inputModeAdjustResize() {
-        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
-
-    fun inputModeAdjustNothing() {
-        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-    }
-
     fun hideKeyboard() {
         launch(200) {
             baseActivity?.hideKeyboard()

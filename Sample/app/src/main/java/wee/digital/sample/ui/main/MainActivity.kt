@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<MainBinding>(),
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (ev?.action === MotionEvent.ACTION_DOWN) {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
             val v: View? = currentFocus
             if (v is EditText) {
                 val outRect = Rect()

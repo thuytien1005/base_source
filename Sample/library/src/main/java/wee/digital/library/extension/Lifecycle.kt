@@ -7,6 +7,7 @@ import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import java.lang.Deprecated
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
@@ -17,9 +18,17 @@ inline fun <T> LiveData<T?>.observe(owner: LifecycleOwner, crossinline block: (t
     })
 }
 
+/**
+ * Annotation that can be used to mark methods on {@link LifecycleObserver} implementations that
+ * should be invoked to handle lifecycle events.
+ *
+ * @deprecated This annotation required the usage of code generation or reflection, which should
+ * be avoided. Use [DefaultLifecycleObserver] or [LifecycleEventObserver] instead.
+ */
+@Deprecated
 abstract class SimpleLifecycleObserver : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onEventCreated() {
+    fun onEventCreated(){
         onCreated()
     }
 
@@ -235,16 +244,16 @@ fun LifecycleOwner.requireWindow(): Window? {
 }
 
 fun LifecycleOwner.onPause(block: () -> Unit) {
-    lifecycle.addObserver(object : SimpleLifecycleObserver() {
-        override fun onPause() {
+    lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onPause(owner: LifecycleOwner) {
             block()
         }
     })
 }
 
 fun LifecycleOwner.onDestroy(block: () -> Unit) {
-    lifecycle.addObserver(object : SimpleLifecycleObserver() {
-        override fun onDestroy() {
+    lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onDestroy(owner: LifecycleOwner) {
             block()
         }
     })

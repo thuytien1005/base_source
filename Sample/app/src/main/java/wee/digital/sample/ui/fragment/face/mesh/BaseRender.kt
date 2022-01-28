@@ -44,7 +44,7 @@ abstract class BaseRender : ResultGlRenderer<FaceMeshResult> {
         result ?: return
         GLES20.glUseProgram(program)
         GLES20.glUniformMatrix4fv(projectionMatrixHandle, 1, false, projectionMatrix, 0)
-        val numFaces = result.multiFaceLandmarks().size
+        //val numFaces = result.multiFaceLandmarks().size
         val normalizedLandmarkList: LandmarkProto.NormalizedLandmarkList =
             result.multiFaceLandmarks()
                 .firstOrNull()

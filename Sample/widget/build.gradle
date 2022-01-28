@@ -10,6 +10,7 @@ android {
         minSdkVersion builds.min_sdk
         targetSdkVersion builds.target_sdk
         consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables.useSupportLibrary true
     }
     buildTypes {
         all {
@@ -33,7 +34,6 @@ android {
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
     maven { url "https://maven.google.com" }
     maven { url "https://jitpack.io" }
@@ -53,9 +53,9 @@ dependencies {
     implementation deps.android.constraintlayout
     implementation deps.android.recyclerview
     implementation deps.android.cardview
-    implementation deps.android.material
     implementation deps.android.browser
     implementation deps.android.vectordrawable
+    implementation deps.google.material
 
     // paging recycler view adapter
     implementation deps.paging.runtime

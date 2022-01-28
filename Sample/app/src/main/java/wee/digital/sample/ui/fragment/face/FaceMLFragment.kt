@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.example.camera.CameraController
@@ -52,8 +54,8 @@ class FaceMLFragment : MainFragment<FaceBinding>(),
             startFaceDetect()
             camera.start(fragment.viewLifecycleOwner)
         }
-        addObserver(object : SimpleLifecycleObserver() {
-            override fun onDestroy() {
+        addObserver(object : DefaultLifecycleObserver {
+            override fun onDestroy(owner: LifecycleOwner) {
                 faceDetector.pause()
                 camera.stop()
             }

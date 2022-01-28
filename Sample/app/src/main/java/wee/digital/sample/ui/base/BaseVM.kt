@@ -15,7 +15,7 @@ import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.networkConnected
 import wee.digital.library.extension.registerNetworkCallback
 import wee.digital.library.util.Logger
-import wee.digital.sample.api.ApiResultHandler
+import wee.digital.sample.data.api.ApiResultHandler
 import wee.digital.widget.app
 
 

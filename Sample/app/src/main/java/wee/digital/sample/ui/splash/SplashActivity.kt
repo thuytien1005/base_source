@@ -65,7 +65,6 @@ class SplashActivity : BaseActivity<SplashBinding>() {
      *
      */
     private fun onSplash() {
-        return
         if (networkDisconnected) {
             alertNetworkError()
         } else {

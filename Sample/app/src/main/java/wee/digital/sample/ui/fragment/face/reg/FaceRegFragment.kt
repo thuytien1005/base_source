@@ -65,7 +65,7 @@ class FaceRegFragment : MainFragment<FaceRegBinding>() {
             .build()
 
         faceMesh = FaceMesh(requireContext(), options)
-        faceMesh!!.setErrorListener { message: String, e: RuntimeException? ->
+        faceMesh!!.setErrorListener { message: String, _: RuntimeException? ->
             log.e(message)
         }
 

@@ -1,8 +1,11 @@
 package wee.digital.sample.ui.base
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.IdRes
@@ -95,7 +98,27 @@ interface FragmentView : BaseView {
     }
 
     /**
-     * Keyboard
+     * SoftInputMode
+     */
+    fun inputModeAdjustResize() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            fragment.view?.setOnApplyWindowInsetsListener { _, windowInsets ->
+                val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
+                fragment.view?.setPadding(0, 0, 0, imeHeight)
+                windowInsets
+            }
+        }else{
+            @Suppress("DEPRECATION")
+            baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+    }
+
+    fun inputModeAdjustNothing() {
+        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    }
+
+    /**
+     *
      */
     fun observerCameraPermission(onGranted: () -> Unit) {
         val request = ActivityResultContracts.RequestPermission()
