@@ -107,7 +107,7 @@ interface FragmentView : BaseView {
                 fragment.view?.setPadding(0, 0, 0, imeHeight)
                 windowInsets
             }
-        }else{
+        } else {
             @Suppress("DEPRECATION")
             baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }

@@ -20,10 +20,7 @@ import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -85,7 +82,7 @@ val wifiPermission = arrayOf(
     permission.ACCESS_WIFI_STATE,
     permission.ACCESS_FINE_LOCATION,
     permission.ACCESS_COARSE_LOCATION,
-    )
+)
 
 private fun Context.isGranted(permission: String): Boolean {
     return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
@@ -119,9 +116,8 @@ fun AppCompatActivity.onGrantedWifiPermission(
         }
     }
     if (notGrantedPermissions.isNotEmpty()) {
-        lifecycle.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            fun onResume() {
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
                 if (isGrantedWifiPermission) {
                     lifecycle.removeObserver(this)
                     onGranted()
@@ -163,7 +159,7 @@ class WifiHandler {
      */
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     fun listen(activity: AppCompatActivity, onAvailable: () -> Unit, onLost: () -> Unit) {
         if (networkCallback != null) return
         val callback = object : ConnectivityManager.NetworkCallback() {
@@ -184,7 +180,9 @@ class WifiHandler {
             override fun onLost(network: Network) {
                 val cm = activity.connectivityManager
                 // This is to stop the looping request for OnePlus & Xiaomi models
-                cm.bindProcessToNetwork(null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    cm.bindProcessToNetwork(null)
+                }
                 activity.lifecycleScope.launch {
                     onLost()
                 }
@@ -407,7 +405,6 @@ class WifiHandler {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @RequiresPermission(permission.CHANGE_WIFI_STATE)
     fun turnOnHotspot(activity: AppCompatActivity) {
         val permission = ActivityCompat.checkSelfPermission(
@@ -417,38 +414,40 @@ class WifiHandler {
         if (permission != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        activity.wifiManager.startLocalOnlyHotspot(object : LocalOnlyHotspotCallback() {
-            override fun onStarted(reservation: LocalOnlyHotspotReservation) {
-                val hotspotReservation = reservation
-                val currentConfig = hotspotReservation.getWifiConfiguration()
-                Log.v(
-                    "DANG", ("THE PASSWORD IS: "
-                            + currentConfig?.preSharedKey
-                            ) + " \n SSID is : "
-                            + currentConfig?.SSID
-                )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity.wifiManager.startLocalOnlyHotspot(object : LocalOnlyHotspotCallback() {
+                override fun onStarted(reservation: LocalOnlyHotspotReservation) {
+                    val currentConfig = reservation.wifiConfiguration
+                    Log.v(
+                        "DANG", ("THE PASSWORD IS: "
+                                + currentConfig?.preSharedKey
+                                ) + " \n SSID is : "
+                                + currentConfig?.SSID
+                    )
 
-            }
+                }
 
-            override fun onStopped() {
-                super.onStopped()
-                Log.v("DANG", "Local Hotspot Stopped")
-            }
+                override fun onStopped() {
+                    super.onStopped()
+                    Log.v("DANG", "Local Hotspot Stopped")
+                }
 
-            override fun onFailed(reason: Int) {
-                Log.v("DANG", "Local Hotspot failed to start")
-            }
-        }, Handler())
+                override fun onFailed(reason: Int) {
+                    Log.v("DANG", "Local Hotspot failed to start")
+                }
+            }, Handler())
+        }
     }
 }
 
-abstract class WifiReceiver : BroadcastReceiver(){
+abstract class WifiReceiver : BroadcastReceiver() {
     final override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
         intent ?: return
         val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
         onReceived(context, success)
     }
+
     abstract fun onReceived(context: Context, isSuccess: Boolean)
 }
 

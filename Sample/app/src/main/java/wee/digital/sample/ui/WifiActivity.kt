@@ -12,7 +12,7 @@ class WifiActivity : AppCompatActivity() {
         ActivityWifiBinding.inflate(layoutInflater)
     }
 
-    private val wifiListener = WifiHandler().also {
+    private val wifiHandler = WifiHandler().also {
         it.defaultSSID = "Huy"
         it.defaultPassword = "23121990huy"
     }
@@ -23,7 +23,7 @@ class WifiActivity : AppCompatActivity() {
 
         vb.buttonOnOf.text = if (isWifiEnabled) "off" else "on"
 
-        wifiListener.listen(this, {
+        wifiHandler.listen(this, {
             vb.buttonOnOf.text = "off"
         }, {
             vb.buttonOnOf.text = "on"
@@ -39,7 +39,7 @@ class WifiActivity : AppCompatActivity() {
 
         vb.buttonConnect.addClickListener {
             onGrantedWifiPermission({
-                wifiListener.startScan(this)
+                wifiHandler.startScan(this)
             }, {
 
             })

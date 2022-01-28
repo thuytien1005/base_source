@@ -29,8 +29,8 @@
             android:layout_height="@dimen/faceScanXYWidth"
             android:layout_marginStart="@dimen/faceScanRadius"
             android:layout_marginEnd="@dimen/faceScanRadius"
-            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
@@ -50,8 +50,8 @@
             android:layout_height="@dimen/faceScanXYWidth"
             android:layout_marginStart="@dimen/faceScanRadius"
             android:layout_marginEnd="@dimen/faceScanRadius"
-            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 

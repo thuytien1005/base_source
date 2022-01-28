@@ -14,7 +14,6 @@ import com.example.camera.face.FaceDetectorCallback
 import com.example.camera.face.FaceDetectorProcessor
 import com.example.camera.toBitmap
 import com.example.camera.ui.FaceScanView
-import wee.digital.library.extension.SimpleLifecycleObserver
 import wee.digital.sample.databinding.FaceBinding
 import wee.digital.sample.ui.main.MainFragment
 

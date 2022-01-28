@@ -8,9 +8,9 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.camera.R
 import com.example.camera.databinding.FaceScanLayoutBinding
 
-interface FaceScanView{
+interface FaceScanView {
 
-    fun FaceScanLayoutBinding.onViewCreated(){
+    fun FaceScanLayoutBinding.onViewCreated() {
         val anim: Animation = AlphaAnimation(1F, 0F).apply {
             interpolator = DecelerateInterpolator()
             duration = 800

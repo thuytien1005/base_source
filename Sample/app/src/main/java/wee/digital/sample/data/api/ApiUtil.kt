@@ -9,16 +9,13 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
-import okio.Buffer
 import okio.buffer
 import okio.sink
-import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.flowResult
-import wee.digital.library.util.Logger
 import wee.digital.sample.BuildConfig
 import wee.digital.sample.app
 import java.io.*
@@ -96,9 +93,9 @@ fun writeFile(response: Response<ResponseBody>, fileName: String): Flow<Result<F
         } else {
             @Suppress("DEPRECATION")
             (File(
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-        fileName
-    ))
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                fileName
+            ))
         }
         file.sink().buffer().apply {
             writeAll(source)

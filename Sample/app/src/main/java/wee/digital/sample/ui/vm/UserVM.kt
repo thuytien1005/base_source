@@ -1,6 +1,5 @@
 package wee.digital.sample.ui.vm
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth

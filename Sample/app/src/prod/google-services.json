@@ -1,6 +1,6 @@
 {
   "project_info": {
-    "env":"prod",
+    "env": "prod",
     "project_number": "761055463658",
     "firebase_url": "https://example-32b9d.firebaseio.com",
     "project_id": "example-32b9d",

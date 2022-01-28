@@ -6,8 +6,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import wee.digital.library.extension.isEmpty
 import wee.digital.library.extension.put
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 fun DocumentSnapshot.documentToJsObject(): JsonObject? {
     val obj = JsonObject()

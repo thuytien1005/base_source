@@ -49,7 +49,7 @@ android {
         }
     }
     productFlavors {
-        all {flavor ->
+        all { flavor ->
             task("${flavor.name}GoogleServices", type: Copy) {
                 description = 'Switches to google-services.json depending on flavor'
                 from "src/${flavor.name}"

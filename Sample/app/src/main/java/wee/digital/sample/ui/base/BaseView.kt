@@ -3,7 +3,6 @@ package wee.digital.sample.ui.base
 import android.os.Build
 import android.text.Html
 import android.view.View
-import android.view.WindowManager
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView

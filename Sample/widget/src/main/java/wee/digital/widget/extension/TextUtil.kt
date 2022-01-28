@@ -81,11 +81,13 @@ fun String?.normalizer(): String? {
 
 fun String?.capitalizeWords(): String {
     this ?: return ""
-    return split(" ").joinToString(" ") { it.replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(
-            Locale.getDefault()
-        ) else it.toString()
-    } }
+    return split(" ").joinToString(" ") {
+        it.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
+    }
 }
 
 
