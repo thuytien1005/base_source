@@ -163,6 +163,9 @@ dependencies {
     implementation 'com.google.mediapipe:solution-core:latest.release'
     implementation 'com.google.mediapipe:facedetection:latest.release'
     implementation 'com.google.mediapipe:facemesh:latest.release'
+
+    implementation 'com.linkedin.dexmaker:dexmaker:2.25.0'
+    implementation 'com.vkpapps.wifimanager:APManager:1.0.0'
 }
 
 afterEvaluate {

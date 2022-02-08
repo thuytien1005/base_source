@@ -2,49 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonCheck"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewWifi"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="check enable"
+        android:text="..."
+        app:layout_constraintBottom_toBottomOf="@+id/buttonOnOff"
+        app:layout_constraintEnd_toStartOf="@+id/buttonOnOff"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="textViewCheck"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonCheck"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonCheck"
-        app:layout_constraintTop_toTopOf="@+id/buttonCheck" />
-
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonOnOf"
+        android:id="@+id/buttonOnOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="..."
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCheck" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonConnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonOnOf" />
-
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewList"
-        android:layout_width="match_parent"
+        android:id="@+id/textViewHotspot"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="textViewList"
+        android:layout_marginStart="8dp"
+        android:text="..."
+        app:layout_constraintBottom_toBottomOf="@+id/buttonOnOff"
+        app:layout_constraintEnd_toStartOf="@+id/buttonHotspot"
+        app:layout_constraintStart_toEndOf="@+id/buttonOnOff"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonHotspot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonOnOff">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="..." />
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/buttonScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:text="..."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonConnect" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
