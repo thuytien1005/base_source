@@ -1,68 +1,20 @@
 package wee.digital.library.extension
 
 import android.app.Activity
-import android.os.Looper
 import android.view.Window
 import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import java.lang.Deprecated
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.reflect.KClass
 
 inline fun <T> LiveData<T?>.observe(owner: LifecycleOwner, crossinline block: (t: T?) -> Unit) {
     this.observe(owner, Observer {
         block(it)
     })
-}
-
-/**
- * Annotation that can be used to mark methods on {@link LifecycleObserver} implementations that
- * should be invoked to handle lifecycle events.
- *
- * @deprecated This annotation required the usage of code generation or reflection, which should
- * be avoided. Use [DefaultLifecycleObserver] or [LifecycleEventObserver] instead.
- */
-@Deprecated
-abstract class SimpleLifecycleObserver : LifecycleObserver {
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onEventCreated(){
-        onCreated()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onEventStart() {
-        onStart()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onEventResume() {
-        onResume()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onEventPause() {
-        onPause()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onEventStop() {
-        onStop()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onEventDestroy() {
-        onDestroy()
-    }
-
-    open fun onCreated() {}
-    open fun onStart() {}
-    open fun onResume() {}
-    open fun onPause() {}
-    open fun onStop() {}
-    open fun onDestroy() {}
 }
 
 /**
@@ -72,15 +24,8 @@ open class SingleLiveData<T> : MediatorLiveData<T> {
 
     constructor() : super()
 
-    constructor(t: T) : super() {
-        try {
-            if (Looper.myLooper() == Looper.getMainLooper()) {
-                value = t
-            } else {
-                postValue(t)
-            }
-        } catch (e: Exception) {
-        }
+    constructor(value: T) : super() {
+        this.value = value
     }
 
     private val observers = ConcurrentHashMap<LifecycleOwner, MutableSet<ObserverWrapper<T>>>()
@@ -160,6 +105,9 @@ fun <R, T : LiveData<R>> T.single(): T {
     return result as T
 }
 
+/**
+ * Live data only trigger when data equal true
+ */
 class EventLiveData : MediatorLiveData<Boolean>() {
 
     val isTrue get() = value == true
@@ -208,11 +156,7 @@ class EventLiveData : MediatorLiveData<Boolean>() {
 
     @MainThread
     override fun setValue(t: Boolean?) {
-        observers.forEach {
-            it.value.forEach { wrapper ->
-                wrapper.newValue()
-            }
-        }
+        observers.forEach { it.value.forEach { wrapper -> wrapper.newValue() } }
         super.setValue(t)
     }
 
@@ -235,6 +179,40 @@ class EventLiveData : MediatorLiveData<Boolean>() {
 
 }
 
+/**
+ * Live data only trigger when data change if value none null
+ */
+class NonNullLiveData<T> : MediatorLiveData<T>()
+
+fun <T> NonNullLiveData<T>.observe(owner: LifecycleOwner, observer: (t: T) -> Unit) {
+    this.observe(owner, Observer {
+        it?.let(observer)
+    })
+}
+
+fun <T> LiveData<T?>.nonNull(): NonNullLiveData<T> {
+    val mediator: NonNullLiveData<T> = NonNullLiveData()
+    mediator.addSource(this) { data ->
+        data?.let {
+            mediator.value = data
+        }
+    }
+    return mediator
+}
+
+fun <R, T : LiveData<R>> T.noneNull(): T {
+    val result = NonNullLiveData<R>()
+    result.addSource(this) {
+        @Suppress("UNCHECKED_CAST")
+        result.value = it as R
+    }
+    @Suppress("UNCHECKED_CAST")
+    return result as T
+}
+
+/**
+ *
+ */
 fun LifecycleOwner.requireActivity(): Activity? {
     return (this as? Fragment)?.requireActivity() ?: (this as? Activity)
 }
@@ -258,6 +236,28 @@ fun LifecycleOwner.onDestroy(block: () -> Unit) {
         }
     })
 }
+
+fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
+    return ViewModelProvider(this).get(cls.java)
+}
+
+fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
+    return lazy { viewModel(cls) }
+}
+
+fun <T : ViewModel> Fragment.activityVM(cls: KClass<T>): T {
+    return ViewModelProvider(requireActivity()).get(cls.java)
+}
+
+fun <T : ViewModel> Fragment.lazyActivityVM(cls: KClass<T>): Lazy<T> {
+    return lazy { ViewModelProvider(requireActivity()).get(cls.java) }
+}
+
+fun <T : ViewModel> Fragment.newActivityVM(cls: KClass<T>): T {
+    return ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[cls.java]
+}
+
+
 
 
 

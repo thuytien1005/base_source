@@ -11,7 +11,7 @@ open class UsbReceiver(private val vendorIdList: IntArray) : BroadcastReceiver()
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val usb = intent?.getParcelableExtra<Parcelable>(UsbManager.EXTRA_DEVICE) as? UsbDevice
-                ?: return
+            ?: return
         vendorIdList.forEach {
             if (it == usb.vendorId) {
                 onUsbLiveDataUpdate(usb, intent)

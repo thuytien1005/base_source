@@ -7,9 +7,8 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import wee.digital.library.app
 
 object Usb {
@@ -25,7 +24,6 @@ object Usb {
     const val DENIED: String = "permission denied"
 
     const val PERMISSION = ".USB_PERMISSION"
-
 
     val manager: UsbManager =
         ContextCompat.getSystemService(app, UsbManager::class.java) as UsbManager
@@ -51,14 +49,12 @@ object Usb {
 
     fun observer(activity: AppCompatActivity, vararg vendorIds: Int) {
         val receiver = UsbReceiver(vendorIds)
-        activity.lifecycle.addObserver(object : LifecycleObserver {
-            @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-            fun onCreate() {
+        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onCreate(owner: LifecycleOwner) {
                 activity.registerReceiver(receiver, intentFilter)
             }
 
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            fun onDestroy() {
+            override fun onDestroy(owner: LifecycleOwner) {
                 activity.unregisterReceiver(receiver)
             }
         })

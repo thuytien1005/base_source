@@ -23,12 +23,12 @@ val convertFactory: Gson by lazy {
 }
 
 fun readJsonFromAssets(fileName: String): JsonObject? {
-    val s = readStringFromAssets(fileName)
+    val s = readAssets(fileName)
     return s.parse(JsonObject::class)
 }
 
 fun readArrayFromAssets(fileName: String): JsonArray? {
-    val s = readStringFromAssets(fileName)
+    val s = readAssets(fileName)
     return s.parse(JsonArray::class)
 }
 
@@ -61,14 +61,16 @@ fun <T> String?.parse(cls: Class<T>): T? {
 }
 
 fun <T : Any> JsonElement?.parseOrThrow(cls: KClass<T>): T {
-    val s = this?.toString()
     return convertFactory.fromJson(this, cls.java)
 }
 
 fun JsonElement?.toMap(): Map<String, Any?>? {
     try {
         this ?: return null
-        return convertFactory.fromJson(this, object : TypeToken<HashMap<String?, Any?>?>() {}.type)
+        return convertFactory.fromJson(
+            this,
+            object : TypeToken<java.util.HashMap<String?, Any?>?>() {}.type
+        )
     } catch (ignore: Exception) {
         return null
     }
@@ -336,17 +338,14 @@ fun JsonObject?.decimalOrNull(key: String): BigDecimal? {
         if (!has(key)) return null
         if (get(key).isJsonNull) return null
         return get(key)?.asBigDecimal ?: get(key)?.asString?.toBigDecimalOrNull()
-        ?: null
     } catch (ignore: Exception) {
-        return null
     }
+    return null
 }
 
 fun JsonObject?.decimalOrThrow(key: String): BigDecimal {
     return decimalOrNull(key) ?: throw JsonFieldNullException(key)
 }
-
-val BIG_DECIMAL_MAX: BigDecimal get() = BigDecimal(999999999999)
 
 fun JsonObject?.decimal(key: String, default: BigDecimal = BigDecimal.ZERO): BigDecimal {
     return decimalOrNull(key) ?: default
@@ -359,8 +358,8 @@ fun JsonObject?.floatOrNull(key: String): Float? {
         if (get(key).isJsonNull) return null
         return get(key)?.asFloat ?: get(key)?.asString?.toFloatOrNull() ?: null
     } catch (ignore: Exception) {
-        return null
     }
+    return null
 }
 
 fun JsonObject?.floatOrThrow(key: String): Float {
@@ -378,8 +377,8 @@ fun JsonObject?.doubleOrNull(key: String): Double? {
         if (get(key).isJsonNull) return null
         return get(key)?.asDouble ?: get(key)?.asString?.toDoubleOrNull() ?: null
     } catch (ignore: Exception) {
-        return null
     }
+    return null
 }
 
 fun JsonObject?.doubleOrThrow(key: String): Double {
@@ -463,11 +462,3 @@ fun JsonObject?.stringyJson(): String {
         "null"
     }
 }
-
-
-
-
-
-
-
-

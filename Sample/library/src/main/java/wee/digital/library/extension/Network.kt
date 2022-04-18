@@ -74,11 +74,13 @@ fun registerNetworkCallback() {
 
         override fun onCapabilitiesChanged(
             network: Network,
-            networkCapabilities: NetworkCapabilities
+            capabilities: NetworkCapabilities
         ) {
-            val hasCellular =
-                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-            val hasWifi = networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            val hasCellular = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+            print("hasCellular: $hasCellular")
+
+            val hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            print("hasWifi: $hasWifi")
         }
     })
 }
@@ -118,5 +120,6 @@ val networkReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
     }
 }
+
 
 

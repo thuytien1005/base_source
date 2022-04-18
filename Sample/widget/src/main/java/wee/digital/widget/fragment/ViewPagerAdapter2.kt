@@ -1,4 +1,4 @@
-package wee.digital.widget.adapter
+package wee.digital.widget.fragment
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

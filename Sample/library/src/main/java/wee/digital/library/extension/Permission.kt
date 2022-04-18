@@ -13,7 +13,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import wee.digital.library.app
 import java.util.*
 
@@ -113,9 +115,8 @@ fun Fragment.observerPermission(
     onGranted: () -> Unit,
     onDenied: (List<String>) -> Unit
 ) {
-    lifecycle.addObserver(object : LifecycleObserver {
-        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        fun onResume() {
+    lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onResume(owner: LifecycleOwner) {
             if (isGranted(*permissions)) {
                 onGranted.invoke()
             }
@@ -162,9 +163,8 @@ fun FragmentActivity.observerPermission(
     onGranted: () -> Unit,
     onDenied: (List<String>) -> Unit
 ) {
-    lifecycle.addObserver(object : LifecycleObserver {
-        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        fun onResume() {
+    lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onResume(owner: LifecycleOwner) {
             if (isGranted(*permissions)) {
                 onGranted.invoke()
             }
@@ -238,7 +238,6 @@ class PermissionHandler(val lifecycleOwner: LifecycleOwner) {
     }
 
 }
-
 
 
 

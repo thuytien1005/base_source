@@ -11,18 +11,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath deps.kotlin.gradle
         classpath deps.google.services
-        classpath deps.navigation.safe_args
     }
 
 }
 
 allprojects {
     repositories {
-        google()
         mavenCentral()
+        google()
+        jcenter()
         maven { url "https://maven.google.com" }
         maven { url "https://jitpack.io" }
     }

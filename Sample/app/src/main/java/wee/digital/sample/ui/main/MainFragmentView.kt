@@ -2,7 +2,6 @@ package wee.digital.sample.ui.main
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
 import wee.digital.library.extension.*
 import wee.digital.sample.ui.base.FragmentView
 import wee.digital.sample.ui.fragment.dialog.DialogVM
@@ -11,9 +10,10 @@ import wee.digital.sample.ui.fragment.dialog.selectable.Selectable
 import wee.digital.sample.ui.fragment.dialog.selectable.SelectableArg
 import wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment
 import wee.digital.widget.custom.InputView
-import wee.digital.widget.extension.*
+import wee.digital.widget.extension.ViewClickListener
+import wee.digital.widget.extension.networkErrorShown
+import wee.digital.widget.extension.toastError
 import java.io.IOException
-import java.util.*
 
 interface MainFragmentView : FragmentView {
 

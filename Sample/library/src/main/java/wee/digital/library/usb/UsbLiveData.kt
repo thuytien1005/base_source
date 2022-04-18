@@ -2,12 +2,13 @@ package wee.digital.library.usb
 
 import android.hardware.usb.UsbDevice
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import wee.digital.library.extension.SingleLiveData
 
-class UsbLiveData private constructor() : SingleLiveData<UsbDevice>() {
+class UsbLiveData private constructor() : MutableLiveData<UsbDevice?>() {
 
     companion object {
+
         val instance: UsbLiveData by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             UsbLiveData()
         }

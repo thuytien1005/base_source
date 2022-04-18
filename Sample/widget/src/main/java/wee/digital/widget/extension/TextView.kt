@@ -27,7 +27,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import wee.digital.widget.R
 import wee.digital.widget.app
-import java.util.*
 
 
 fun charsFilter(chars: CharArray): InputFilter {

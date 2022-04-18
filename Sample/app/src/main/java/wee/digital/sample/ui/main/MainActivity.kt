@@ -12,7 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.delay
-import wee.digital.library.extension.*
+import wee.digital.library.extension.darkStatusBarWidgets
+import wee.digital.library.extension.lightStatusBarWidgets
+import wee.digital.library.extension.navBarColor
+import wee.digital.library.extension.statusBarColor
 import wee.digital.sample.R
 import wee.digital.sample.databinding.MainBinding
 import wee.digital.sample.ui.base.BaseActivity
@@ -28,7 +31,7 @@ class MainActivity : BaseActivity<MainBinding>(),
     override var arg: AppBarArg? = null
 
     override fun activityNavController(): NavController? {
-        return findNavController(R.id.mainContainerView)
+        return findNavController(R.id.mainFragment)
     }
 
     override fun inflating(): (LayoutInflater) -> ViewBinding {

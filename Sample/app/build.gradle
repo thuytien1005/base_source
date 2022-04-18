@@ -2,7 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "kotlin-kapt"
-    id "androidx.navigation.safeargs.kotlin"
+    id "com.google.gms.google-services"
 }
 
 android {
@@ -82,23 +82,22 @@ dependencies {
 
     implementation fileTree(include: ["*.jar", "*aar"], dir: "libs")
 
-    // utils lib
+    //Utils lib
     implementation project(":library")
 
-    // widgets lib
+    //Widgets lib
     implementation project(":widget")
 
-    // widgets lib
+    //Camera
     implementation project(":camera")
 
-    // kotlin
+    //Kotlin
     implementation deps.kotlin.stdlib
-
     // concurrency pattern
     implementation deps.kotlin.coroutines_core
     implementation deps.kotlin.coroutines_android
 
-    // android
+    //Android
     implementation deps.android.corektx
     implementation deps.android.multidex
     implementation deps.android.appcompat
@@ -114,29 +113,29 @@ dependencies {
     implementation deps.android.vectordrawable
     implementation deps.android.security
     implementation deps.android.legacy_v4
-    implementation deps.google.material
 
-    // fragment navigation
+    //Google
+    implementation deps.google.material
+    implementation deps.google.gson
+
+    //Fragment navigation
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
 
-    // paging recycler view adapter
+    //Paging recycler view adapter
     implementation deps.paging.runtime
 
-    // android lifecycle aware
+    //Android lifecycle aware
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
 
-    // sq-lite database orm
+    //SQLite database orm
     implementation deps.room.runtime
     annotationProcessor deps.room.compiler
     kapt deps.room.compiler
 
-    // json convert
-    implementation deps.google.gson
-
-    // firebase sdk
+    //Firebase sdk
     implementation platform(deps.firebase.bom)
     implementation deps.firebase.analytics
     implementation deps.firebase.auth
@@ -144,25 +143,27 @@ dependencies {
     implementation deps.firebase.storage
     implementation deps.firebase.messaging
 
-    // dimension resources
+    //Dimension resources
     implementation deps.dimens.sdp
     implementation deps.dimens.ssp
 
-    // restful client
+    //Http client, RestFUL api
     implementation deps.square.retrofit
     implementation deps.square.okhttp
     implementation deps.square.okhttp_log
     implementation deps.square.gson
 
-    implementation "com.google.mlkit:camera:16.0.0-beta2"
-
-    // custom view
+    //Custom view
     implementation deps.rounded_image_view
 
-    // MediaPipe Face Detection Solution.
+    //Camera
+    implementation deps.ml.camera
+
+    //MediaPipe Face Detection Solution.
     implementation 'com.google.mediapipe:solution-core:latest.release'
     implementation 'com.google.mediapipe:facedetection:latest.release'
     implementation 'com.google.mediapipe:facemesh:latest.release'
+
 }
 
 afterEvaluate {

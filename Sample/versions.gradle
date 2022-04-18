@@ -266,18 +266,12 @@ deps.image_cropper = "com.github.CanHub:Android-Image-Cropper:3.2.0"
  * [https://github.com/mmin18/RealtimeBlurView]
  *
  * App gradle:
- * android {
- *      defaultConfig {
- *          minSdkVersion builds.min_sdk
+ * android {*      defaultConfig {*          minSdkVersion builds.min_sdk
  *          renderscriptTargetApi builds.min_sdk
  *          renderscriptSupportModeEnabled true
- *      }
- * }
- *
+ *}*}*
  * Proguard:
- *  -keep class android.support.v8.renderscript.** { *; }
- *  -keep class androidx.renderscript.** { *; }
- *
+ *  -keep class android.support.v8.renderscript.** { *; }*  -keep class androidx.renderscript.** { *; }*
  * Layout:
  * <com.github.mmin18.widget.RealtimeBlurView
  *      android:layout_width="match_parent"
