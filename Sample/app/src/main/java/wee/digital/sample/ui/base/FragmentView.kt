@@ -17,6 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import wee.digital.library.extension.hideKeyboard
+import wee.digital.library.extension.showKeyboard
 import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermissionDenied
 
 
@@ -69,7 +71,6 @@ interface FragmentView : BaseView {
         lifecycleOwner.lifecycle.addObserver(observer)
     }
 
-
     /**
      * Navigation
      */
@@ -98,7 +99,7 @@ interface FragmentView : BaseView {
     }
 
     /**
-     * SoftInputMode
+     * Keyboard utils
      */
     fun inputModeAdjustResize() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -115,6 +116,14 @@ interface FragmentView : BaseView {
 
     fun inputModeAdjustNothing() {
         baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    }
+
+    fun hideKeyboard() {
+        fragment.requireActivity().hideKeyboard()
+    }
+
+    fun showKeyboard() {
+        fragment.requireActivity().showKeyboard()
     }
 
     /**

@@ -13,10 +13,10 @@ android {
         targetSdkVersion builds.target_sdk
         versionCode builds.version_code
         versionName builds.version_name
-        flavorDimensions "default"
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    flavorDimensions "default"
     testOptions {
         unitTests.includeAndroidResources = true
         unitTests.returnDefaultValues = true
@@ -98,21 +98,21 @@ dependencies {
     implementation deps.kotlin.coroutines_android
 
     //Android
-    implementation deps.android.corektx
-    implementation deps.android.multidex
-    implementation deps.android.appcompat
     implementation deps.android.activity
-    implementation deps.android.fragment
-    implementation deps.android.constraintlayout
-    implementation deps.android.viewpager
-    implementation deps.android.recyclerview
-    implementation deps.android.cardview
-    implementation deps.android.swiperefreshlayout
-    implementation deps.android.browser
+    implementation deps.android.animation
     implementation deps.android.annotation
-    implementation deps.android.vectordrawable
+    implementation deps.android.appcompat
+    implementation deps.android.browser
+    implementation deps.android.cardview
+    implementation deps.android.constraintlayout
+    implementation deps.android.corektx
+    implementation deps.android.fragment
+    implementation deps.android.multidex
+    implementation deps.android.recyclerview
     implementation deps.android.security
-    implementation deps.android.legacy_v4
+    implementation deps.android.swiperefreshlayout
+    implementation deps.android.vectordrawable
+    implementation deps.android.viewpager
 
     //Google
     implementation deps.google.material
@@ -126,6 +126,7 @@ dependencies {
     implementation deps.paging.runtime
 
     //Android lifecycle aware
+    implementation deps.lifecycle.runtime
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
     kapt deps.lifecycle.compiler
@@ -135,6 +136,17 @@ dependencies {
     annotationProcessor deps.room.compiler
     kapt deps.room.compiler
 
+    //Http client, RestFUL api
+    implementation deps.square.retrofit
+    implementation deps.square.gson
+    implementation deps.square.okhttp
+    implementation deps.square.okhttp_log
+    implementation deps.square.okhttp_url
+
+    //Dimension resources
+    implementation deps.dimens.sdp
+    implementation deps.dimens.ssp
+
     //Firebase sdk
     implementation platform(deps.firebase.bom)
     implementation deps.firebase.analytics
@@ -143,17 +155,7 @@ dependencies {
     implementation deps.firebase.storage
     implementation deps.firebase.messaging
 
-    //Dimension resources
-    implementation deps.dimens.sdp
-    implementation deps.dimens.ssp
-
-    //Http client, RestFUL api
-    implementation deps.square.retrofit
-    implementation deps.square.okhttp
-    implementation deps.square.okhttp_log
-    implementation deps.square.gson
-
-    //Custom view
+    //Rounded/oval image view
     implementation deps.rounded_image_view
 
     //Camera

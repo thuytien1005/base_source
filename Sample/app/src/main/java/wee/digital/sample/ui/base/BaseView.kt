@@ -1,8 +1,10 @@
 package wee.digital.sample.ui.base
 
+import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
@@ -295,21 +297,6 @@ interface BaseView {
 
     fun String.bold(): String {
         return "<b>$this</b>"
-    }
-
-    /**
-     *
-     */
-    fun hideKeyboard() {
-        launch(200) {
-            baseActivity?.hideKeyboard()
-        }
-    }
-
-    fun showKeyboard() {
-        launch(200) {
-            baseActivity?.showKeyboard()
-        }
     }
 
 }

@@ -7,43 +7,46 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 
 fun View?.hideKeyboard() {
     this?.post {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.hideSoftInputFromWindow(windowToken, 0)
+        (context as? Activity)?.hideKeyboard()
     }
+
 }
 
 fun View?.showKeyboard() {
     this?.post {
-        if (requestFocus()) {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-        }
+        (context as? Activity)?.showKeyboard()
     }
 }
 
 fun Activity.hideKeyboard() {
-    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.ime())
+    // DEPRECATED
+    /*val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(
         findViewById(android.R.id.content),
         InputMethodManager.SHOW_IMPLICIT
-    )
+    )*/
 }
 
 fun Activity.showKeyboard() {
-    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.showSoftInput(findViewById(android.R.id.content), InputMethodManager.SHOW_IMPLICIT)
+    WindowInsetsControllerCompat(window, window.decorView).show(WindowInsetsCompat.Type.ime())
+    // DEPRECATED
+    /*val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(findViewById(android.R.id.content), InputMethodManager.SHOW_IMPLICIT)*/
 }
 
 fun Fragment.hideKeyboard() {
-    view?.hideKeyboard()
+    requireActivity().hideKeyboard()
 }
 
 fun Fragment.showKeyboard() {
-    view?.showKeyboard()
+    requireActivity().showKeyboard()
 }
 
 private var keypadHeight: Int = 0

@@ -3,6 +3,7 @@ package wee.digital.sample.ui.fragment.dialog.selectable
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import wee.digital.sample.R
+import wee.digital.sample.app
 import wee.digital.sample.ui.base.BaseView
 import wee.digital.sample.ui.fragment.dialog.DialogVM
 import wee.digital.widget.extension.color
@@ -33,7 +34,6 @@ fun BaseView.showSelectable(block: SelectableBlock) {
     val arg = SelectableArg()
     block?.invoke(arg)
     if (arg.itemList.isNullOrEmpty()) return
-    hideKeyboard()
     vm.selectableLiveData.value = arg
     vm.selectableMap[arg.key] = MutableLiveData(arg.selectedItem).also {
         it.observe { selectable ->

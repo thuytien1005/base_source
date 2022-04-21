@@ -7,6 +7,8 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
@@ -61,9 +63,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
     }
 
     /**
-     * SoftInputMode
+     * Keyboard utils
      */
-    fun inputModeAdjustResize() {
+    protected fun inputModeAdjustResize() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             vb.root.setOnApplyWindowInsetsListener { _, windowInsets ->
                 val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
@@ -76,8 +78,16 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
         }
     }
 
-    fun inputModeAdjustNothing() {
+    protected fun inputModeAdjustNothing() {
         baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    }
+
+    protected fun hideKeyboard() {
+        WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.ime())
+    }
+
+    protected fun showKeyboard() {
+        WindowInsetsControllerCompat(window, window.decorView).show(WindowInsetsCompat.Type.ime())
     }
 
 }

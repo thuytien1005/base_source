@@ -70,6 +70,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), FragmentView {
     final override val backPressedCallback: OnBackPressedCallback by lazy { getBackPressCallBack() }
 
     override fun onBackPressed() {
+
         backPressedCallback.remove()
         activity?.onBackPressed()
     }
