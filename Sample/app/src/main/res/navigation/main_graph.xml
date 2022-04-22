@@ -3,7 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/widgetsFragment">
+
+    <fragment
+        android:id="@+id/widgetsFragment"
+        android:name="wee.digital.sample.ui.fragment.widgets.WidgetsFragment"
+        android:label="WidgetsFragment" />
+    <action
+        android:id="@+id/action_global_widgetsFragment"
+        app:destination="@id/widgetsFragment" />
+
+    <fragment
+        android:id="@+id/faceMeshFragment"
+        android:name="wee.digital.sample.ui.fragment.face.mesh.FaceMeshFragment"
+        android:label="FaceMeshFragment" />
+    <action
+        android:id="@+id/action_global_faceMeshFragment"
+        app:destination="@id/faceMeshFragment" />
+
+    <fragment
+        android:id="@+id/faceRegFragment"
+        android:name="wee.digital.sample.ui.fragment.face.reg.FaceRegFragment"
+        android:label="FaceRegFragment" />
+    <action
+        android:id="@+id/action_global_faceRegFragment"
+        app:destination="@id/faceRegFragment" />
 
     <fragment
         android:id="@+id/homeFragment"

@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import wee.digital.library.extension.MapValueNullException
-import wee.digital.library.extension.toast
 import wee.digital.sample.data.firebase.auth
 import wee.digital.sample.data.firebase.selfUserRef
 import wee.digital.sample.ui.base.BaseVM
@@ -45,11 +43,7 @@ class UserVM : BaseVM() {
 
     private fun syncUser(map: Map<String, Any>) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
 
-            } catch (e: MapValueNullException) {
-                toast(e.message)
-            }
         }
     }
 
