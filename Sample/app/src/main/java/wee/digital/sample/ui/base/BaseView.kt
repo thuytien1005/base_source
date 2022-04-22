@@ -1,10 +1,8 @@
 package wee.digital.sample.ui.base
 
-import android.content.Context
 import android.os.Build
 import android.text.Html
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
@@ -69,19 +67,19 @@ interface BaseView {
      * [ViewModel] utils
      */
     fun <T : ViewModel> activityVM(cls: KClass<T>): T {
-        return ViewModelProvider(baseActivity!!).get(cls.java)
+        return ViewModelProvider(baseActivity!!)[cls.java]
     }
 
     fun <T : ViewModel> lazyActivityVM(cls: KClass<T>): Lazy<T> {
-        return lazy { ViewModelProvider(baseActivity!!).get(cls.java) }
+        return lazy { ViewModelProvider(baseActivity!!)[cls.java] }
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
-        return lazy { ViewModelProvider(this).get(cls.java) }
+        return lazy { ViewModelProvider(this)[cls.java] }
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
-        return ViewModelProvider(this).get(cls.java)
+        return ViewModelProvider(this)[cls.java]
     }
 
     /**

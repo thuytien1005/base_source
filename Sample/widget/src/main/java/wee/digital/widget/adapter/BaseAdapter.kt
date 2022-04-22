@@ -50,7 +50,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun onItemViewClick(viewHolder: RecyclerView.ViewHolder, viewBinding: ViewBinding) {
         val position: Int = viewHolder.absoluteAdapterPosition
-        val item = getItemOrNull(position) ?: return
+        val item = get(position) ?: return
         onItemClick?.invoke(item)
         onItemViewClick?.invoke(item, viewBinding)
         onItemPositionClick?.invoke(item, position)
@@ -68,7 +68,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun onItemViewLongClick(viewHolder: RecyclerView.ViewHolder, viewBinding: ViewBinding) {
         val position: Int = viewHolder.absoluteAdapterPosition
-        val item = getItemOrNull(position) ?: return
+        val item = get(position) ?: return
         onItemViewLongClick?.invoke(item, viewBinding)
     }
 
@@ -95,7 +95,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
         return listItem().indexOf(item)
     }
 
-    fun getItemOrNull(position: Int): T? {
+    fun get(position: Int): T? {
         if (dataIsEmpty) return null
         if (isInfinity()) return listItem().getOrNull(position % size)
         return listItem().getOrNull(position)
@@ -111,12 +111,16 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun getBaseItemViewType(position: Int): Int {
         blankItemOptions()?.also {
-            if (it.layoutId != 0 && dataIsEmpty) return it.layoutId
+            if (dataIsEmpty) {
+                return it.layoutId
+            }
         }
         footerItemOptions()?.also {
-            if (it.layoutId != 0 && dataNotEmpty && position == size) return it.layoutId
+            if (dataNotEmpty && position == size) {
+                return it.layoutId
+            }
         }
-        val model = getItemOrNull(position)
+        val model = get(position)
         return modelItemOptions(model, position)?.layoutId ?: GONE_VIEW_TYPE
     }
 
@@ -145,7 +149,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
                 return
             }
         }
-        val model: T = getItemOrNull(position) ?: return
+        val model: T = get(position) ?: return
         val options: ItemOptions = modelItemOptions(model, position) ?: return
         val viewBinding: ViewBinding = options.inflaterInvoker(itemView)
         itemView.addClickListener(itemClickDelayed(), 1) {

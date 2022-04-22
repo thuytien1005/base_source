@@ -5,6 +5,4 @@
     app:startDestination="@id/widgetsFragment">
 
 
-
-
 </navigation>

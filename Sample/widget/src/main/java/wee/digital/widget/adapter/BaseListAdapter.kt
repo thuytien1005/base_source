@@ -3,15 +3,38 @@ package wee.digital.widget.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 
-abstract class BaseListAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder>,
+abstract class BaseListAdapter<T>(itemCallback: DiffUtil.ItemCallback<T> = DiffItemCallback()) :
+    ListAdapter<T, RecyclerView.ViewHolder>(itemCallback),
     BaseAdapter<T, BaseListAdapter<T>> {
 
-    private val differ: AsyncListDiffer<T>
+    private fun asyncListDiffer(itemCallback: DiffUtil.ItemCallback<T>): AsyncListDiffer<T> {
+        val adapterCallback = AdapterListUpdateCallback(this)
+        val listCallback = object : ListUpdateCallback {
+            override fun onChanged(position: Int, count: Int, payload: Any?) {
+                adapterCallback.onChanged(position, if (hasFooter) count + 1 else count, payload)
+            }
 
+            override fun onMoved(fromPosition: Int, toPosition: Int) {
+                adapterCallback.onMoved(fromPosition, toPosition)
+            }
 
-    constructor(itemCallback: DiffUtil.ItemCallback<T> = DiffItemCallback()) : super(itemCallback) {
-        differ = asyncListDiffer(itemCallback)
+            override fun onInserted(position: Int, count: Int) {
+                if (position == 0 && blankItemOptions() != null) {
+                    adapterCallback.onChanged(position, if (hasFooter) count + 1 else count, null)
+                } else {
+                    adapterCallback.onInserted(position, if (hasFooter) count + 1 else count)
+                }
+            }
+
+            override fun onRemoved(position: Int, count: Int) {
+                adapterCallback.onRemoved(position, if (hasFooter) count + 1 else count)
+            }
+        }
+
+        return AsyncListDiffer<T>(listCallback, AsyncDifferConfig.Builder(itemCallback).build())
     }
+
+    private val differ: AsyncListDiffer<T> = asyncListDiffer(itemCallback)
 
     /**
      * [ListAdapter] implements
@@ -112,27 +135,5 @@ abstract class BaseListAdapter<T> : ListAdapter<T, RecyclerView.ViewHolder>,
         set(listOf(), callback)
     }
 
-    private fun asyncListDiffer(itemCallback: DiffUtil.ItemCallback<T>): AsyncListDiffer<T> {
-
-        val adapterCallback = AdapterListUpdateCallback(this)
-        val listCallback = object : ListUpdateCallback {
-            override fun onChanged(position: Int, count: Int, payload: Any?) {
-                adapterCallback.onChanged(position, if (hasFooter) count + 1 else count, payload)
-            }
-
-            override fun onMoved(fromPosition: Int, toPosition: Int) {
-                adapterCallback.onMoved(fromPosition, toPosition)
-            }
-
-            override fun onInserted(position: Int, count: Int) {
-                adapterCallback.onInserted(position, if (hasFooter) count + 1 else count)
-            }
-
-            override fun onRemoved(position: Int, count: Int) {
-                adapterCallback.onRemoved(position, if (hasFooter) count + 1 else count)
-            }
-        }
-        return AsyncListDiffer<T>(listCallback, AsyncDifferConfig.Builder<T>(itemCallback).build())
-    }
 
 }

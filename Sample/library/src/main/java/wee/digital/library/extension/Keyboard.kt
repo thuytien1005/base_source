@@ -1,11 +1,9 @@
 package wee.digital.library.extension
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat

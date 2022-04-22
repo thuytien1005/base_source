@@ -3,7 +3,6 @@ package wee.digital.sample.ui.fragment.dialog.selectable
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import wee.digital.sample.R
-import wee.digital.sample.app
 import wee.digital.sample.ui.base.BaseView
 import wee.digital.sample.ui.fragment.dialog.DialogVM
 import wee.digital.widget.extension.color

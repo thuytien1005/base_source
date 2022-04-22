@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.multidex.MultiDexApplication
 import com.example.camera.CameraApp
 import wee.digital.library.Library
+import wee.digital.library.util.Logger
 import wee.digital.widget.Widget
 import java.lang.ref.WeakReference
 
@@ -20,6 +21,8 @@ class App : MultiDexApplication() {
 }
 
 lateinit var app: App private set
+
+val log by lazy { Logger("sampleApp") }
 
 private var activityReference: WeakReference<Activity>? = null
 
