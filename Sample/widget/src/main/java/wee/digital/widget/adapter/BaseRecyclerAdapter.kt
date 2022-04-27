@@ -53,7 +53,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHo
 
     override var lastBindIndex: Int = -1
 
-    override fun listItem(): MutableList<T> {
+    override fun itemList(): MutableList<T> {
         return currentList
     }
 

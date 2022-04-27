@@ -10,7 +10,11 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
+import androidx.lifecycle.MutableLiveData
 import wee.digital.library.app
+
+val connectivityManager: ConnectivityManager
+    get() = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 val connectionInfo: String?
     @SuppressLint("MissingPermission")
@@ -45,6 +49,15 @@ val connectionInfo: String?
         return null
     }
 
+val networkLiveData: MutableLiveData<Boolean> by lazy {
+    registerNetworkCallback()
+    MutableLiveData<Boolean>(networkConnected)
+}
+
+val networkAvailableLiveData: SingleLiveData<Boolean> by lazy {
+    SingleLiveData(networkConnected)
+}
+
 val hasWifi: Boolean get() = connectionInfo == "wifi" || connectionInfo == "is connected"
 
 val networkConnected: Boolean
@@ -52,13 +65,6 @@ val networkConnected: Boolean
 
 val networkDisconnected: Boolean
     get() = connectionInfo == null
-
-val connectivityManager: ConnectivityManager
-    get() = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-val networkLiveData: SingleLiveData<Boolean> = SingleLiveData(networkConnected)
-
-val networkAvailableLiveData: SingleLiveData<Boolean> = SingleLiveData(networkConnected)
 
 fun registerNetworkCallback() {
     registerNetworkCallback(object : ConnectivityManager.NetworkCallback() {

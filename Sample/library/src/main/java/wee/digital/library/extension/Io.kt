@@ -217,3 +217,5 @@ fun unzip(zipFile: File?, targetDirectory: File?) {
     }
 }
 
+val File?.isExist: Boolean get() = this?.absoluteFile?.exists() ?: false
+

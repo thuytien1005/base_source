@@ -9,7 +9,7 @@ import wee.digital.widget.extension.addClickListener
 interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     @Suppress("UNCHECKED_CAST")
-    val self: A
+    val recyclerViewAdapter: A
         get() = this as A
 
     /**
@@ -21,14 +21,14 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun onItemClick(block: OnItemClick<T>): A {
         onItemClick = block
-        return self
+        return recyclerViewAdapter
     }
 
     var onItemViewClick: OnItemViewClick<T>
 
     fun onItemViewClick(block: OnItemViewClick<T>): A {
         onItemViewClick = block
-        return self
+        return recyclerViewAdapter
     }
 
     fun <VB : ViewBinding> onItemClick(block: ((T, VB) -> Unit)? = null): A {
@@ -38,14 +38,14 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
                 block?.invoke(item, vb)
             }
         }
-        return self
+        return recyclerViewAdapter
     }
 
     var onItemPositionClick: OnItemPositionClick<T>
 
     fun onItemPositionClick(block: OnItemPositionClick<T>): A {
         onItemPositionClick = block
-        return self
+        return recyclerViewAdapter
     }
 
     fun onItemViewClick(viewHolder: RecyclerView.ViewHolder, viewBinding: ViewBinding) {
@@ -63,7 +63,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun onItemViewLongClick(block: OnItemViewClick<T>): A {
         onItemViewLongClick = block
-        return self
+        return recyclerViewAdapter
     }
 
     fun onItemViewLongClick(viewHolder: RecyclerView.ViewHolder, viewBinding: ViewBinding) {
@@ -81,24 +81,24 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
     /**
      *
      */
-    fun listItem(): List<T>
+    fun itemList(): List<T>
 
-    val size: Int get() = listItem().size
+    val size: Int get() = itemList().size
 
-    val lastIndex: Int get() = listItem().lastIndex
+    val lastIndex: Int get() = itemList().lastIndex
 
-    val dataIsEmpty: Boolean get() = listItem().isEmpty()
+    val dataIsEmpty: Boolean get() = itemList().isEmpty()
 
-    val dataNotEmpty: Boolean get() = listItem().isNotEmpty()
+    val dataNotEmpty: Boolean get() = itemList().isNotEmpty()
 
     fun indexOf(item: T): Int {
-        return listItem().indexOf(item)
+        return itemList().indexOf(item)
     }
 
     fun get(position: Int): T? {
         if (dataIsEmpty) return null
-        if (isInfinity()) return listItem().getOrNull(position % size)
-        return listItem().getOrNull(position)
+        if (isInfinity()) return itemList().getOrNull(position % size)
+        return itemList().getOrNull(position)
     }
 
     fun getBaseItemCount(): Int {
@@ -159,7 +159,8 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
             onItemViewLongClick(viewHolder, viewBinding)
             true
         }
-        viewBinding.onBindModelItem(model, position)
+        viewBinding.onBindItem(viewHolder, model, position)
+        viewBinding.onBindItem(model, position)
         lastBindIndex = position
     }
 
@@ -192,7 +193,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
 
     fun placeHolderItemCount(count: Int): A {
         placeHolderItemCount = count
-        return self
+        return recyclerViewAdapter
     }
 
     fun isInfinity(): Boolean = false
@@ -202,7 +203,9 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
      */
     fun modelItemOptions(item: T?, position: Int): ItemOptions?
 
-    fun ViewBinding.onBindModelItem(item: T, position: Int)
+    fun ViewBinding.onBindItem(vh: RecyclerView.ViewHolder, item: T, position: Int) = Unit
+
+    fun ViewBinding.onBindItem(item: T, position: Int) = Unit
 
     /**
      *
@@ -212,7 +215,7 @@ interface BaseAdapter<T, A : RecyclerView.Adapter<*>> {
         (v.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         v.layoutManager = lm
         v.adapter = this as RecyclerView.Adapter<*>
-        return self
+        return recyclerViewAdapter
     }
 
     fun bind(v: RecyclerView, block: (LinearLayoutManager.() -> Unit)? = null): A {

@@ -13,7 +13,7 @@ abstract class BaseSelectableAdapter<T, VB : ViewBinding> : BaseRecyclerAdapter<
 
     final override fun modelItemOptions(item: T?, position: Int): ItemOptions? = null
 
-    final override fun ViewBinding.onBindModelItem(item: T, position: Int) = Unit
+    final override fun ViewBinding.onBindItem(item: T, position: Int) = Unit
 
     final override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,7 +25,7 @@ abstract class BaseSelectableAdapter<T, VB : ViewBinding> : BaseRecyclerAdapter<
     final override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         @Suppress("UNCHECKED_CAST")
         (viewHolder as? ViewBindingHolder<VB>)?.apply {
-            val item = getItemOrNull(position) ?: return
+            val item = get(position) ?: return
             vb.onBindDefaultItem(item, position)
             if (isSelected(item)) {
                 vb.onBindSelectedItem(item, position)
@@ -68,7 +68,7 @@ abstract class BaseSelectableAdapter<T, VB : ViewBinding> : BaseRecyclerAdapter<
     val selectedPosition: Int
         get() {
             selectedItem ?: return -1
-            return listItem().indexOf(selectedItem)
+            return itemList().indexOf(selectedItem)
         }
 
     private val itemClickList = mutableListOf<(T, Boolean) -> Unit>()

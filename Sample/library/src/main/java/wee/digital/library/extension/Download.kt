@@ -9,12 +9,26 @@ import android.content.IntentFilter
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import wee.digital.library.app
 import java.io.File
 
 val downloadManager = app.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
 val downloadDir: File get() = publicDir(Environment.DIRECTORY_DOWNLOADS)
+
+val isDownloading: Boolean
+    get() {
+        val query = DownloadManager.Query()
+        query.setFilterByStatus(DownloadManager.STATUS_RUNNING)
+        val cursor = downloadManager.query(query)
+        if (cursor.moveToFirst()) {
+            cursor.close()
+            return true
+        }
+        return false
+    }
 
 interface DownloadListener {
     fun onSuccessful(file: File)
@@ -26,7 +40,6 @@ interface DownloadListener {
  * can cancel download by
  * @return downloadId
  */
-
 fun Activity.download(url: String, file: File, listener: DownloadListener): Long {
     val downloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(ctx: Context?, intent: Intent?) {
@@ -50,7 +63,13 @@ fun Activity.download(url: String, file: File, listener: DownloadListener): Long
                 }
                 val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
                 val uri = cursor.getString(uriIndex)!!
-                listener.onSuccessful(File(Uri.parse(uri).path!!))
+
+                val downloadedFile = File(Uri.parse(uri).path!!)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    //downloadManager.cancelDownload()
+                    //listener.onCancelled()
+                    listener.onSuccessful(downloadedFile)
+                }, 1000)
             } catch (e: Exception) {
                 listener.onCancelled()
             }
@@ -69,7 +88,7 @@ fun Activity.download(url: String, fileName: String, listener: DownloadListener)
 
 fun Activity.downloadIfNotExist(url: String, file: File, listener: DownloadListener): Long {
     if (file.exists()) {
-        listener?.onSuccessful(file)
+        listener.onSuccessful(file)
         return -1
     }
     return download(url, file, listener)

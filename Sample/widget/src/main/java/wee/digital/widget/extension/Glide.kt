@@ -2,8 +2,12 @@ package wee.digital.widget.extension
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
+import android.os.CancellationSignal
+import android.provider.MediaStore
+import android.util.Size
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.annotation.GlideModule
@@ -180,5 +184,27 @@ fun downloadImage(url: String?): ByteArray? {
     } catch (e: Exception) {
         null
     }
+}
+
+fun Uri.thumbnail(): Bitmap? {
+    val path = this.path ?: return null
+    val file = File(path)
+    return file.thumbnail()
+}
+
+fun File.thumbnail(): Bitmap? {
+    try {
+        val file = File(path)
+        if (file.absoluteFile.exists()) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ThumbnailUtils.createVideoThumbnail(file, Size(96, 96), CancellationSignal())
+            } else {
+                ThumbnailUtils.createVideoThumbnail(path!!, MediaStore.Video.Thumbnails.MICRO_KIND)
+            }
+        }
+    } catch (e: Exception) {
+
+    }
+    return null
 }
 

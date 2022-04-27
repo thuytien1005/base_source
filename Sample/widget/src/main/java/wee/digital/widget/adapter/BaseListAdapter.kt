@@ -86,7 +86,7 @@ abstract class BaseListAdapter<T>(itemCallback: DiffUtil.ItemCallback<T> = DiffI
 
     override var lastBindIndex: Int = -1
 
-    override fun listItem(): MutableList<T> {
+    override fun itemList(): MutableList<T> {
         return currentList
     }
 
@@ -126,7 +126,7 @@ abstract class BaseListAdapter<T>(itemCallback: DiffUtil.ItemCallback<T> = DiffI
     }
 
     open fun remove(item: T, callback: Runnable? = null) {
-        val list = listItem().toMutableList()
+        val list = itemList().toMutableList()
         list.remove(item)
         set(list, callback)
     }

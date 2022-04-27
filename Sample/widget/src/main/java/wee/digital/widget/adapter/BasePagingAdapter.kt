@@ -41,7 +41,7 @@ abstract class BasePagingAdapter<T : Any> : PagingDataAdapter<T, RecyclerView.Vi
 
     override var lastBindIndex: Int = -1
 
-    override fun listItem(): List<T> {
+    override fun itemList(): List<T> {
         return snapshot().items
     }
 
