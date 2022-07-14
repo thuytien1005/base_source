@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewTime"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:textColor="#42A5F5"
+        android:textStyle="bold"
+        android:textSize="@dimen/_8ssp"
+        tools:text="12:13:50:000" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewMessage"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:maxLines="1"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:textSize="@dimen/_8ssp"
+        tools:text="12:13:50:000" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

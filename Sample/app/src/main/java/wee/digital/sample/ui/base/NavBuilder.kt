@@ -10,7 +10,7 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import wee.digital.sample.R
 
-class NavBuilder(private val navController: NavController) {
+class NavBuilder(private val controller: NavController) {
 
     private val options = NavOptions.Builder()
 
@@ -20,7 +20,7 @@ class NavBuilder(private val navController: NavController) {
 
     fun clearBackStack() {
         options.setLaunchSingleTop(true)
-        options.setPopUpTo(navController.graph.id, true)
+        options.setPopUpTo(controller.graph.id, true)
     }
 
     fun setLaunchSingleTop() {
@@ -28,7 +28,7 @@ class NavBuilder(private val navController: NavController) {
     }
 
     fun setPopUpTo(@IdRes fragmentId: Int, inclusive: Boolean = false) {
-//        options.setLaunchSingleTop(true)
+        options.setLaunchSingleTop(true)
         options.setPopUpTo(fragmentId, inclusive)
     }
 
@@ -47,17 +47,12 @@ class NavBuilder(private val navController: NavController) {
         args = bundleOf(*pairs)
     }
 
-    fun setVerticalAnim(reserved: Boolean = false) {
-        if (reserved) options.apply {
-            setEnterAnim(R.anim.vertical_pop_enter)
-            setExitAnim(R.anim.vertical_pop_exit)
-            setPopEnterAnim(R.anim.vertical_enter)
-            setPopExitAnim(R.anim.vertical_exit)
-        } else options.apply {
-            setEnterAnim(R.anim.vertical_enter)
-            setExitAnim(R.anim.vertical_exit)
-            setPopEnterAnim(R.anim.vertical_pop_enter)
-            setPopExitAnim(R.anim.vertical_pop_exit)
+    fun setNoneAnim() {
+        options.apply {
+            setEnterAnim(0)
+            setExitAnim(0)
+            setPopEnterAnim(0)
+            setPopExitAnim(0)
         }
     }
 
@@ -73,20 +68,24 @@ class NavBuilder(private val navController: NavController) {
             setPopEnterAnim(R.anim.horizontal_pop_enter)
             setPopExitAnim(R.anim.horizontal_pop_exit)
         }
-
     }
 
-    fun setNoneAnim() {
-        options.apply {
-            setEnterAnim(0)
-            setExitAnim(0)
-            setPopEnterAnim(0)
-            setPopExitAnim(0)
+    fun setVerticalAnim(reserved: Boolean = false) {
+        if (reserved) options.apply {
+            setEnterAnim(R.anim.vertical_pop_enter)
+            setExitAnim(R.anim.vertical_pop_exit)
+            setPopEnterAnim(R.anim.vertical_enter)
+            setPopExitAnim(R.anim.vertical_exit)
+        } else options.apply {
+            setEnterAnim(R.anim.vertical_enter)
+            setExitAnim(R.anim.vertical_exit)
+            setPopEnterAnim(R.anim.vertical_pop_enter)
+            setPopExitAnim(R.anim.vertical_pop_exit)
         }
     }
 
     fun navigate(@IdRes actionId: Int) {
-        navController.navigate(actionId, args, options.build(), extras)
+        controller.navigate(actionId, args, options.build(), extras)
     }
 
 }

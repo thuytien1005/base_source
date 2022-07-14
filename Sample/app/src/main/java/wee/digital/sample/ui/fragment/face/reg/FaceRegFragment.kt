@@ -1,9 +1,8 @@
 package wee.digital.sample.ui.fragment.face.reg
 
-import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
-import androidx.viewbinding.ViewBinding
+import wee.digital.camera.ui.observerCameraPermission
 import com.google.mediapipe.components.TextureFrameConsumer
 import com.google.mediapipe.framework.TextureFrame
 import com.google.mediapipe.solutioncore.CameraInput
@@ -13,6 +12,7 @@ import com.google.mediapipe.solutions.facemesh.FaceMeshResult
 import wee.digital.library.extension.lightSystemWidgets
 import wee.digital.library.extension.windowFullScreen
 import wee.digital.sample.databinding.FaceRegBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainFragment
 
 
@@ -21,9 +21,7 @@ class FaceRegFragment : MainFragment<FaceRegBinding>() {
     /**
      * [MainFragment] implements
      */
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return FaceRegBinding::inflate
-    }
+    override fun inflating(): Inflating = FaceRegBinding::inflate
 
     override fun onViewCreated() {
         lightSystemWidgets()

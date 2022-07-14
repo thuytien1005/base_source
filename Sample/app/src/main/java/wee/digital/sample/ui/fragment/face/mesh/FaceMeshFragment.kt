@@ -1,9 +1,8 @@
 package wee.digital.sample.ui.fragment.face.mesh
 
 import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.View
-import androidx.viewbinding.ViewBinding
+import wee.digital.camera.ui.observerCameraPermission
 import com.google.mediapipe.components.TextureFrameConsumer
 import com.google.mediapipe.framework.TextureFrame
 import com.google.mediapipe.solutioncore.CameraInput
@@ -14,6 +13,7 @@ import com.google.mediapipe.solutions.facemesh.FaceMeshResult
 import wee.digital.library.extension.lightSystemWidgets
 import wee.digital.library.extension.statusBarColor
 import wee.digital.sample.databinding.FaceMeshBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainFragment
 
 class FaceMeshFragment : MainFragment<FaceMeshBinding>() {
@@ -21,9 +21,7 @@ class FaceMeshFragment : MainFragment<FaceMeshBinding>() {
     /**
      * [MainFragment] implements
      */
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return FaceMeshBinding::inflate
-    }
+    override fun inflating(): Inflating = FaceMeshBinding::inflate
 
     override fun onViewCreated() {
         statusBarColor(Color.BLACK)

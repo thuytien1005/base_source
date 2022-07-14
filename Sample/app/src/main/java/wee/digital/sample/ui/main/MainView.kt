@@ -23,7 +23,7 @@ interface MainView {
             root.gone()
             return
         }
-        imageViewLogo.isShow(it.logoVisible)
+        //imageViewLogo.isShow(it.logoVisible)
         viewBackground.setBackgroundColor(it.appBarColor)
         if (it.progress < 0) {
             progressBarLayout.hide()

@@ -261,7 +261,7 @@ fun TextView.setSpanClick(fullText: String, spannedText: String, block: () -> Un
     val spanStr = SpannableString(fullText)
     spanStr.setSpan(click, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     spanStr.setSpan(
-        ForegroundColorSpan(color(R.color.colorPrimary)),
+        ForegroundColorSpan(color(R.color.color_primary)),
         startIndex,
         endIndex,
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

@@ -1,8 +1,11 @@
 package wee.digital.sample.ui.base
 
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
@@ -15,14 +18,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import wee.digital.sample.R
-import wee.digital.widget.app
+import kotlinx.coroutines.*
+import wee.digital.library.extension.toast
+import wee.digital.sample.app
+import wee.digital.widget.R
 import wee.digital.widget.extension.ViewClickListener
 import kotlin.reflect.KClass
+
 
 interface BaseView {
 
@@ -33,7 +35,7 @@ interface BaseView {
     val uiJobList: MutableList<Job>
 
     fun launch(delayInterval: Long, block: suspend CoroutineScope.() -> Unit): Job {
-        val job = lifecycleOwner.lifecycleScope.launch {
+        val job = lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             delay(delayInterval)
             block()
         }
@@ -42,7 +44,7 @@ interface BaseView {
     }
 
     fun launch(block: suspend CoroutineScope.() -> Unit): Job {
-        return lifecycleOwner.lifecycleScope.launch {
+        return lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             block()
         }
     }
@@ -56,6 +58,14 @@ interface BaseView {
     fun show(dialog: DialogFragment) {
         val sfm = (baseActivity as? FragmentActivity)?.supportFragmentManager ?: return
         dialog.show(sfm, dialog.tag)
+    }
+
+    fun dismissAllDialogs() {
+        (baseActivity as? FragmentActivity)?.supportFragmentManager?.fragments?.forEach {
+            if (it is DialogFragment) {
+                it.dismissAllowingStateLoss()
+            }
+        }
     }
 
     fun addObserve(observer: LifecycleObserver): LifecycleObserver {
@@ -79,7 +89,7 @@ interface BaseView {
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
-        return ViewModelProvider(this)[cls.java]
+        return ViewModelProvider(this).get(cls.java)
     }
 
     /**
@@ -106,10 +116,34 @@ interface BaseView {
      * [NavController] utils
      */
     fun NavController?.navigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
-        this ?: return
+        if (this == null) {
+            toast("NavController is null")
+            return
+        }
+        NavBuilder(this).also {
+            block?.invoke(it)
+            it.setVerticalAnim()
+            it.navigate(actionId)
+        }
+    }
+
+    fun NavController?.navigateNoAnim(
+        @IdRes actionId: Int,
+        block: (NavBuilder.() -> Unit)? = null
+    ) {
+        if (this == null) {
+            toast("NavController is null")
+            return
+        }
         NavBuilder(this).also {
             block?.invoke(it)
             it.navigate(actionId)
+        }
+    }
+
+    fun navigateSingleTop(@IdRes actionId: Int) {
+        activityNavController().navigate(actionId) {
+            clearBackStack()
         }
     }
 
@@ -138,6 +172,15 @@ interface BaseView {
         activityNavController()
             ?.previousBackStackEntry
             ?.savedStateHandle?.set("", result)
+    }
+
+    fun startClear(cls: Class<*>) {
+        baseActivity?.run {
+            val intent = Intent(this, cls)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            this.startActivity(intent)
+            this.finish()
+        }
     }
 
     /**
@@ -204,22 +247,18 @@ interface BaseView {
         this@addClickListener.addClickListener(0, listener)
     }
 
-    fun TextView.setHyperText(@StringRes res: Int, vararg args: Any?) {
-        setHyperText(string(res), * args)
-    }
-
-    fun TextView.setHyperText(s: String?, vararg args: Any?) {
+    fun TextView.setHyperText(s: String?) {
         post {
             text = try {
                 when {
                     s.isNullOrEmpty() -> null
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(
-                        s.format(*args),
+                        s,
                         Html.FROM_HTML_MODE_LEGACY
                     )
                     else -> {
                         @Suppress("DEPRECATION")
-                        Html.fromHtml(s.format(*args))
+                        Html.fromHtml(s)
                     }
                 }
             } catch (e: Throwable) {
@@ -259,7 +298,6 @@ interface BaseView {
      * Resources utils
      */
     fun color(@ColorRes res: Int): Int {
-        app.resources
         return ContextCompat.getColor(app, res)
     }
 
@@ -290,11 +328,30 @@ interface BaseView {
     }
 
     fun String.colorPrimary(): String {
-        return colorRes(R.color.colorPrimary)
+        return colorRes(R.color.color_primary)
     }
 
     fun String.bold(): String {
         return "<b>$this</b>"
     }
 
+    /**
+     * Keyboard utils
+     */
+    fun View?.hideKeyboard() {
+        this?.post {
+            val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this@hideKeyboard.windowToken, 0)
+        }
+    }
+
+    fun View?.showKeyboard() {
+        this?.post {
+            val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(this@showKeyboard, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+
 }
+

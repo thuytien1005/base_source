@@ -1,50 +1,50 @@
 package wee.digital.sample.ui.base
 
-import android.content.pm.PackageManager
 import android.os.Build
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
 import androidx.viewbinding.ViewBinding
-import wee.digital.library.extension.hideKeyboard
-import wee.digital.library.extension.showKeyboard
-import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermissionDenied
-
 
 interface FragmentView : BaseView {
 
-    val fragment: Fragment get() = this as Fragment
+    val fragment: Fragment
 
-    override val baseActivity: BaseActivity<*>? get() = fragment.activity as? BaseActivity<*>
+    /**
+     * [BaseView] implements
+     */
+    override val baseActivity: BaseActivity<*>? get() = fragment.requireActivity() as? BaseActivity<*>
 
-    override val lifecycleOwner: LifecycleOwner get() = fragment.viewLifecycleOwner
+    override val lifecycleOwner: LifecycleOwner get() = fragment
 
     override fun activityNavController(): NavController? {
         return baseActivity?.activityNavController()
     }
 
-    fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> ViewBinding): Lazy<T> {
+    fun onCreateView() = Unit
+
+    /**
+     * [FragmentView] utils
+     */
+    fun <T : ViewBinding> viewBinding(block: Inflating): Lazy<T> {
         return lazy {
             @Suppress("UNCHECKED_CAST")
             block.invoke(fragment.layoutInflater) as T
         }
     }
 
-    fun onCreateView() = Unit
-
     fun requestFocus(v: View?) {
-        launch(1000) { v?.requestFocus() }
+        launch(240) { v?.requestFocus() }
     }
 
     /**
@@ -82,19 +82,26 @@ interface FragmentView : BaseView {
         if (fragmentId != 0) {
             fragment.findNavController().popBackStack(fragmentId, inclusive)
         } else {
-            fragment.findNavController().navigateUp()
+            fragment.findNavController().popBackStack()
         }
     }
 
     fun mainNavigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
-        activityNavController()?.navigate(actionId, block)
+        val nav = activityNavController()
+        nav?.navigate(actionId, block)
+    }
+
+    fun mainNavigateNoAnim(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
+        val nav = activityNavController()
+        nav?.navigateNoAnim(actionId, block)
     }
 
     fun mainPopBackStack(@IdRes fragmentId: Int = 0, inclusive: Boolean = false) {
+        val nav = activityNavController()
         if (fragmentId != 0) {
-            activityNavController()?.popBackStack(fragmentId, inclusive)
+            nav?.popBackStack(fragmentId, inclusive)
         } else {
-            activityNavController()?.navigateUp()
+            nav?.popBackStack()
         }
     }
 
@@ -119,35 +126,15 @@ interface FragmentView : BaseView {
     }
 
     fun hideKeyboard() {
-        fragment.requireActivity().hideKeyboard()
+        fragment.view?.hideKeyboard()
     }
 
     fun showKeyboard() {
-        fragment.requireActivity().showKeyboard()
+        fragment.view?.showKeyboard()
     }
 
-    /**
-     *
-     */
-    fun observerCameraPermission(onGranted: () -> Unit) {
-        val request = ActivityResultContracts.RequestPermission()
-        val permissionLauncher = fragment.registerForActivityResult(request) { isGranted: Boolean ->
-            if (isGranted) {
-                onGranted()
-            }
-        }
-        val permission = android.Manifest.permission.CAMERA
-        val selfPms = ContextCompat.checkSelfPermission(fragment.requireContext(), permission)
-        when {
-            selfPms == PackageManager.PERMISSION_GRANTED -> {
-                onGranted()
-            }
-            fragment.shouldShowRequestPermissionRationale(permission) -> {
-                alertCameraPermissionDenied()
-            }
-            else -> {
-                permissionLauncher.launch(permission)
-            }
-        }
+    fun transition(id: Int): Transition {
+        return TransitionInflater.from(fragment.requireContext())
+            .inflateTransition(android.R.transition.move)
     }
 }

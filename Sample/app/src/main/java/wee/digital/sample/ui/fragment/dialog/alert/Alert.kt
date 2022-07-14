@@ -32,7 +32,7 @@ fun BaseView.alertNetworkError() {
 fun BaseView.alertCameraPermissionDenied() {
     showAlert {
         icon = R.drawable.ic_check
-        title = "Camera chưa sẵn sàng"
+        title = "CameraApp chưa sẵn sàng"
         message = "Để tiếp tục, hãy cho phép ứng dụng truy cập Máy ảnh của bạn."
         acceptLabel = "Cài đặt ứng dụng"
         acceptOnClick = { navigateAppSettings() }

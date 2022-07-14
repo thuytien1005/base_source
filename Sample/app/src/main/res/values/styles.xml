@@ -13,7 +13,7 @@
     <style name="Dialog.CenterLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/colorWhite</item>
+        <item name="android:background">@color/color_white</item>
         <item name="android:minHeight">260dp</item>
         <item name="android:paddingBottom">@dimen/contentMargin24</item>
         <item name="android:layout_gravity">center</item>
@@ -32,7 +32,7 @@
         <item name="strokeLineColor">#E1E1E1</item>
         <item name="radiusTopRight">@dimen/dialogRadius</item>
         <item name="radiusTopLeft">@dimen/dialogRadius</item>
-        <item name="backgroundColor">@color/colorWhite</item>
+        <item name="backgroundColor">@color/color_white</item>
     </style>
 
     <style name="Dialog.Title" parent="TextView">
@@ -100,7 +100,7 @@
     <style name="App.ProgressView">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:background">@color/colorWhite</item>
+        <item name="android:background">@color/color_white</item>
         <item name="android:src">@drawable/ic_check</item>
         <item name="android:tint">#3C3C3C</item>
     </style>
@@ -109,7 +109,7 @@
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
         <item name="android:layout_margin">@dimen/contentMargin24</item>
-        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:tint">@color/color_primary</item>
         <item name="android:src">@drawable/ic_double_arrow_down</item>
         <item name="android:padding">6dp</item>
     </style>

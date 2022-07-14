@@ -1,11 +1,10 @@
 package wee.digital.sample.ui.fragment.dialog.tip
 
-import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.transition.ChangeBounds
-import androidx.viewbinding.ViewBinding
 import wee.digital.sample.R
 import wee.digital.sample.databinding.TipBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.widget.extension.animationFadeIn
 import wee.digital.widget.extension.beginTransition
@@ -19,9 +18,7 @@ class TipFragment : MainDialogFragment<TipBinding>() {
         return R.style.App_Dialog_FullScreen
     }
 
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return TipBinding::inflate
-    }
+    override fun inflating(): Inflating = TipBinding::inflate
 
     override fun onViewCreated() {
         dialog?.window?.also { it.attributes.windowAnimations = R.style.App_DialogAnim_Alpha }

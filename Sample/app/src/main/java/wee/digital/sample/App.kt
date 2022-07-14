@@ -2,11 +2,12 @@ package wee.digital.sample
 
 import android.app.Activity
 import androidx.multidex.MultiDexApplication
-import com.example.camera.CameraApp
+import wee.digital.camera.CameraApp
 import wee.digital.library.Library
 import wee.digital.library.util.Logger
 import wee.digital.widget.Widget
 import java.lang.ref.WeakReference
+
 
 class App : MultiDexApplication() {
 

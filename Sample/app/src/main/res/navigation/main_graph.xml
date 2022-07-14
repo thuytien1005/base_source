@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/widgetsFragment"
         android:name="wee.digital.sample.ui.fragment.widgets.WidgetsFragment"
-        android:label="WidgetsFragment" />
+        android:label="WidgetsFragment"
+        tools:layout="@layout/widgets" />
     <action
         android:id="@+id/action_global_widgetsFragment"
         app:destination="@id/widgetsFragment" />
@@ -16,7 +17,8 @@
     <fragment
         android:id="@+id/faceMeshFragment"
         android:name="wee.digital.sample.ui.fragment.face.mesh.FaceMeshFragment"
-        android:label="FaceMeshFragment" />
+        android:label="FaceMeshFragment"
+        tools:layout="@layout/face_mesh" />
     <action
         android:id="@+id/action_global_faceMeshFragment"
         app:destination="@id/faceMeshFragment" />
@@ -24,7 +26,8 @@
     <fragment
         android:id="@+id/faceRegFragment"
         android:name="wee.digital.sample.ui.fragment.face.reg.FaceRegFragment"
-        android:label="FaceRegFragment" />
+        android:label="FaceRegFragment"
+        tools:layout="@layout/face_reg" />
     <action
         android:id="@+id/action_global_faceRegFragment"
         app:destination="@id/faceRegFragment" />
@@ -37,5 +40,23 @@
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
+
+    <fragment
+        android:id="@+id/camFragment"
+        android:name="wee.digital.sample.ui.fragment.cam.CamFragment"
+        android:label="CamFragment"
+        tools:layout="@layout/cam" />
+    <action
+        android:id="@+id/action_global_camFragment"
+        app:destination="@id/camFragment" />
+
+    <fragment
+        android:id="@+id/rsFragment"
+        android:name="wee.digital.sample.ui.fragment.rs.RsFragment"
+        android:label="RsFragment"
+        tools:layout="@layout/rs"  />
+    <action
+        android:id="@+id/action_global_rsFragment"
+        app:destination="@id/rsFragment" />
 
 </navigation>

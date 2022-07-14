@@ -44,7 +44,7 @@ class MainActivity : BaseActivity<MainBinding>(),
         window.exitTransition = null
         vb.includeAppBar.also {
             it.init(this)
-            it.progressBar.progressDrawable.tintRes(R.color.colorPrimary)
+            it.progressBar.progressDrawable.tintRes(R.color.color_primary)
         }
     }
 
@@ -68,7 +68,7 @@ class MainActivity : BaseActivity<MainBinding>(),
         }
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+    /*override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev?.action == MotionEvent.ACTION_DOWN) {
             val v: View? = currentFocus
             if (v is EditText) {
@@ -82,7 +82,7 @@ class MainActivity : BaseActivity<MainBinding>(),
             }
         }
         return super.dispatchTouchEvent(ev)
-    }
+    }*/
 
 
 }

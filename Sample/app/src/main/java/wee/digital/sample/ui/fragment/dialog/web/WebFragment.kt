@@ -1,13 +1,12 @@
 package wee.digital.sample.ui.fragment.dialog.web
 
-import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.viewbinding.ViewBinding
 import wee.digital.sample.databinding.WebBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.widget.extension.editConstraint
 
@@ -20,9 +19,7 @@ class WebFragment : MainDialogFragment<WebBinding>() {
     /**
      * [MainDialogFragment] implements
      */
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return WebBinding::inflate
-    }
+    override fun inflating(): Inflating = WebBinding::inflate
 
     override fun onViewCreated() {
         addClickListener(vb.viewClose)

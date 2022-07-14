@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
 import wee.digital.library.extension.lightSystemWidgets
@@ -145,6 +146,8 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(),
     /**
      * [FragmentView] implements
      */
+    final override val fragment: Fragment get() = this
+
     final override val uiJobList: MutableList<Job> = mutableListOf()
 
     final override val backPressedCallback: OnBackPressedCallback by lazy { getBackPressCallBack() }

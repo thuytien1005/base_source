@@ -1,10 +1,9 @@
 package wee.digital.sample.ui.fragment.dialog.selectable
 
-import android.view.LayoutInflater
-import androidx.viewbinding.ViewBinding
 import wee.digital.sample.R
 import wee.digital.sample.databinding.SelectableBinding
 import wee.digital.sample.databinding.SelectableItemBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainDialogFragment
 import wee.digital.widget.adapter.BaseSelectableAdapter
 import wee.digital.widget.adapter.InflaterInvokerBinding
@@ -17,9 +16,7 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
     /**
      * [MainDialogFragment] implements
      */
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return SelectableBinding::inflate
-    }
+    override fun inflating(): Inflating = SelectableBinding::inflate
 
     override fun onViewCreated() {
     }
@@ -100,7 +97,7 @@ class SelectableFragment : MainDialogFragment<SelectableBinding>() {
         }
 
         override fun SelectableItemBinding.onBindSelectedItem(item: Selectable, position: Int) {
-            selectableTextView.strokeLineColor = color(R.color.colorPrimary)
+            selectableTextView.strokeLineColor = color(R.color.color_primary)
             imageViewCheck.setImageResource(R.drawable.ic_checkbox_checked2)
         }
 

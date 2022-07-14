@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <wee.digital.camera.view.RsSurfaceView
+        android:id="@+id/rsSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextUrl"
+        style="@style/MatchWidth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rsSurfaceView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewError"
+        style="@style/MatchWidth"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:textColor="#EC4040"
+        android:textSize="@dimen/_8ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextUrl"
+        tools:text="error text goes here" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewStatus"
+        style="@style/WrapContent"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/viewConnect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viewConnect"
+        tools:text="status" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/viewConnect"
+        style="@style/WrapContent"
+        android:text="connect"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewError" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/viewSend"
+        style="@style/WrapContent"
+        android:text="send"
+        app:layout_constraintStart_toEndOf="@+id/viewConnect"
+        app:layout_constraintTop_toBottomOf="@+id/textViewError" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_4sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewConnect">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewTimeSend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#42A5F5"
+            android:textSize="@dimen/_8ssp"
+            android:textStyle="bold"
+            tools:text="12:13:50:000" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewMessageSend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_weight="4"
+            android:maxLines="1"
+            android:textSize="@dimen/_8ssp"
+            tools:text="..." />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/_4sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewTimeReceive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#42A5F5"
+            android:textSize="@dimen/_8ssp"
+            android:textStyle="bold"
+            tools:text="12:13:50:000" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewMessageReceive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_weight="4"
+            android:maxLines="1"
+            android:textSize="@dimen/_8ssp"
+            tools:text="..." />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

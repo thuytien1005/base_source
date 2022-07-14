@@ -35,7 +35,7 @@ class AppTextView : AppCompatTextView {
             if (errorText.isNullOrEmpty()) {
                 clearColor()
             } else {
-                setTextColorRes(R.color.colorAccent, R.color.colorAccent)
+                setTextColorRes(R.color.color_accent, R.color.color_accent)
             }
         }
         invalidate()

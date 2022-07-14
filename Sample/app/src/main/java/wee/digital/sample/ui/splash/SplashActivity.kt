@@ -1,15 +1,12 @@
 package wee.digital.sample.ui.splash
 
 import android.view.LayoutInflater
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import wee.digital.library.extension.darkSystemWidgets
 import wee.digital.library.extension.networkDisconnected
 import wee.digital.library.extension.start
-import wee.digital.sample.R
 import wee.digital.sample.data.firebase.onFirebaseAppInit
 import wee.digital.sample.databinding.SplashBinding
 import wee.digital.sample.ui.base.BaseActivity
@@ -32,10 +29,6 @@ class SplashActivity : BaseActivity<SplashBinding>() {
 
     override fun inflating(): (LayoutInflater) -> ViewBinding {
         return SplashBinding::inflate
-    }
-
-    override fun activityNavController(): NavController? {
-        return findNavController(R.id.splashContainerView)
     }
 
     override fun onViewCreated() {

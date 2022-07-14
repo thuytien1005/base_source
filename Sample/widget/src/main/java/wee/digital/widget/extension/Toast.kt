@@ -40,11 +40,11 @@ fun showToast(theme: Int, message: String? = null, duration: Long = 2000) {
         when (theme) {
             TOAST_SUCCESS -> {
                 bind.imageViewIcon.setImageResource(R.drawable.ic_toast_success)
-                bind.toastLayout.strokeLineColor = color(R.color.colorSuccess)
+                bind.toastLayout.strokeLineColor = color(R.color.color_success)
             }
             TOAST_FAILURE -> {
                 bind.imageViewIcon.setImageResource(R.drawable.ic_toast_failure)
-                bind.toastLayout.strokeLineColor = color(R.color.colorError)
+                bind.toastLayout.strokeLineColor = color(R.color.color_error)
             }
         }
         bind.textViewMessage.text = message

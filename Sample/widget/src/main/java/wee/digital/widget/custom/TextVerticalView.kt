@@ -36,7 +36,7 @@ class TextVerticalView : AppCustomView<TextVerticalBinding> {
         text = types.text
         vb.textViewProperty.setTextColor(types.textColorHint(color(R.color.colorHint)))
 
-        val drawableTint = types.drawableTint(color(R.color.colorPrimaryLight))
+        val drawableTint = types.drawableTint(color(R.color.color_primary_light))
         vb.imageViewDrawableStart.backgroundTint(drawableTint)
         val tint = types.tint(Color.TRANSPARENT)
         if (tint != Color.TRANSPARENT) {

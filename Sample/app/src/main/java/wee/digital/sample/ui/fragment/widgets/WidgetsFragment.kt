@@ -1,20 +1,17 @@
 package wee.digital.sample.ui.fragment.widgets
 
-import android.view.LayoutInflater
-import androidx.viewbinding.ViewBinding
 import wee.digital.library.extension.darkSystemWidgets
 import wee.digital.library.extension.start
 import wee.digital.library.extension.toast
 import wee.digital.sample.R
 import wee.digital.sample.databinding.WidgetsBinding
 import wee.digital.sample.ui.base.BaseFragment
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainActivity
 
 class WidgetsFragment : BaseFragment<WidgetsBinding>() {
 
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return WidgetsBinding::inflate
-    }
+    override fun inflating(): Inflating = WidgetsBinding::inflate
 
     override fun onViewCreated() {
         darkSystemWidgets()
@@ -32,6 +29,12 @@ class WidgetsFragment : BaseFragment<WidgetsBinding>() {
      *
      */
     private fun configFragmentView() {
+        vb.viewRs.addClickListener {
+            mainNavigate(R.id.action_global_rsFragment)
+        }
+        vb.viewCam.addClickListener {
+            mainNavigate(R.id.action_global_camFragment)
+        }
         vb.viewFaceReg.addClickListener {
             mainNavigate(R.id.action_global_faceRegFragment)
         }

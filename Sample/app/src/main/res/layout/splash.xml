@@ -17,16 +17,5 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/drw_app_launch" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/splashContainerView"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/splash_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

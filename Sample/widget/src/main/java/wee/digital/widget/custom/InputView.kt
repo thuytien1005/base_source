@@ -35,7 +35,7 @@ class InputView : AppCustomView<InputBinding>,
 
     private val colorFocused get() = ContextCompat.getColor(context, R.color.colorInputFocused)
     private val colorUnFocus get() = ContextCompat.getColor(context, R.color.colorInputUnFocused)
-    private val colorError get() = ContextCompat.getColor(context, R.color.colorError)
+    private val colorError get() = ContextCompat.getColor(context, R.color.color_error)
     private val colorHint get() = ContextCompat.getColor(context, R.color.colorInputHint)
 
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)
@@ -604,7 +604,7 @@ class InputView : AppCustomView<InputBinding>,
             dialog.minDate = Calendar.getInstance().also { it.time = arg.minDate }
             dialog.maxDate = Calendar.getInstance().also { it.time = arg.maxDate }
             dialog.version = DatePickerDialog.Version.VERSION_1
-            dialog.accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
+            dialog.accentColor = ContextCompat.getColor(context, R.color.color_primary)
             dialog.show(activity.supportFragmentManager, "DatePickerDialog")
         }
         vb.inputImageViewEnd.addClickListener {

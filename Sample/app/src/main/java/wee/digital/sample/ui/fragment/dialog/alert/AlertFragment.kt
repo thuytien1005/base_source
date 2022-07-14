@@ -1,10 +1,9 @@
 package wee.digital.sample.ui.fragment.dialog.alert
 
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.viewbinding.ViewBinding
 import wee.digital.sample.databinding.AlertBinding
+import wee.digital.sample.ui.base.Inflating
 import wee.digital.sample.ui.main.MainDialogFragment
 
 open class AlertFragment : MainDialogFragment<AlertBinding>() {
@@ -14,9 +13,7 @@ open class AlertFragment : MainDialogFragment<AlertBinding>() {
     /**
      * [MainDialogFragment] implements
      */
-    override fun inflating(): (LayoutInflater) -> ViewBinding {
-        return AlertBinding::inflate
-    }
+    override fun inflating(): Inflating = AlertBinding::inflate
 
     override fun onViewCreated() {
     }

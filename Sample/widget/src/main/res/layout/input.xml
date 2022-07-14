@@ -66,7 +66,7 @@
         android:layout_width="4dp"
         android:layout_height="4dp"
         android:background="@drawable/drw_oval"
-        android:backgroundTint="@color/colorError"
+        android:backgroundTint="@color/color_error"
         app:layout_constraintBottom_toBottomOf="@id/inputTextViewTitle"
         app:layout_constraintStart_toEndOf="@id/inputTextViewTitle"
         app:layout_constraintTop_toTopOf="@id/inputTextViewTitle" />
@@ -75,7 +75,7 @@
         android:id="@+id/inputImageViewEnd"
         android:layout_width="@dimen/rowSize"
         android:layout_height="@dimen/rowSize"
-        android:background="@color/colorTransparent"
+        android:background="@color/color_transparent"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/inputEditText"
         app:layout_constraintEnd_toEndOf="@+id/inputEditText"

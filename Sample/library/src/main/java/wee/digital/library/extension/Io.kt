@@ -20,15 +20,17 @@ fun Closeable.safeClose() {
     }
 }
 
-val packageDir: File
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        app.getExternalFilesDir(null)!!
-    } else {
-        @Suppress("DEPRECATION")
-        Environment.getExternalStorageDirectory()
+val externalDir: File
+    get() {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            app.getExternalFilesDir(null)!!
+        } else {
+            @Suppress("DEPRECATION")
+            Environment.getExternalStorageDirectory()
+        }
     }
 
-val externalPath: String get() = packageDir.absolutePath
+val externalPath: String get() = externalDir.absolutePath
 
 fun packageDir(dir: String, fileName: String? = null): File {
     val parent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -101,7 +103,7 @@ fun saveBitmap(fileName: String, bitmap: Bitmap) {
 }
 
 fun newFile(fileName: String): File {
-    return File(packageDir, fileName)
+    return File(externalDir, fileName)
 }
 
 fun open(file: File) {
@@ -118,7 +120,7 @@ fun copyFile(fileName: String) {
     var fos: FileOutputStream? = null
     try {
         inputStream = app.assets.open(fileName)
-        fos = FileOutputStream("${packageDir.absolutePath}/$fileName")
+        fos = FileOutputStream("${externalDir.absolutePath}/$fileName")
         val buffer = ByteArray(1024)
         var read: Int = inputStream.read(buffer)
         while (read >= 0) {
@@ -133,21 +135,21 @@ fun copyFile(fileName: String) {
 }
 
 fun createFileIfNotExist(fileName: String) {
-    val dir = File(packageDir.absolutePath)
+    val dir = File(externalDir.absolutePath)
     if (!dir.exists()) {
         dir.mkdirs()
     }
-    val file = File(packageDir, fileName)
+    val file = File(externalDir, fileName)
     if (file.exists()) return
     copyFile(fileName)
 }
 
 fun getFile(fileName: String): File {
-    return File(packageDir, fileName)
+    return File(externalDir, fileName)
 }
 
 fun isExistFile(fileName: String): Boolean {
-    return File(packageDir, fileName).exists()
+    return File(externalDir.path, fileName).exists()
 }
 
 fun createFile(fileName: String) {
@@ -166,7 +168,7 @@ fun createFile(fileName: String) {
 @RequiresPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 fun writeFile(fileName: String, bytes: ByteArray): File? {
     return try {
-        val file = File(packageDir, fileName)
+        val file = File(externalDir.path, fileName)
         val stream = FileOutputStream(file)
         stream.write(bytes)
         stream.flush()
@@ -179,7 +181,7 @@ fun writeFile(fileName: String, bytes: ByteArray): File? {
 
 @RequiresPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
 fun readFile(fileName: String): String {
-    val file = File(packageDir, fileName)
+    val file = File(externalDir.path, fileName)
     val text = java.lang.StringBuilder()
     try {
         val br = BufferedReader(FileReader(file))

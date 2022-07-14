@@ -4,15 +4,15 @@
     <style name="App" />
 
     <style name="App.Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@color/colorWhite</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:navigationBarColor">@color/color_white</item>
         <item name="android:splitMotionEvents">false</item>
-        <item name="android:statusBarColor">@color/colorWhite</item>
+        <item name="android:statusBarColor">@color/color_white</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowBackground">@color/color_white</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -26,8 +26,8 @@
 
     <style name="App.Theme.Launch" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/drw_app_launch</item>
-        <item name="android:statusBarColor">@color/colorWhite</item>
-        <item name="android:navigationBarColor">@color/colorWhite</item>
+        <item name="android:statusBarColor">@color/color_white</item>
+        <item name="android:navigationBarColor">@color/color_white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>

@@ -67,7 +67,6 @@ class FaceRegRender : BaseRender() {
         }*/
     }
 
-
     private fun drawIris(
         landmarks: List<NormalizedLandmark>,
         connections: ImmutableSet<Connection>,

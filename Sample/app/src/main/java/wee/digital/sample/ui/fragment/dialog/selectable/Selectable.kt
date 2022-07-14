@@ -10,7 +10,7 @@ import wee.digital.widget.extension.color
 open class Selectable(
     val id: String = "",
     var ic: Int = R.drawable.ic_check,
-    var icColor: Int = color(R.color.colorPrimary),
+    var icColor: Int = color(R.color.color_primary),
     var icBackground: Int = Color.WHITE,
     val text: String? = null,
     val description: String? = null,

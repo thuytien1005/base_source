@@ -5,23 +5,16 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import wee.digital.library.extension.SimpleNetworkCallback
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.library.extension.networkConnected
 import wee.digital.library.extension.registerNetworkCallback
-import wee.digital.library.util.Logger
 import wee.digital.sample.data.api.ApiResultHandler
 import wee.digital.widget.app
 
-
 abstract class BaseVM : ViewModel() {
-
-    val log by lazy { Logger(this::class.java.simpleName) }
 
     val networkAvailableLiveData: SingleLiveData<Boolean> by lazy {
         val liveData = SingleLiveData(networkConnected)
@@ -47,7 +40,7 @@ abstract class BaseVM : ViewModel() {
     }
 
     fun <T> ApiResultHandler<T>.launch(): ApiResultHandler<T> {
-        return launch(this@BaseVM.viewModelScope)
+        return launch(viewModelScope)
     }
 
     fun JsonObject.put(key: String, value: String?): JsonObject {
@@ -63,4 +56,17 @@ abstract class BaseVM : ViewModel() {
         }
     }
 
+    fun launch(delayInterval: Long, block: suspend CoroutineScope.() -> Unit): Job {
+        val job = viewModelScope.launch(Dispatchers.Main) {
+            delay(delayInterval)
+            block()
+        }
+        return job
+    }
+
+    fun launch(block: suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.Main) {
+            block()
+        }
+    }
 }

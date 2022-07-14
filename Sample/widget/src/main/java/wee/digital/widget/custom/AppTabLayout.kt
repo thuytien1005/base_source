@@ -38,7 +38,7 @@ class AppTabLayout : ConstraintLayout {
         val isChanged = selectedView?.id != value.id
         selectedView = value
         value.bold()
-        value.textColorRes(R.color.colorBlack)
+        value.textColorRes(R.color.color_black)
         this.children.iterator().forEach { unSelectedView ->
             if (unSelectedView is TextView && unSelectedView.id != value.id) {
                 unSelectedView.regular()
@@ -106,7 +106,7 @@ class AppTabLayout : ConstraintLayout {
 
     private fun addTabSelectionBar() {
         selectionBarView = View(context).also {
-            it.setBackgroundResource(R.color.colorPrimary)
+            it.setBackgroundResource(R.color.color_primary)
             it.id = View.generateViewId()
         }
         this.addView(selectionBarView)

@@ -50,6 +50,8 @@ android {
     }
     productFlavors {
         all { flavor ->
+            println "Root project: ${project.rootProject}"
+            println "Root Dir: ${project.rootDir}"
             task("${flavor.name}GoogleServices", type: Copy) {
                 description = 'Switches to google-services.json depending on flavor'
                 from "src/${flavor.name}"

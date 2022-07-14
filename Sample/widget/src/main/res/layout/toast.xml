@@ -19,7 +19,7 @@
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         app:radius="@dimen/rowRadius"
-        app:strokeLineColor="@color/colorSuccess"
+        app:strokeLineColor="@color/color_success"
         app:strokeLineWidth="2dp">
 
         <androidx.appcompat.widget.AppCompatImageView

@@ -83,7 +83,7 @@ fun Activity.download(url: String, file: File, listener: DownloadListener): Long
 }
 
 fun Activity.download(url: String, fileName: String, listener: DownloadListener): Long {
-    return download(url, File(packageDir, fileName), listener)
+    return download(url, File(externalDir, fileName), listener)
 }
 
 fun Activity.downloadIfNotExist(url: String, file: File, listener: DownloadListener): Long {
@@ -96,5 +96,5 @@ fun Activity.downloadIfNotExist(url: String, file: File, listener: DownloadListe
 }
 
 fun Activity.downloadIfNotExist(url: String, fileName: String, listener: DownloadListener): Long {
-    return downloadIfNotExist(url, File(packageDir, fileName), listener)
+    return downloadIfNotExist(url, File(externalDir, fileName), listener)
 }

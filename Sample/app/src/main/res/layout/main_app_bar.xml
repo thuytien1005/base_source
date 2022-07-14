@@ -5,7 +5,7 @@
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorTransparent"
+    android:background="@color/color_transparent"
     android:fitsSystemWindows="false"
     android:minHeight="0dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -17,7 +17,7 @@
         android:layout_height="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/colorPrimary"
+        tools:background="@color/color_primary"
         tools:expanded="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,18 +83,6 @@
             app:layout_constraintTop_toTopOf="@+id/viewBackground"
             tools:text="@string/app_name" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageViewLogo"
-            style="@style/App.Logo"
-            android:layout_marginStart="@dimen/contentMargin24"
-            android:scaleType="fitStart"
-            android:transformPivotX="40dp"
-            android:transformPivotY="50dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/viewLeftButton1"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <FrameLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
@@ -121,7 +109,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:max="100"
-                    android:secondaryProgressTint="@color/colorPrimary"
+                    android:secondaryProgressTint="@color/color_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
