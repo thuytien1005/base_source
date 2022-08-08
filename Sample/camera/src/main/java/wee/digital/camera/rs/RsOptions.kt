@@ -29,15 +29,13 @@ object RsOptions {
                 colorConfig.update(1280, 720, 15)
                 depthConfig.update(1280, 720, 6)
             }
-            ProductId.SR300, ProductId.SR305 -> {
+            /*ProductId.SR300, ProductId.SR305 -> {
                 colorConfig.update(1280, 720, 30)
                 depthConfig.update(640, 480, 30)
-            }
+            }*/
             else -> {
                 colorConfig.update(1280, 720, 30)
                 depthConfig.update(640, 480, 30)
-                //colorConfig.update(1920, 1080, 30)
-                //depthConfig.update(640, 480, 30)
             }
         }
         updateStreamConfig(device)

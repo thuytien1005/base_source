@@ -1,5 +1,8 @@
 package wee.digital.sample.ui.fragment.rs
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import wee.digital.camera.rs.FrameSnapshot
 import wee.digital.camera.rs.RsController
 import wee.digital.camera.rs.RsStreamer
@@ -23,6 +26,7 @@ class RsFragment : MainFragment<RsBinding>(),
     override fun onViewCreated() {
         RsController.initContext()
         RsController.startPipeline()
+        socketVM.socketUrlLiveData.value = "172.16.16.181:9090"
     }
 
 
@@ -92,18 +96,36 @@ class RsFragment : MainFragment<RsBinding>(),
      * [RsStreamer.StreamListener] implements
      */
     override fun onRsFrameSnapshot(snapshot: FrameSnapshot) {
-       vb.rsSurfaceView.setBitmap(snapshot.colorData.bitmap)
+        vb.rsSurfaceView.setBitmap(snapshot.colorData.bitmap)
+        sendData(snapshot)
     }
 
+private var progress: Boolean = false
+    private fun sendData(snapshot: FrameSnapshot) {
+        if (!socketVM.isConnected || progress) {
+            snapshot.close()
+            return
+        }
+        progress = true
+        lifecycleScope.launch(Dispatchers.IO){
+            val imageData: ByteArray? = snapshot.colorData.matBytes
+            if (imageData==null){
+                snapshot.close()
+                isProcessing = false
+                return@launch
+            }
+            socketVM.receivedMessage = false
+            log.d("send --------------------------------------------------")
+            val sizeData: ByteArray = numberToByteArray(imageData.size.toUInt())
 
-    private fun sendData() {
-        val imageData: ByteArray = byteArrayOf()
-        log.d("data --------------------------------------------------")
-        val sizeData: ByteArray = numberToByteArray(imageData.size.toUInt())
-        log.d("send SIZE_DATA: ${sizeData.toHexString()}")
-        log.d("send IMAGE_DATA length: ${imageData.size}")
-        log.d("\n")
-        socketVM.send(sizeData + imageData)
+            log.d("send SIZE_DATA: ${sizeData.toHexString()}")
+            log.d("send IMAGE_DATA length: ${imageData.size}")
+            log.d("\n")
+            socketVM.send(sizeData + imageData)
+            delay(1000)
+            isProcessing = false
+        }
+
     }
 
     private fun numberToByteArray(data: UInt, size: Int = 4): ByteArray {

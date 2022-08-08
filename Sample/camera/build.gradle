@@ -38,7 +38,7 @@ repositories {
     maven { url "https://maven.google.com" }
     maven { url "https://jitpack.io" }
     maven{ url "https://egiintel.jfrog.io/artifactory/librealsense" }
-    maven{ url "https://dl.bintray.com/intel-realsense/librealsense" }
+    //maven{ url "https://dl.bintray.com/intel-realsense/librealsense" }
 }
 
 dependencies {
@@ -86,13 +86,15 @@ dependencies {
     // Face recognize
     implementation "com.google.mlkit:face-detection:16.1.2"
 
+    implementation "com.github.warkiz.widget:indicatorseekbar:2.1.2"
+
     // quick bird studios
     implementation "com.quickbirdstudios:opencv:4.3.0"
     implementation "com.quickbirdstudios:yuvtomat:1.1.0"
 
     //RealSense camera
     implementation "com.intel.realsense:librealsense:2.49.0@aar"
-    implementation "com.github.warkiz.widget:indicatorseekbar:2.1.2"
+
 
     def camerax_version = "1.1.0"
     implementation "androidx.camera:camera-core:${camerax_version}"

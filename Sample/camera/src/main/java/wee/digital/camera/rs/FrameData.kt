@@ -1,6 +1,7 @@
 package wee.digital.camera.rs
 
 import android.graphics.Bitmap
+import androidx.core.graphics.green
 import com.intel.realsense.librealsense.Extension
 import com.intel.realsense.librealsense.Frame
 import com.intel.realsense.librealsense.VideoFrame
@@ -8,14 +9,18 @@ import org.opencv.android.Utils
 import org.opencv.core.Core
 import org.opencv.core.CvType
 import org.opencv.core.Mat
+import org.opencv.core.MatOfByte
+import wee.digital.camera.rs.FrameData.Companion.toByteArray
 import wee.digital.camera.util.clone
 import java.io.ByteArrayOutputStream
 
 class FrameData {
 
     var bitmap: Bitmap? = null
+
     var mat: Mat? = null
-    val bytes: ByteArray
+
+    val jpegBytes: ByteArray
         get() {
             bitmap ?: return byteArrayOf()
             return try {
@@ -29,6 +34,8 @@ class FrameData {
                 byteArrayOf()
             }
         }
+
+    val matBytes: ByteArray? get() = mat?.toByteArray()
 
     val safeBitmap: Bitmap?
         get() {
@@ -96,6 +103,12 @@ class FrameData {
             } catch (ignore: Exception) {
             }
             return null
+        }
+
+        fun Mat.toByteArray(): ByteArray {
+            val bytes = ByteArray(channels() * cols() * rows())
+            this.get(0,0,bytes)
+            return bytes
         }
     }
 

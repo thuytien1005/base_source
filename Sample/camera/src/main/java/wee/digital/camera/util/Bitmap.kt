@@ -2,6 +2,7 @@ package wee.digital.camera.util
 
 import android.graphics.*
 import android.media.Image
+import org.opencv.core.Mat
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
@@ -123,3 +124,4 @@ fun Image.rgba8888ToBitmap(): Bitmap? {
     bitmap.copyPixelsFromBuffer(buffer)
     return bitmap
 }
+

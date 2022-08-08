@@ -1,14 +1,20 @@
 package wee.digital.sample.ui.fragment.cam
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.media.Image
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
+import com.google.android.gms.tasks.Tasks
+import com.google.mlkit.vision.common.InputImage
 import wee.digital.camera.*
-import com.quickbirdstudios.yuv2mat.UnsupportedImageFormatException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import wee.digital.camera.util.nv21ToBitmap
+import wee.digital.camera.util.rotate
+import wee.digital.camera.util.yuv420toNV21
 import wee.digital.library.extension.onGrantedPermission
 import wee.digital.library.extension.toast
 import wee.digital.sample.databinding.CamBinding
@@ -37,7 +43,6 @@ class CamFragment : MainFragment<CamBinding>(),
         cameraController = CameraController(this)
         onGrantedPermission(
             android.Manifest.permission.CAMERA,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             onGranted = {
                 cameraController.start(lifecycleOwner)
             }, onDenied = {
@@ -105,8 +110,9 @@ class CamFragment : MainFragment<CamBinding>(),
     private var isProcessing: Boolean = false
 
 
+    @SuppressLint("UnsafeOptInUsageError")
     override fun onImageAnalysis(imageProxy: ImageProxy) {
-        if (isProcessing || !socketVM.isConnected) {
+        /*if (isProcessing || !socketVM.isConnected) {
             imageProxy.close()
             return
         }
@@ -124,12 +130,27 @@ class CamFragment : MainFragment<CamBinding>(),
                 log.d(e.message)
                 imageProxy.close()
             }
-        }
+        }*/
 
+        lifecycleScope.launch(Dispatchers.IO){
+            try {
+                val image: Image = imageProxy.image!!
+                val visionImage = InputImage.fromMediaImage(image, imageProxy.imageInfo.rotationDegrees)
+
+                val bitmap: Bitmap? = image.yuv420toNV21()
+                    .nv21ToBitmap(imageProxy.width, imageProxy.height)
+                    .rotate(visionImage.rotationDegrees)
+                withContext(Dispatchers.Main){
+                    vb.imageViewSend.setImageBitmap(bitmap)
+                }
+            }catch (e: Exception){
+
+            }
+            imageProxy.close()
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    @Throws(UnsupportedImageFormatException::class)
     private fun sendData(imageProxy: ImageProxy) {
 
         val image: Image = imageProxy.image ?: throw NullPointerException()

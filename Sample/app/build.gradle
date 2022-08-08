@@ -168,6 +168,8 @@ dependencies {
     implementation 'com.google.mediapipe:facedetection:latest.release'
     implementation 'com.google.mediapipe:facemesh:latest.release'
 
+    //RealSense camera
+    implementation "com.intel.realsense:librealsense:2.49.0@aar"
 }
 
 afterEvaluate {

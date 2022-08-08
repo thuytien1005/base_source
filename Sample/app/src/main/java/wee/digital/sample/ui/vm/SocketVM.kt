@@ -8,7 +8,9 @@ import kotlinx.coroutines.launch
 import wee.digital.library.extension.SingleLiveData
 import wee.digital.sample.log
 import wee.digital.sample.ui.base.BaseVM
-import java.io.*
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -16,7 +18,7 @@ import java.net.Socket
 
 class SocketVM : BaseVM() {
 
-    val socketUrlLiveData = MutableLiveData("172.16.16.181:9090")
+    val socketUrlLiveData = MutableLiveData("")
     val connectionLiveData = MutableLiveData(SocketStatus.closed)
     val sendLiveData = SingleLiveData<String?>()
     val messageLiveData = SingleLiveData<String?>()
@@ -24,10 +26,12 @@ class SocketVM : BaseVM() {
 
     val isConnected: Boolean get() = socket != null
     private var socket: Socket? = null
-    private var printWriter: PrintWriter? = null
-    private var dataOutputStream : DataOutputStream?=null
+    private var dataOutputStream: DataOutputStream? = null
     private var bufferedReader: BufferedReader? = null
     private var mRun: Boolean = false
+
+    @Volatile
+    var receivedMessage: Boolean = true
 
     fun connect(url: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -38,17 +42,18 @@ class SocketVM : BaseVM() {
                 val port = url.substringAfterLast(":").toInt()
                 val inetAddress: InetAddress = InetAddress.getByName(endpoint)
                 socket?.connect(InetSocketAddress(inetAddress, port), 5000)
-                /*printWriter = PrintWriter(
-                    BufferedWriter(OutputStreamWriter(socket!!.getOutputStream())),
-                    true
-                )*/
                 dataOutputStream = DataOutputStream(socket!!.getOutputStream())
                 bufferedReader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
                 mRun = true
                 connectionLiveData.postValue(SocketStatus.opened)
                 while (mRun) {
-                    bufferedReader?.readLine()?.also {
-                        messageLiveData.postValue(it)
+                    try {
+                        bufferedReader?.readLine()?.also {
+                            messageLiveData.postValue(it.length.toString())
+                            receivedMessage = true
+                        }
+                    } catch (e: Exception) {
+                        errorLiveData.postValue(e.message)
                     }
                     delay(50)
                 }
@@ -63,7 +68,6 @@ class SocketVM : BaseVM() {
 
     fun disconnect() {
         mRun = false
-        printWriter = null
         dataOutputStream = null
         bufferedReader = null
         socket?.close()
@@ -76,15 +80,15 @@ class SocketVM : BaseVM() {
     }
 
     fun send(message: ByteArray) {
-        //log.d("socket send ByteArray: ${message.size}")
+        receivedMessage = false
         sendLiveData.postValue("${message.size}")
-        viewModelScope.launch(Dispatchers.IO){
-           try {
-               dataOutputStream?.write(message)
-               dataOutputStream?.flush()
-           }catch (e: Exception){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dataOutputStream?.write(message)
+                dataOutputStream?.flush()
+            } catch (e: Exception) {
 
-           }
+            }
         }
     }
 
