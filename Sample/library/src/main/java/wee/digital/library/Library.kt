@@ -1,11 +1,13 @@
 package wee.digital.library
 
 import android.app.Application
+import wee.digital.library.extension.registerNetworkCallback
 
 object Library {
 
     fun init(application: Application) {
         mApp = application
+        registerNetworkCallback()
     }
 }
 

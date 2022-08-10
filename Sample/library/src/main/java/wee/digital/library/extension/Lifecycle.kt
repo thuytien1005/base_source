@@ -1,6 +1,7 @@
 package wee.digital.library.extension
 
 import android.app.Activity
+import android.os.Looper
 import android.view.Window
 import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
@@ -67,7 +68,15 @@ open class SingleLiveData<T> : MediatorLiveData<T> {
     @MainThread
     override fun setValue(t: T?) {
         observers.forEach { it.value.forEach { wrapper -> wrapper.newValue() } }
-        super.setValue(t)
+        try {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                super.setValue(t)
+            } else {
+                super.postValue(t)
+            }
+        } catch (e: Exception) {
+            super.postValue(t)
+        }
     }
 
     /**
@@ -75,6 +84,12 @@ open class SingleLiveData<T> : MediatorLiveData<T> {
      */
     @MainThread
     fun call() {
+        value = null
+    }
+
+    val isFalse  : Boolean get() = value!=true
+
+    fun clear(){
         value = null
     }
 

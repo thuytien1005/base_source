@@ -28,6 +28,58 @@ fun <T> List<T>?.join(collection: Collection<T>?): List<T>? {
     return if (list.isEmpty()) return null else list
 }
 
+fun <T, R> List<T>?.convert(block: (T) -> R?): List<R>? {
+    val list = mutableListOf<R>()
+    this?.foreachCatching {
+        val r = block(it)
+        if (r != null) {
+            list.add(r)
+        }
+    }
+    if (list.isEmpty())  return null
+    return list
+}
+
+fun <T, R> Iterable<T>?.convert(block: (T) -> R?): List<R>? {
+    val list = mutableListOf<R>()
+    this?.foreachCatching {
+        val r = block(it)
+        if (r != null) {
+            list.add(r)
+        }
+    }
+    if (list.isEmpty())  return null
+    return list
+}
+
+fun <T, R> MutableIterator<T>?.convert(block: (T) -> R?): List<R>? {
+    val list = mutableListOf<R>()
+    this?.foreachCatching {
+        val r = block(it)
+        if (r != null) {
+            list.add(r)
+        }
+    }
+    if (list.isEmpty())  return null
+    return list
+}
+
+fun <T> Iterable<T>.foreachCatching(block: (T) -> Unit) {
+    for (item in this) try {
+        block(item)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+fun <T> MutableIterator<T>.foreachCatching(block: (T) -> Unit) {
+    for (item in this) try {
+        block(item)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
 /**
  * Typed T should be override method toString() : String
  */
@@ -37,6 +89,7 @@ fun <T> Collection<T>?.search(
 ): List<T>? {
     return this?.filter { searchProperty(it).like(s) }
 }
+
 
 private fun String?.like(s: String?): Boolean {
     val left: String = this.normalizer() ?: return false

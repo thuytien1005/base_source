@@ -42,6 +42,6 @@ fun BaseView.showSelectable(block: SelectableBlock) {
     }
     vm.showDialogJob?.cancel()
     vm.showDialogJob = launch(300) {
-        show(SelectableFragment())
+       baseActivity?.show(SelectableFragment(),"selectable")
     }
 }

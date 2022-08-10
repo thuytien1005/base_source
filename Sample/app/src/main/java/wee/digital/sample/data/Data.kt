@@ -1,4 +1,4 @@
-package wee.digital.sample.shared
+package wee.digital.sample.data
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot

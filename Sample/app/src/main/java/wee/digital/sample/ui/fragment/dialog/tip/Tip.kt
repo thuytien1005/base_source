@@ -12,6 +12,6 @@ fun BaseView.showTip(v: View, block: TipBlock) {
     val arg = TipArg(v)
     block?.invoke(arg)
     vm.tipViewLiveData.value = arg
-    show(TipFragment())
+    baseActivity?.show(TipFragment(),"tip")
 }
 

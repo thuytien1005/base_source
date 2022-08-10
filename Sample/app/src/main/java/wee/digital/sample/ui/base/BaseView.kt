@@ -1,11 +1,10 @@
 package wee.digital.sample.ui.base
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
@@ -14,17 +13,17 @@ import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
-import kotlinx.coroutines.*
-import wee.digital.library.extension.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import wee.digital.library.extension.SingleLiveData
+import wee.digital.sample.R
 import wee.digital.sample.app
-import wee.digital.widget.R
 import wee.digital.widget.extension.ViewClickListener
 import kotlin.reflect.KClass
-
 
 interface BaseView {
 
@@ -35,7 +34,7 @@ interface BaseView {
     val uiJobList: MutableList<Job>
 
     fun launch(delayInterval: Long, block: suspend CoroutineScope.() -> Unit): Job {
-        val job = lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+        val job = lifecycleOwner.lifecycleScope.launch {
             delay(delayInterval)
             block()
         }
@@ -44,7 +43,7 @@ interface BaseView {
     }
 
     fun launch(block: suspend CoroutineScope.() -> Unit): Job {
-        return lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+        return lifecycleOwner.lifecycleScope.launch {
             block()
         }
     }
@@ -54,19 +53,6 @@ interface BaseView {
     fun onViewCreated()
 
     fun onLiveDataObserve() = Unit
-
-    fun show(dialog: DialogFragment) {
-        val sfm = (baseActivity as? FragmentActivity)?.supportFragmentManager ?: return
-        dialog.show(sfm, dialog.tag)
-    }
-
-    fun dismissAllDialogs() {
-        (baseActivity as? FragmentActivity)?.supportFragmentManager?.fragments?.forEach {
-            if (it is DialogFragment) {
-                it.dismissAllowingStateLoss()
-            }
-        }
-    }
 
     fun addObserve(observer: LifecycleObserver): LifecycleObserver {
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -85,7 +71,7 @@ interface BaseView {
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
-        return lazy { ViewModelProvider(this)[cls.java] }
+        return lazy { ViewModelProvider(this).get(cls.java) }
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
@@ -96,12 +82,7 @@ interface BaseView {
      * [LiveData] utils
      */
     fun <T> LiveData<T>.observe(block: (T) -> Unit) {
-        removeObservers(lifecycleOwner)
         observe(lifecycleOwner, Observer(block))
-    }
-
-    fun <T> LiveData<T>.removeObservers() {
-        removeObservers(lifecycleOwner)
     }
 
     fun <T> LiveData<T>.singleObserve(block: (T) -> Unit) {
@@ -112,39 +93,46 @@ interface BaseView {
         })
     }
 
+    fun <T> LiveData<T?>.observerNoneNull(block: (T) -> Unit) {
+        observe(lifecycleOwner, Observer {
+            it ?: return@Observer
+            block(it)
+        })
+    }
+
+
+
+    fun SingleLiveData<Boolean>.observerIfTrue(block: () -> Unit) {
+        if (this.value == true) {
+            block()
+            value = false
+        }
+        observe(lifecycleOwner, Observer {
+            if (it == true) {
+                block()
+                value = false
+            }
+        })
+    }
+
+    fun <T> LiveData<T>.removeObservers() {
+        removeObservers(lifecycleOwner)
+    }
+
     /**
      * [NavController] utils
      */
     fun NavController?.navigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
-        if (this == null) {
-            toast("NavController is null")
-            return
-        }
-        NavBuilder(this).also {
-            block?.invoke(it)
-            it.setVerticalAnim()
-            it.navigate(actionId)
-        }
-    }
-
-    fun NavController?.navigateNoAnim(
-        @IdRes actionId: Int,
-        block: (NavBuilder.() -> Unit)? = null
-    ) {
-        if (this == null) {
-            toast("NavController is null")
-            return
-        }
+        this ?: return
         NavBuilder(this).also {
             block?.invoke(it)
             it.navigate(actionId)
         }
     }
 
-    fun navigateSingleTop(@IdRes actionId: Int) {
-        activityNavController().navigate(actionId) {
-            clearBackStack()
-        }
+    fun NavController?.removeFragments(@IdRes vararg actionId: Int) {
+        this ?: return
+        NavBuilder(this).remove(*actionId)
     }
 
     fun navigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
@@ -153,6 +141,12 @@ interface BaseView {
 
     fun popBackStack(@IdRes fragmentId: Int, inclusive: Boolean = false) {
         activityNavController()?.popBackStack(fragmentId, inclusive)
+    }
+
+    fun <T : Activity> navigate(cls: KClass<T>) {
+        baseActivity?.also {
+            it.startActivity(Intent(it, cls.java))
+        }
     }
 
     fun <T> navResultLiveData(key: String? = null): MutableLiveData<T>? {
@@ -174,14 +168,12 @@ interface BaseView {
             ?.savedStateHandle?.set("", result)
     }
 
-    fun startClear(cls: Class<*>) {
-        baseActivity?.run {
-            val intent = Intent(this, cls)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            this.startActivity(intent)
-            this.finish()
-        }
-    }
+    /**
+     * Keyboard utils
+     */
+    fun hideKeyboard()
+
+    fun showKeyboard()
 
     /**
      * [View] utils
@@ -231,8 +223,8 @@ interface BaseView {
             }
             return
         }
-        this.isClickable = true
-        setOnClickListener(object : ViewClickListener(delayedInterval, this.id) {
+        isClickable = true
+        setOnClickListener(object : ViewClickListener(delayedInterval, id) {
             override fun onClicks(v: View) {
                 listener(v)
             }
@@ -247,18 +239,22 @@ interface BaseView {
         this@addClickListener.addClickListener(0, listener)
     }
 
-    fun TextView.setHyperText(s: String?) {
+    fun TextView.setHyperText(@StringRes res: Int, vararg args: Any?) {
+        setHyperText(string(res), * args)
+    }
+
+    fun TextView.setHyperText(s: String?, vararg args: Any?) {
         post {
             text = try {
                 when {
                     s.isNullOrEmpty() -> null
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> Html.fromHtml(
-                        s,
+                        s.format(*args),
                         Html.FROM_HTML_MODE_LEGACY
                     )
                     else -> {
                         @Suppress("DEPRECATION")
-                        Html.fromHtml(s)
+                        Html.fromHtml(s.format(*args))
                     }
                 }
             } catch (e: Throwable) {
@@ -335,23 +331,5 @@ interface BaseView {
         return "<b>$this</b>"
     }
 
-    /**
-     * Keyboard utils
-     */
-    fun View?.hideKeyboard() {
-        this?.post {
-            val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(this@hideKeyboard.windowToken, 0)
-        }
-    }
-
-    fun View?.showKeyboard() {
-        this?.post {
-            val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(this@showKeyboard, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
 
 }
-

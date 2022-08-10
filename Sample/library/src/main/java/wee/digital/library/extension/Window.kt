@@ -226,6 +226,38 @@ fun Window.hideSystemUI(hasFocus: Boolean = true) {
     )
 }
 
+fun Window.showSystemUI(hasFocus: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasFocus) {
+        insetsController?.show(WindowInsets.Type.statusBars())
+        setDecorFitsSystemWindows(false)
+        return
+    }
+
+    @Suppress("DEPRECATION")
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && hasFocus) {
+        val flags = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        decorView.systemUiVisibility = flags
+        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                decorView.systemUiVisibility = flags
+            }
+        }
+        return
+    }
+    @Suppress("DEPRECATION")
+    setFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
+}
+
 fun LifecycleOwner.hideSystemUI(hasFocus: Boolean = true) {
     requireWindow()?.hideSystemUI(hasFocus)
 }

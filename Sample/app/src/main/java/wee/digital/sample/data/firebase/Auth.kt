@@ -10,7 +10,7 @@ import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.*
 import wee.digital.library.extension.toast
 import wee.digital.sample.app
-import wee.digital.sample.shared.pref
+import wee.digital.sample.pref
 
 val currentUser get() = auth.currentUser
 

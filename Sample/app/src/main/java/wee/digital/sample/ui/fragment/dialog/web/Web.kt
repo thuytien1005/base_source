@@ -11,6 +11,6 @@ fun BaseView.showWeb(block: WebBlock) {
     val arg = WebArg()
     block?.invoke(arg)
     activityVM(DialogVM::class).webLiveData.value = arg
-    show(WebFragment())
+    baseActivity?.show(WebFragment(),"web")
 }
 

@@ -1,24 +1,30 @@
 package wee.digital.sample.ui.base
 
 import android.os.Build
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.transition.Transition
-import androidx.transition.TransitionInflater
 import androidx.viewbinding.ViewBinding
+import wee.digital.sample.log
+import wee.digital.library.extension.foreachCatching
+import wee.digital.library.extension.hideKeyboard
+import wee.digital.library.extension.showKeyboard
 
 interface FragmentView : BaseView {
 
-    val fragment: Fragment
+    val fragment: Fragment get() = this as Fragment
 
     /**
      * [BaseView] implements
@@ -31,12 +37,40 @@ interface FragmentView : BaseView {
         return baseActivity?.activityNavController()
     }
 
+    /**
+     * Keyboard utils
+     */
+    override fun hideKeyboard() {
+        fragment.requireActivity().hideKeyboard()
+    }
+
+    override fun showKeyboard() {
+        fragment.requireActivity().showKeyboard()
+    }
+
+    fun inputModeAdjustResize() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            fragment.view?.setOnApplyWindowInsetsListener { _, windowInsets ->
+                val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
+                fragment.view?.setPadding(0, 0, 0, imeHeight)
+                windowInsets
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+    }
+
+    fun inputModeAdjustNothing() {
+        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    }
+
     fun onCreateView() = Unit
 
     /**
      * [FragmentView] utils
      */
-    fun <T : ViewBinding> viewBinding(block: Inflating): Lazy<T> {
+    fun <T : ViewBinding> viewBinding(block: (LayoutInflater) -> ViewBinding): Lazy<T> {
         return lazy {
             @Suppress("UNCHECKED_CAST")
             block.invoke(fragment.layoutInflater) as T
@@ -86,55 +120,47 @@ interface FragmentView : BaseView {
         }
     }
 
-    fun mainNavigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
-        val nav = activityNavController()
-        nav?.navigate(actionId, block)
+    fun childRemoveFragments(@IdRes vararg actionId: Int) {
+        fragment.findNavController().removeFragments(*actionId)
     }
 
-    fun mainNavigateNoAnim(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
-        val nav = activityNavController()
-        nav?.navigateNoAnim(actionId, block)
+    fun mainNavigate(@IdRes actionId: Int, block: (NavBuilder.() -> Unit)? = null) {
+        activityNavController()?.navigate(actionId, block)
+    }
+
+    fun mainRemoveFragments(@IdRes vararg actionId: Int) {
+        activityNavController()?.removeFragments(*actionId)
     }
 
     fun mainPopBackStack(@IdRes fragmentId: Int = 0, inclusive: Boolean = false) {
-        val nav = activityNavController()
         if (fragmentId != 0) {
-            nav?.popBackStack(fragmentId, inclusive)
+            activityNavController()?.popBackStack(fragmentId, inclusive)
         } else {
-            nav?.popBackStack()
+            activityNavController()?.popBackStack()
         }
     }
 
     /**
-     * Keyboard utils
+     * Dialog utils
      */
-    fun inputModeAdjustResize() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            fragment.view?.setOnApplyWindowInsetsListener { _, windowInsets ->
-                val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
-                fragment.view?.setPadding(0, 0, 0, imeHeight)
-                windowInsets
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        }
+    fun showAlertDialog(block: (AlertDialog.Builder.() -> Unit)? = null) {
+        baseActivity?.showAlertDialog(block)
     }
 
-    fun inputModeAdjustNothing() {
-        baseActivity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+    fun show(dialog: DialogFragment, tag: String? = null) {
+        baseActivity?.show(dialog, tag)
     }
 
-    fun hideKeyboard() {
-        fragment.view?.hideKeyboard()
+    fun dismissDialog(tag: String) {
+        baseActivity?.dismissDialog(tag)
     }
 
-    fun showKeyboard() {
-        fragment.view?.showKeyboard()
+    fun dismissAllExceptSelf() {
+        baseActivity?.dismissAllExcept(fragment)
     }
 
-    fun transition(id: Int): Transition {
-        return TransitionInflater.from(fragment.requireContext())
-            .inflateTransition(android.R.transition.move)
+    fun dismissAllDialogs() {
+        baseActivity?.dismissAllDialogs()
     }
+
 }

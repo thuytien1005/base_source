@@ -54,9 +54,7 @@ val networkLiveData: MutableLiveData<Boolean> by lazy {
     MutableLiveData<Boolean>(networkConnected)
 }
 
-val networkAvailableLiveData: SingleLiveData<Boolean> by lazy {
-    SingleLiveData(networkConnected)
-}
+val networkAvailableLiveData = SingleLiveData(networkConnected)
 
 val hasWifi: Boolean get() = connectionInfo == "wifi" || connectionInfo == "is connected"
 
@@ -71,7 +69,6 @@ fun registerNetworkCallback() {
         override fun onAvailable(network: Network) {
             networkLiveData.postValue(true)
             networkAvailableLiveData.postValue(true)
-
         }
 
         override fun onLost(network: Network) {

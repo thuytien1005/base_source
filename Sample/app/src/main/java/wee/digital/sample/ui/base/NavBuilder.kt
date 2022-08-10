@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
@@ -84,8 +85,42 @@ class NavBuilder(private val controller: NavController) {
         }
     }
 
+    fun setParallaxAnim(reserved: Boolean = false) {
+        if (reserved) options.apply {
+            setEnterAnim(R.anim.parallax_pop_enter)
+            setExitAnim(R.anim.parallax_pop_exit)
+            setPopEnterAnim(R.anim.parallax_enter)
+            setPopExitAnim(R.anim.parallax_exit)
+        } else options.apply {
+            setEnterAnim(R.anim.parallax_enter)
+            setExitAnim(R.anim.parallax_exit)
+            setPopEnterAnim(R.anim.parallax_pop_enter)
+            setPopExitAnim(R.anim.parallax_pop_exit)
+        }
+    }
+
+    fun setAlphaAnim() {
+        options.apply {
+            setEnterAnim(R.anim.alpha01)
+            setExitAnim(R.anim.alpha10)
+            setPopEnterAnim(R.anim.alpha01)
+            setPopExitAnim(R.anim.alpha10)
+        }
+    }
+
     fun navigate(@IdRes actionId: Int) {
         controller.navigate(actionId, args, options.build(), extras)
+    }
+
+    fun remove(@IdRes vararg actionId: Int) {
+        kotlin.runCatching {
+            val queue: ArrayDeque<NavBackStackEntry> = controller.backQueue
+            queue.toList().filter {
+                actionId.contains(it.destination.id)
+            }.iterator().forEach {
+                queue.remove(it)
+            }
+        }
     }
 
 }

@@ -4,7 +4,7 @@ import android.net.http.X509TrustManagerExtensions
 import android.util.Base64
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
-import wee.digital.sample.shared.serviceUrl
+import wee.digital.sample.serviceUrl
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom

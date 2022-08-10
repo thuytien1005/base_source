@@ -114,6 +114,28 @@ fun realPathFromURI(uri: Uri): String? {
     return cursor.getString(columnIndex)
 }
 
+fun openApplication(pkg: String){
+    try {
+        openApplicationOrThrow(pkg)
+    }catch (e: Exception){
+
+    }
+}
+
+fun openApplicationOrThrow(pkg: String){
+    val intent = app.packageManager.getLaunchIntentForPackage(pkg)
+    app.startActivity(intent)
+}
+
+fun openApplicationOrElse(pkg: String) : Boolean{
+    return try {
+        openApplicationOrThrow(pkg)
+        false
+    }catch (e: Exception){
+        true
+    }
+}
+
 /**
  * include in dependency [androidx.activity:activity-ktx:X.X.X]
  */

@@ -14,7 +14,7 @@ fun BaseView.showAlert(block: AlertBlock) {
     val arg = AlertArg()
     block?.invoke(arg)
     vm.alertLiveData.value = arg
-    show(AlertFragment())
+    baseActivity?.show(AlertFragment(),"alert")
 }
 
 fun BaseView.alertNetworkError() {

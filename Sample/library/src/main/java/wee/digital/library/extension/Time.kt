@@ -34,6 +34,10 @@ val calendar: Calendar get() = Calendar.getInstance()
 
 val nowInSecond: Long get() = System.currentTimeMillis() / SECOND
 
+fun millis(hour: Int = 0, min: Int = 0, second: Int = 0, millis: Int = 0): Long {
+    return hour * HOUR + min * MIN + second * SECOND + millis
+}
+
 fun nowFormat(strFormat: String): String {
     return nowInMillis.timeFormat(strFormat)
 }

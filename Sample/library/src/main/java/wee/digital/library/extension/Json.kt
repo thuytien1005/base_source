@@ -18,18 +18,8 @@ class JsonFieldNullException(key: String) : NullPointerException("json parse $ke
 /**
  * Parse [JsonObject]/[JsonArray]/[String] to Kotlin Object/List<Object>
  */
-val convertFactory: Gson by lazy {
+val gson: Gson by lazy {
     Gson()
-}
-
-fun readJsonFromAssets(fileName: String): JsonObject? {
-    val s = readAssets(fileName)
-    return s.parse(JsonObject::class)
-}
-
-fun readArrayFromAssets(fileName: String): JsonArray? {
-    val s = readAssets(fileName)
-    return s.parse(JsonArray::class)
 }
 
 fun <T> JsonElement?.parse(cls: Class<T>): T? {
@@ -54,20 +44,20 @@ fun <T> String?.parse(cls: Class<T>): T? {
         return null
     }
     return try {
-        return convertFactory.fromJson(this, cls)
+        return gson.fromJson(this, cls)
     } catch (ignore: Exception) {
         null
     }
 }
 
 fun <T : Any> JsonElement?.parseOrThrow(cls: KClass<T>): T {
-    return convertFactory.fromJson(this, cls.java)
+    return gson.fromJson(this, cls.java)
 }
 
 fun JsonElement?.toMap(): Map<String, Any?>? {
     try {
         this ?: return null
-        return convertFactory.fromJson(
+        return gson.fromJson(
             this,
             object : TypeToken<java.util.HashMap<String?, Any?>?>() {}.type
         )
@@ -82,7 +72,7 @@ fun <T> String?.parse(cls: Class<Array<T>>): List<T>? {
         return null
     }
     return try {
-        return convertFactory.fromJson(StringReader(this), cls).toList()
+        return gson.fromJson(StringReader(this), cls).toList()
     } catch (ignore: Exception) {
         null
     }
@@ -101,7 +91,7 @@ fun <T> T.toJsonObject(): JsonObject? {
         if (this is String) {
             return parse(JsonObject::class.java)
         }
-        val element = convertFactory.toJsonTree(this, object : TypeToken<T>() {}.type)
+        val element = gson.toJsonTree(this, object : TypeToken<T>() {}.type)
         return element.asJsonObject
     } catch (ignore: Exception) {
         null
@@ -409,16 +399,20 @@ fun JsonObject?.dateOrThrow(key: String, fmt: SimpleDateFormat): Date {
 fun JsonObject?.list(key: String): List<JsonObject>? {
     val s = array(key).toString()
     return try {
-        return convertFactory.fromJson(StringReader(s), Array<JsonObject>::class.java).toList()
+        return gson.fromJson(StringReader(s), Array<JsonObject>::class.java).toList()
     } catch (ignore: Exception) {
         null
     }
 }
 
+fun JsonObject?.mutableList(key: String): MutableList<JsonObject>? {
+    return list(key)?.toMutableList()
+}
+
 fun <T : Any> JsonObject?.list(key: String, cls: KClass<Array<T>>): List<T>? {
     val s = array(key).toString()
     return try {
-        return convertFactory.fromJson(StringReader(s), cls.java).toList()
+        return gson.fromJson(StringReader(s), cls.java).toList()
     } catch (ignore: Exception) {
         null
     }
@@ -427,7 +421,7 @@ fun <T : Any> JsonObject?.list(key: String, cls: KClass<Array<T>>): List<T>? {
 fun JsonObject?.listString(key: String): List<String>? {
     val s = array(key).toString()
     return try {
-        return convertFactory.fromJson(StringReader(s), Array<String>::class.java).toList()
+        return gson.fromJson(StringReader(s), Array<String>::class.java).toList()
     } catch (ignore: Exception) {
         null
     }
@@ -436,7 +430,7 @@ fun JsonObject?.listString(key: String): List<String>? {
 fun JsonObject?.listInt(key: String): List<Int>? {
     val s = array(key).toString()
     return try {
-        return convertFactory.fromJson(StringReader(s), Array<Int>::class.java).toList()
+        return gson.fromJson(StringReader(s), Array<Int>::class.java).toList()
     } catch (ignore: Exception) {
         null
     }

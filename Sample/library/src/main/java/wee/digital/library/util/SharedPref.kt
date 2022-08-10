@@ -24,11 +24,10 @@ class SharedPref(private val fileName: String) {
         }
     }
 
-    fun edit(block: SharedPreferences.Editor.() -> Unit) {
+    fun edit(block: SharedPreferences.Editor.() -> Unit): Boolean {
         val edit = pref.edit()
         edit.block()
-        edit.apply()
-        edit.commit()
+        return edit.commit()
     }
 
     fun str(key: String, default: String? = null): String? = pref.getString(key, default)
@@ -41,24 +40,24 @@ class SharedPref(private val fileName: String) {
 
     fun float(key: String, default: Float = -1F): Float = pref.getFloat(key, default)
 
-    fun putStr(key: String, value: String?) {
-        edit { putString(key, value) }
+    fun putStr(key: String, value: String?): Boolean {
+        return edit { putString(key, value) }
     }
 
-    fun putLong(key: String, value: Long) {
-        edit { putLong(key, value) }
+    fun putLong(key: String, value: Long): Boolean {
+        return edit { putLong(key, value) }
     }
 
-    fun putInt(key: String, value: Int) {
-        edit { putInt(key, value) }
+    fun putInt(key: String, value: Int): Boolean {
+        return edit { putInt(key, value) }
     }
 
-    fun putBool(key: String, value: Boolean) {
-        edit { putBoolean(key, value) }
+    fun putBool(key: String, value: Boolean): Boolean {
+        return edit { putBoolean(key, value) }
     }
 
-    fun putFloat(key: String, value: Float) {
-        edit { putFloat(key, value) }
+    fun putFloat(key: String, value: Float): Boolean {
+        return edit { putFloat(key, value) }
     }
 
 }
