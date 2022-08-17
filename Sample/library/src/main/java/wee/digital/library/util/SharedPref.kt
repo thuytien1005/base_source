@@ -7,7 +7,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import wee.digital.library.app
 
-class SharedPref(private val fileName: String) {
+open class SharedPref(private val fileName: String) {
 
     private val pref: SharedPreferences by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -18,12 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/main_graph" />
 
-    <include
-        android:id="@+id/includeAppBar"
-        layout="@layout/main_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <wee.digital.widget.custom.KeyboardView
         android:id="@+id/keyboardView"
         style="@style/MatchWidth"

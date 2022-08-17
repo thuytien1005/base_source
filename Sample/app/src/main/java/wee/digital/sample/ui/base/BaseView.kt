@@ -71,11 +71,11 @@ interface BaseView {
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.lazyViewModel(cls: KClass<T>): Lazy<T> {
-        return lazy { ViewModelProvider(this).get(cls.java) }
+        return lazy { ViewModelProvider(this)[cls.java] }
     }
 
     fun <T : ViewModel> ViewModelStoreOwner.viewModel(cls: KClass<T>): T {
-        return ViewModelProvider(this).get(cls.java)
+        return ViewModelProvider(this)[cls.java]
     }
 
     /**

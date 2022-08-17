@@ -9,14 +9,12 @@ import androidx.core.view.doOnPreDraw
 import androidx.transition.Transition
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.transition.MaterialContainerTransform
-import wee.digital.library.extension.windowSafeArea
 import wee.digital.sample.R
 import wee.digital.sample.data.api.httpErrorLiveData
 import wee.digital.sample.data.api.networkErrorLiveData
 import wee.digital.sample.data.api.progressLiveData
 import wee.digital.sample.ui.base.BaseFragment
-import wee.digital.sample.ui.fragment.dialog.DialogVM
-import wee.digital.sample.ui.model.AppBarArg
+import wee.digital.sample.ui.dialog.DialogVM
 import wee.digital.widget.extension.SimpleTransitionListener
 
 abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainFragmentView {
@@ -54,7 +52,6 @@ abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainFragmentVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAppBar()
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         networkErrorLiveData.observe {
@@ -68,22 +65,6 @@ abstract class MainFragment<B : ViewBinding> : BaseFragment<B>(), MainFragmentVi
         }
     }
 
-    private fun initAppBar() {
-        windowSafeArea()
-        val arg = AppBarArg(
-            appBarColor = backgroundColor(),
-            mainBackgroundColor = backgroundColor(),
-            statusBarColor = backgroundColor(),
-            leftButton1 = R.drawable.ic_close,
-            leftButton1onClick = { onBackPressed() }
-        )
-        onAppBarConfig(arg)
-        mainVM.appBarArgLiveData.value = arg
-    }
-
-    open fun onAppBarConfig(it: AppBarArg) {
-        inputModeAdjustNothing()
-    }
 
     open fun onEnterTransitionStarted() = Unit
 }

@@ -2,7 +2,7 @@ package wee.digital.sample.ui.main
 
 import androidx.viewbinding.ViewBinding
 import wee.digital.sample.ui.base.BaseDialogFragment
-import wee.digital.sample.ui.fragment.dialog.DialogVM
+import wee.digital.sample.ui.dialog.DialogVM
 
 abstract class MainDialogFragment<B : ViewBinding> : BaseDialogFragment<B>(), MainFragmentView {
 

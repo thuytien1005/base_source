@@ -4,11 +4,11 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import wee.digital.library.extension.*
 import wee.digital.sample.ui.base.FragmentView
-import wee.digital.sample.ui.fragment.dialog.DialogVM
-import wee.digital.sample.ui.fragment.dialog.alert.alertCameraPermissionDenied
-import wee.digital.sample.ui.fragment.dialog.selectable.Selectable
-import wee.digital.sample.ui.fragment.dialog.selectable.SelectableArg
-import wee.digital.sample.ui.fragment.dialog.selectable.SelectableFragment
+import wee.digital.sample.ui.dialog.DialogVM
+import wee.digital.sample.ui.dialog.alert.alertCameraPermissionDenied
+import wee.digital.sample.ui.dialog.selectable.Selectable
+import wee.digital.sample.ui.dialog.selectable.SelectableArg
+import wee.digital.sample.ui.dialog.selectable.SelectableFragment
 import wee.digital.widget.custom.InputView
 import wee.digital.widget.extension.ViewClickListener
 import wee.digital.widget.extension.networkErrorShown

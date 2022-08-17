@@ -3,60 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/widgetsFragment">
+    app:startDestination="@id/starterFragment">
 
     <fragment
-        android:id="@+id/widgetsFragment"
-        android:name="wee.digital.sample.ui.fragment.widgets.WidgetsFragment"
-        android:label="WidgetsFragment"
-        tools:layout="@layout/widgets" />
+        android:id="@+id/starterFragment"
+        android:name="wee.digital.sample.ui.main.fragment.starter.StarterFragment"
+        android:label="StarterFragment"
+        tools:layout="@layout/starter" />
     <action
-        android:id="@+id/action_global_widgetsFragment"
-        app:destination="@id/widgetsFragment" />
+        android:id="@+id/action_global_starterFragment"
+        app:destination="@id/starterFragment" />
 
     <fragment
-        android:id="@+id/faceMeshFragment"
-        android:name="wee.digital.sample.ui.fragment.face.mesh.FaceMeshFragment"
-        android:label="FaceMeshFragment"
-        tools:layout="@layout/face_mesh" />
+        android:id="@+id/introFragment"
+        android:name="wee.digital.sample.ui.main.fragment.intro.IntroFragment"
+        android:label="IntroFragment"
+        tools:layout="@layout/intro" />
     <action
-        android:id="@+id/action_global_faceMeshFragment"
-        app:destination="@id/faceMeshFragment" />
-
-    <fragment
-        android:id="@+id/faceRegFragment"
-        android:name="wee.digital.sample.ui.fragment.face.reg.FaceRegFragment"
-        android:label="FaceRegFragment"
-        tools:layout="@layout/face_reg" />
-    <action
-        android:id="@+id/action_global_faceRegFragment"
-        app:destination="@id/faceRegFragment" />
+        android:id="@+id/action_global_introFragment"
+        app:destination="@id/introFragment" />
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="wee.digital.sample.ui.fragment.home.HomeFragment"
+        android:name="wee.digital.sample.ui.main.fragment.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/home" />
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment" />
-
-    <fragment
-        android:id="@+id/camFragment"
-        android:name="wee.digital.sample.ui.fragment.cam.CamFragment"
-        android:label="CamFragment"
-        tools:layout="@layout/cam" />
-    <action
-        android:id="@+id/action_global_camFragment"
-        app:destination="@id/camFragment" />
-
-    <fragment
-        android:id="@+id/rsFragment"
-        android:name="wee.digital.sample.ui.fragment.rs.RsFragment"
-        android:label="RsFragment"
-        tools:layout="@layout/rs"  />
-    <action
-        android:id="@+id/action_global_rsFragment"
-        app:destination="@id/rsFragment" />
 
 </navigation>
