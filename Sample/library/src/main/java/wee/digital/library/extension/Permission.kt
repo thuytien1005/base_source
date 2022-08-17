@@ -1,6 +1,7 @@
 package wee.digital.library.extension
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -60,6 +61,14 @@ fun isGranted(vararg permissions: String): Boolean {
         }
     }
     return true
+}
+
+fun Activity.requestPermission(vararg permissions: String){
+    ActivityCompat.requestPermissions(
+        this,
+        permissions,
+        1001
+    )
 }
 
 fun Fragment.onGrantedPermission(

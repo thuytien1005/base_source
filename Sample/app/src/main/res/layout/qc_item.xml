@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40sdp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewAppName"
+        style="@style/TextView"
+        android:layout_marginStart="@dimen/contentMargin16"
+        android:text="Application Name"
+        android:textColor="#3C3C3C"
+        android:textSize="@dimen/_9sdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textViewVersion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewVersion"
+        style="@style/TextView"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:text="1.0.0"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/_6sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewAppName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAppName" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/viewUpdate"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_download"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="@dimen/contentMargin16"
+        android:tint="#26A69A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <FrameLayout
+        android:id="@+id/viewProgress"
+        android:layout_width="wrap_content"
+        android:background="@color/color_white"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="100dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:indeterminate="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:indeterminateTint="@color/color_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textViewAppName"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,11 +13,11 @@ import android.util.Log
 import android.util.Size
 import androidx.annotation.RequiresPermission
 import androidx.core.content.FileProvider
-import wee.digital.library.app
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import wee.digital.library.app
 import java.io.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
@@ -109,7 +109,7 @@ fun readFile(fileName: String): String {
     return text.toString()
 }
 
-fun File.installApk() {
+fun File.installApk(onError: ((Exception) -> Unit) = { toast(it.message) }) {
     try {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setDataAndType(this.uri, "application/vnd.android.package-archive")
@@ -117,7 +117,7 @@ fun File.installApk() {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         app.startActivity(intent)
     } catch (e: Exception) {
-        toast(e.message)
+        onError(e)
     }
 }
 

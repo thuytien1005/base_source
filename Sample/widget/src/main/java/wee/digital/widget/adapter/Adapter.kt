@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.EditText
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ViewBindingHolder<VB : ViewBinding>(val vb: VB) : RecyclerView.ViewHolder(vb.root)
 
@@ -149,5 +154,79 @@ class CachingGridLayoutManager(
         return extraLayoutSpace
     }
 
+}
+
+abstract class ItemClickListener(
+    private val delayedInterval: Long = 700,
+    private val eventId: Int = 1
+) :
+    View.OnClickListener {
+
+    companion object{
+        private var lastClickViewId: Int = 0
+        private var lastEventId: Int = -2
+        private var lastClickTime: Long = System.currentTimeMillis()
+    }
+
+    @Volatile
+    var onTrigger: Boolean = false
+
+    private val isDelayed: Boolean get() = System.currentTimeMillis() - lastClickTime > delayedInterval
+
+    private val View.isAcceptClick: Boolean get() = id != lastClickViewId
+
+    abstract fun onClicks(v: View)
+
+    final override fun onClick(v: View?) {
+        v ?: return
+        if (eventId > 0 && eventId == lastEventId && delayedInterval > 0) return
+        if (onTrigger) return
+        if (v.isAcceptClick || isDelayed) {
+            onTrigger = true
+            lastClickViewId = v.id
+            lastClickTime = System.currentTimeMillis()
+            lastEventId = eventId
+            onClicks(v)
+            GlobalScope.launch(Dispatchers.Unconfined) {
+                delay(delayedInterval)
+                lastEventId = -2
+                onTrigger = false
+            }
+        }
+    }
+
+}
+
+fun View?.addItemClickListener(
+    delayedInterval: Long,
+    eventId: Int,
+    listener: ((View) -> Unit)? = null
+) {
+    this ?: return
+    if (listener == null) {
+        setOnClickListener(null)
+        if (this is EditText) {
+            isFocusable = true
+            isCursorVisible = true
+        }
+        return
+    }
+    setOnClickListener(object : ItemClickListener(delayedInterval, eventId) {
+        override fun onClicks(v: View) {
+            listener(v)
+        }
+    })
+    if (this is EditText) {
+        isFocusable = false
+        isCursorVisible = false
+    }
+}
+
+fun View?.addItemClickListener(delayedInterval: Long, listener: ((View) -> Unit)? = null) {
+    addItemClickListener(delayedInterval, 1, listener)
+}
+
+fun View?.addItemClickListener(listener: ((View) -> Unit)? = null) {
+    addItemClickListener(600, 1, listener)
 }
 

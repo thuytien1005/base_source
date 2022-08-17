@@ -2,6 +2,7 @@ package wee.digital.library.extension
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -114,24 +115,36 @@ fun realPathFromURI(uri: Uri): String? {
     return cursor.getString(columnIndex)
 }
 
-fun openApplication(pkg: String){
+fun isPackageInstalled(pkgName: String?): Boolean {
+    pkgName ?: return false
+    return try {
+        app.packageManager.getPackageInfo(pkgName, 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
+}
+
+fun openApplication(pkgName: String?) {
+    pkgName?:return
     try {
-        openApplicationOrThrow(pkg)
-    }catch (e: Exception){
+        openApplicationOrThrow(packageName)
+    } catch (e: Exception) {
 
     }
 }
 
-fun openApplicationOrThrow(pkg: String){
-    val intent = app.packageManager.getLaunchIntentForPackage(pkg)
+fun openApplicationOrThrow(pkgName: String?) {
+    pkgName?:throw NullPointerException("$pkgName is not installed")
+    val intent = app.packageManager.getLaunchIntentForPackage(pkgName)
     app.startActivity(intent)
 }
 
-fun openApplicationOrElse(pkg: String) : Boolean{
+fun openApplicationOrElse(pkgName: String?): Boolean {
     return try {
-        openApplicationOrThrow(pkg)
+        openApplicationOrThrow(pkgName)
         false
-    }catch (e: Exception){
+    } catch (e: Exception) {
         true
     }
 }

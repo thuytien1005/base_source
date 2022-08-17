@@ -153,6 +153,7 @@ dependencies {
     implementation platform(deps.firebase.bom)
     implementation deps.firebase.analytics
     implementation deps.firebase.auth
+    implementation deps.firebase.database
     implementation deps.firebase.firestore
     implementation deps.firebase.storage
     implementation deps.firebase.messaging

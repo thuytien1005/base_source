@@ -20,13 +20,5 @@ class WidgetsActivity : BaseActivity<WidgetsBinding>() {
 
     }
 
-    fun openApplication(pkg: String) {
-        navigateSettings()
-        try {
-            val intent = app.packageManager.getLaunchIntentForPackage(pkg)
-            app.startActivity(intent)
-        } catch (e: Exception) {
-            toast("Application is not installed")
-        }
-    }
+
 }
