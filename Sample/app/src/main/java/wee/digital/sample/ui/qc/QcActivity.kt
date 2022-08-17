@@ -1,6 +1,9 @@
 package wee.digital.sample.ui.qc
 
 import android.content.pm.PackageManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import wee.digital.library.extension.*
 import wee.digital.sample.app
 import wee.digital.sample.databinding.QcBinding
